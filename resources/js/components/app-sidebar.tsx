@@ -1,290 +1,330 @@
-"use client"
+'use client';
 
-import * as React from "react"
 import {
     BookCheckIcon,
-    BookOpen,
-    DatabaseIcon, DollarSign,
-    Frame, InboxIcon,
-    LaptopMinimalCheck, Layers2, LucideHandshake, LucideLandmark,
-    Map, NewspaperIcon,
-    PieChart, Repeat2,
-    Settings2, SwatchBookIcon,
-    TrophyIcon, UserPlus2Icon, Users, Users2,
-} from "lucide-react"
+    BookOpen, CircleHelp,
+    DatabaseIcon,
+    DollarSign,
+    Frame, HistoryIcon,
+    InboxIcon,
+    LaptopMinimalCheck, Layers,
+    Layers2, LayersIcon,
+    LayoutGrid, LibraryIcon,
+    LucideHandshake,
+    LucideIcon,
+    LucideLandmark,
+    Map,
+    NewspaperIcon,
+    PieChart,
+    Repeat2,
+    Settings2,
+    SwatchBookIcon,
+    TrophyIcon,
+    UserPlus2Icon,
+    Users,
+    Users2
+} from 'lucide-react';
+import * as React from 'react';
 
-import { NavMain } from "@/components/nav-main"
-import {TeamSwitcher} from "@/components/team-switcher";
-import { NavUser } from "@/components/nav-user"
-import {NavProjects} from "@/components/nav-project";
+import { NavMain } from '@/components/nav-main';
+import { NavProjects } from '@/components/nav-project';
+import { NavUser } from '@/components/nav-user';
+import { TeamSwitcher } from '@/components/team-switcher';
 
+import { Label } from '@/components/ui/label';
 import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
     SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
     SidebarRail,
-} from "@/components/ui/sidebar"
+} from '@/components/ui/sidebar';
+import { NavItem } from '@/types';
+import { Link } from '@inertiajs/react';
 
 // This is sample data.
-const data = {
-    user: {
-        name: "Alwin Fau",
-        email: "alwin@gmail.com",
-        avatar: "",
-    },
+export interface AppData {
+    teams: {
+        name: string;
+        logo: LucideIcon;
+        plan: string;
+    }[];
+    navMain: NavItem[];
+    projects: {
+        name: string;
+        url: string;
+        icon: LucideIcon;
+    }[];
+}
+
+const data: AppData = {
     teams: [
         {
             // Sistem Informasi Akademik
-            name: "SIDEMIK",
-            logo: Layers2,
-            plan: "Enterprise",
+            name: 'SIDEMIK',
+            logo: LayersIcon,
+            plan: 'Enterprise',
         },
         {
             // Sistem Informasi Keuangan
-            name: "SIMKEU",
+            name: 'SIMKEU',
             logo: DollarSign,
-            plan: "Growth",
+            plan: 'Growth',
         },
         {
             // Sistem Informasi Kepagawaian
-            name: "SIMPEG",
+            name: 'SIMPEG',
             logo: Users2,
-            plan: "Business",
+            plan: 'Business',
         },
         {
             // Sistem Informasi Seleksi Penerimaan Mahasiswa Baru
-            name: "SIMARU",
+            name: 'SIPEMA',
             logo: UserPlus2Icon,
-            plan: "Professional",
+            plan: 'Professional',
         },
         {
             // Sistem Informasi Pencegahan dan Penanganan Kekerasan Perguruan Tinggi
-            name: "SIPPKPT",
+            name: 'SIPPKPT',
             logo: LucideHandshake,
-            plan: "Premium",
+            plan: 'Premium',
         },
         {
             // Sistem Informasi Akreditasi
-            name: "SIMASI",
+            name: 'SIMASI',
             logo: TrophyIcon,
-            plan: "Enterprise",
+            plan: 'Enterprise',
         },
         {
             // Sistem Informasi Computer Based Test
-            name: "SICBT",
+            name: 'SICBT',
             logo: LaptopMinimalCheck,
-            plan: "Free",
+            plan: 'Free',
         },
         {
             // Sistem Informasi Merdeka Belajar Kampus Merdeka
-            name: "SIMBKM",
+            name: 'SIMBKM',
             logo: Repeat2,
-            plan: "Free",
-        }
+            plan: 'Free',
+        },
     ],
 
     navMain: [
         {
-            title: "Supplementary Data",
-            url: "#",
-            icon: LucideLandmark,
-            isActive: false,
-            items: [
-                {
-                    title: "Profile University",
-                    url: "#",
-                },
-                {
-                    title: "Faculty"
-                },
-                {
-                    title: "Study Program"
-                }
-            ]
-        },
-        {
-            title: "Resource",
-            url: "#",
+            title: 'Resource',
+            url: '#',
             icon: DatabaseIcon,
             isActive: true,
             items: [
                 {
-                    title: "Students",
-                    url: "#",
+                    title: 'Students',
+                    url: '#',
                 },
                 {
-                    title: "Course",
-                    url: "#",
+                    title: 'Course',
+                    url: '#',
                 },
                 {
-                    title: "Course Type",
-                    url: "#",
+                    title: 'Course Type',
+                    url: '#',
                 },
                 {
-                    title: "Course Group",
-                    url: "#",
+                    title: 'Course Group',
+                    url: '#',
                 },
                 {
-                    title: "Room",
-                    url: "#",
+                    title: 'Room',
+                    url: '#',
                 },
                 {
-                    title: "Class",
-                    url: "#",
-                },{
-                    title: "Student Batch",
-                    url: "#",
+                    title: 'Class',
+                    url: '#',
+                },
+                {
+                    title: 'Student Batch',
+                    url: '#',
                 },
             ],
         },
         {
-            title: "Employee",
-            url: "#",
+            title: 'Supplementary Data',
+            url: '#',
+            icon: LucideLandmark,
+            isActive: false,
+            items: [
+                {
+                    title: 'Profile University',
+                    url: 'resources/university-profile',
+                },
+                {
+                    title: 'Faculty',
+                    url: '#',
+                },
+                {
+                    title: 'Study Program',
+                    url: '#',
+                },
+            ],
+        },
+        {
+            title: 'Employee',
+            url: '#',
             icon: Users,
             items: [
                 {
-                    title: "Lecture",
-                    url: "#",
+                    title: 'Lecture',
+                    url: '#',
                 },
                 {
-                    title: "Administrative Staff",
-                    url: "#",
+                    title: 'Administrative Staff',
+                    url: '#',
                 },
             ],
         },
         {
-            title: "Assessment",
-            url: "#",
+            title: 'Assessment',
+            url: '#',
             icon: BookCheckIcon,
             items: [
                 {
-                    title: "Midterm Exam",
-                    url: "#",
+                    title: 'Midterm Exam',
+                    url: '#',
                 },
                 {
-                    title: "Final Exam",
-                    url: "#",
+                    title: 'Final Exam',
+                    url: '#',
                 },
             ],
         },
         {
-            title: "Correspondence",
-            url: "#",
+            title: 'Correspondence',
+            url: '#',
             icon: SwatchBookIcon,
             items: [
                 {
-                    title: "Certificate of Enrollment",
-                    url: "#",
+                    title: 'Certificate of Enrollment',
+                    url: '#',
                 },
                 {
-                    title: "Letter of Resignation",
-                    url: "#",
+                    title: 'Letter of Resignation',
+                    url: '#',
                 },
                 {
-                    title: "Leave of Absence Letter",
-                    url: "#",
+                    title: 'Leave of Absence Letter',
+                    url: '#',
                 },
             ],
         },
         {
-            title: "Report Academic",
-            url: "#",
+            title: 'Report Academic',
+            url: '#',
             icon: BookOpen,
             items: [
                 {
-                    title: "Introduction",
-                    url: "#",
+                    title: 'Introduction',
+                    url: '#',
                 },
             ],
         },
         {
-            title: "Questionnaire",
-            url: "#",
+            title: 'Questionnaire',
+            url: '#',
             icon: InboxIcon,
             items: [
                 {
-                    title: "Lecture",
-                    url: "#",
+                    title: 'Lecture',
+                    url: '#',
                 },
                 {
-                    title: "Head of Study Program",
-                    url: "#",
+                    title: 'Head of Study Program',
+                    url: '#',
                 },
             ],
         },
         {
-            title: "News Management",
-            url: "#",
+            title: 'News Management',
+            url: '#',
             icon: NewspaperIcon,
             items: [
                 {
-                    title: "News",
-                    url: "#",
+                    title: 'News',
+                    url: '#',
                 },
                 {
-                    title: "News Category",
-                    url: "#",
+                    title: 'News Category',
+                    url: '#',
                 },
             ],
         },
         {
-            title: "Settings",
-            url: "#",
+            title: 'Settings',
+            url: '#',
             icon: Settings2,
             items: [
                 {
-                    title: "Academic Period",
-                    url: "#",
+                    title: 'Academic Period',
+                    url: '#',
                 },
                 {
-                    title: "Payments",
-                    url: "#",
+                    title: 'Payments',
+                    url: '#',
                 },
                 {
-                    title: "Application",
-                    url: "#",
+                    title: 'Application',
+                    url: '#',
                 },
                 {
-                    title: "Notification",
-                    url: "#",
+                    title: 'Notification',
+                    url: '#',
                 },
             ],
         },
     ],
     projects: [
         {
-            name: "Design Engineering",
-            url: "#",
-            icon: Frame,
+            name: 'Documentation',
+            url: '#',
+            icon: LibraryIcon,
         },
         {
-            name: "Sales & Marketing",
-            url: "#",
-            icon: PieChart,
+            name: 'History',
+            url: '#',
+            icon: HistoryIcon
         },
         {
-            name: "Travel",
-            url: "#",
-            icon: Map,
+            name: 'Help Center',
+            url: '#',
+            icon: CircleHelp,
         },
     ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     return (
         <Sidebar collapsible="icon" {...props}>
             <SidebarHeader>
                 <TeamSwitcher teams={data.teams} />
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton size={'lg'} asChild>
+                            <Link href={'/dashboard'}>
+                                <LayoutGrid /> <Label>Dashboard</Label>
+                            </Link>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
             </SidebarHeader>
             <SidebarContent>
                 <NavMain items={data.navMain} />
                 <NavProjects projects={data.projects} />
             </SidebarContent>
             <SidebarFooter>
-                <NavUser user={data.user} />
+                <NavUser />
             </SidebarFooter>
             <SidebarRail />
         </Sidebar>
-    )
+    );
 }
