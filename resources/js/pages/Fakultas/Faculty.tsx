@@ -1,12 +1,11 @@
-import Fakultas from "@/layouts/ComponentPages/Faculty/Facultas";
+import Fakultas from '@/layouts/ComponentPages/Faculty/Facultas';
 
 type Props = {};
 const FakultasPages = (props: Props) => {
-    return(
+    return (
         <>
-        
             <Fakultas></Fakultas>
         </>
-    )
-}
+    );
+};
 export default FakultasPages;

@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger, DialogFooter, DialogHeader } from "@/components/ui/dialog";
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { useState } from 'react';
 
@@ -34,13 +34,15 @@ const EditModal = ({ data, onUpdated }: EditModalProps) => {
         code: 'Code',
         name: 'Name Class',
         description: 'Description',
-        is_active: 'Status Class'
+        is_active: 'Status Class',
     };
 
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="default" className='bg-yellow-600'>Edit</Button>
+                <Button variant="default" className="bg-yellow-600">
+                    Edit
+                </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
@@ -53,18 +55,24 @@ const EditModal = ({ data, onUpdated }: EditModalProps) => {
 
                             {key === 'is_active' ? (
                                 <select
-                                    className='rounded border p-2 w-full'
-                                    value={formData.is_active || ""}
+                                    className="w-full rounded border p-2"
+                                    value={formData.is_active || ''}
                                     onChange={(e) => handleChange(key as keyof ClassType, e.target.value)}
                                 >
-                                    <option className='text-black' value="" disabled>Select</option>
-                                    <option className='text-black' value="true">True</option>
-                                    <option className='text-black' value="false">False</option>
+                                    <option className="text-black" value="" disabled>
+                                        Select
+                                    </option>
+                                    <option className="text-black" value="true">
+                                        True
+                                    </option>
+                                    <option className="text-black" value="false">
+                                        False
+                                    </option>
                                 </select>
                             ) : (
                                 <input
                                     type="text"
-                                    className='rounded border p-2'
+                                    className="rounded border p-2"
                                     value={formData[key as keyof ClassType] as string}
                                     onChange={(e) => handleChange(key as keyof ClassType, e.target.value)}
                                 />
@@ -73,7 +81,9 @@ const EditModal = ({ data, onUpdated }: EditModalProps) => {
                     ))}
                 </div>
                 <DialogFooter>
-                    <Button type="button" onClick={handleSubmit}>Save</Button>
+                    <Button type="button" onClick={handleSubmit}>
+                        Save
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

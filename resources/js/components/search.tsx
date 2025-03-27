@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 const SearchName = ({ onSearch }) => {
-    const [search, setSearch] = useState("");
+    const [search, setSearch] = useState('');
 
     const handleSearch = () => {
         if (onSearch) {

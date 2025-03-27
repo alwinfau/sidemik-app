@@ -2,27 +2,27 @@
 
 import {
     BookCheckIcon,
-    BookOpen, CircleHelp,
+    BookOpen,
+    CircleHelp,
     DatabaseIcon,
     DollarSign,
-    Frame, HistoryIcon,
+    HistoryIcon,
     InboxIcon,
-    LaptopMinimalCheck, Layers,
-    Layers2, LayersIcon,
-    LayoutGrid, LibraryIcon,
+    LaptopMinimalCheck,
+    LayersIcon,
+    LayoutGrid,
+    LibraryIcon,
     LucideHandshake,
     LucideIcon,
     LucideLandmark,
-    Map,
     NewspaperIcon,
-    PieChart,
     Repeat2,
     Settings2,
     SwatchBookIcon,
     TrophyIcon,
     UserPlus2Icon,
     Users,
-    Users2
+    Users2,
 } from 'lucide-react';
 import * as React from 'react';
 
@@ -44,7 +44,6 @@ import {
 } from '@/components/ui/sidebar';
 import { NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-
 
 // This is sample data.
 export interface AppData {
@@ -112,7 +111,7 @@ const data: AppData = {
             plan: 'Free',
         },
     ],
-    
+
     navMain: [
         {
             title: 'Resource',
@@ -171,7 +170,6 @@ const data: AppData = {
             ],
         },
         {
-            
             title: 'Employee',
             url: '#',
             icon: Users,
@@ -284,7 +282,6 @@ const data: AppData = {
                 },
             ],
         },
-    
     ],
     projects: [
         {
@@ -295,7 +292,7 @@ const data: AppData = {
         {
             name: 'History',
             url: '#',
-            icon: HistoryIcon
+            icon: HistoryIcon,
         },
         {
             name: 'Help Center',
@@ -316,13 +313,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                             <Link href={'/dashboard'}>
                                 <LayoutGrid /> <Label>Dashboard</Label>
                             </Link>
-                            
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
             <SidebarContent>
-            <NavMain items={data.navMain} />
+                <NavMain items={data.navMain} />
                 <NavProjects projects={data.projects} />
             </SidebarContent>
             <SidebarFooter>

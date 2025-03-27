@@ -1,11 +1,11 @@
-import { Tables } from "@/components/table";
-import {Card, CardContent, CardHeader, CardTitle, CardDescription} from "@/components/ui/card";
-import { useState } from "react";
-import CreateModal from "./CreateModal";
-import EditModal from "./EditModal";
-import AppLayout from "@/layouts/app-layout";
+import FilterStatus from '@/components/Filter';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import SearchName from "@/components/search";
-import FilterStatus from "@/components/Filter";
+import { Tables } from '@/components/table';
+import AppLayout from '@/layouts/app-layout';
+import { useState } from 'react';
+import CreateModal from './CreateModal';
+import EditModal from './EditModal';
 
 type ClassType = {
     id?: number
@@ -35,25 +35,24 @@ const Class = () => {
 
     return (
         <>
-        
             <AppLayout>
                 <div className="p-4">
                     <Card className="w-full">
                         <CardHeader>
                             <CardTitle>Class</CardTitle>
                             <CardDescription>Manage your class</CardDescription>
-                                <FilterStatus />
-                                <SearchName />
+                            <FilterStatus />
+                            <SearchName />
                         </CardHeader>
-                        <CardContent >
-                            <div className="mb-2 flex  justfy-end">
+                        <CardContent>
+                            <div className="justfy-end mb-2 flex">
                                 <CreateModal onCreate={handleCreate} />
                             </div>
                             <Tables
-                                head ={['Code', 'Name', 'Description', 'Active', 'Action']}
+                                head={['Code', 'Name', 'Description', 'Active', 'Action']}
                                 data={data}
                                 columns={['code', 'name', 'description', 'is_active']}
-                                edit= {(item) => <EditModal data={item} onUpdate={handleUpdate} />}
+                                edit={(item) => <EditModal data={item} onUpdate={handleUpdate} />}
                             />
                         </CardContent>
                     </Card>

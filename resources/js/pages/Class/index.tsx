@@ -1,4 +1,4 @@
-import Class from "@/layouts/ComponentPages/Class";
+import Class from '@/layouts/ComponentPages/Class';
 
 type Props = {};
 
@@ -7,8 +7,7 @@ const ClassPage = (props: Props) => {
         <>
             <Class></Class>
         </>
-        
-    )
+    );
 };
 
 export default ClassPage;
