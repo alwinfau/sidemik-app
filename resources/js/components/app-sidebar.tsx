@@ -45,6 +45,7 @@ import {
 import { NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 
+
 // This is sample data.
 export interface AppData {
     teams: {
@@ -111,7 +112,7 @@ const data: AppData = {
             plan: 'Free',
         },
     ],
-
+    
     navMain: [
         {
             title: 'Resource',
@@ -141,7 +142,7 @@ const data: AppData = {
                 },
                 {
                     title: 'Class',
-                    url: '#',
+                    url: '/class',
                 },
                 {
                     title: 'Student Batch',
@@ -161,15 +162,16 @@ const data: AppData = {
                 },
                 {
                     title: 'Faculty',
-                    url: '#',
+                    url: route('Fakultas'),
                 },
                 {
                     title: 'Study Program',
-                    url: '#',
+                    url: '/study-program',
                 },
             ],
         },
         {
+            
             title: 'Employee',
             url: '#',
             icon: Users,
@@ -282,6 +284,7 @@ const data: AppData = {
                 },
             ],
         },
+    
     ],
     projects: [
         {
@@ -313,12 +316,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                             <Link href={'/dashboard'}>
                                 <LayoutGrid /> <Label>Dashboard</Label>
                             </Link>
+                            
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
             <SidebarContent>
-                <NavMain items={data.navMain} />
+            <NavMain items={data.navMain} />
                 <NavProjects projects={data.projects} />
             </SidebarContent>
             <SidebarFooter>

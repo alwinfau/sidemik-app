@@ -15,7 +15,7 @@ import {
     SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 import { NavItem } from '@/types';
-import { usePage } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 
 export function NavMain({ items = [] }: { items: NavItem[] }) {
     const page = usePage();
@@ -38,9 +38,9 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                                     {item.items?.map((subItem) => (
                                         <SidebarMenuSubItem key={subItem.title}>
                                             <SidebarMenuSubButton asChild isActive={item.url === page.url}>
-                                                <a href={subItem.url}>
+                                                <Link href={subItem.url}>
                                                     <span>{subItem.title}</span>
-                                                </a>
+                                                </Link>
                                             </SidebarMenuSubButton>
                                         </SidebarMenuSubItem>
                                     ))}
