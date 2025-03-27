@@ -8,7 +8,7 @@ import {
     PaginationLink,
     PaginationNext,
     PaginationPrevious,
-} from '@/components/ui/paginition';
+} from '@/components/ui/pagination';
 
 function Paginations({}: Props) {
     return (

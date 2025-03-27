@@ -1,5 +1,5 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import Paginations from './paginations';
+import Paginations from './pagination';
 import { Button } from './ui/button';
 
 type Itables<T> = {
@@ -15,7 +15,7 @@ export function Tables<T>({ data, head, columns, edit }: Itables<T>) {
             <div>
                 <Table>
                     <TableHeader>
-                        <TableRow className="bg-gray-100">
+                        <TableRow>
                             <TableHead>No</TableHead>
                             {head.map((title, index) => (
                                 <TableHead key={index} className="text-start">

@@ -1,17 +1,18 @@
-import { Tables } from "@/components/Tables";
-import {Card, CardContent, CardHeader, CardTitle, CardDescription} from "@/components/ui/card";
-import { useState } from "react";
-import CreateModal from "./CreateModal";
-import EditModal from "./EditModal";
-import AppLayout from "@/layouts/app-layout";
+import FilterStatus from '@/components/Filter';
+import SearchName from '@/components/search';
+import { Tables } from '@/components/table';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import AppLayout from '@/layouts/app-layout';
+import { useState } from 'react';
+import CreateModal from './CreateModal';
+import EditModal from './EditModal';
 
 type ClassType = {
-    id?: number
-    code: string
-    name: string
-    description: string
-    is_active: "True" | "False"
-     
+    id?: number;
+    code: string;
+    name: string;
+    description: string;
+    is_active: 'True' | 'False';
 };
 
 const Class = () => {
@@ -21,9 +22,8 @@ const Class = () => {
             code: 'A',
             name: 'Class A',
             description: 'Class A description',
-            is_active: 'True', 
-            
-        }
+            is_active: 'True',
+        },
     ]);
     const handleCreate = (newData: Omit<ClassType, 'id'>) => {
         setData([...data, { ...newData, id: data.length + 1 }]);
@@ -34,23 +34,24 @@ const Class = () => {
 
     return (
         <>
-        
             <AppLayout>
                 <div className="p-4">
                     <Card className="w-full">
                         <CardHeader>
                             <CardTitle>Class</CardTitle>
                             <CardDescription>Manage your class</CardDescription>
+                            <FilterStatus />
+                            <SearchName />
                         </CardHeader>
-                        <CardContent >
-                            <div className="mb-2 flex  justfy-end">
+                        <CardContent>
+                            <div className="justfy-end mb-2 flex">
                                 <CreateModal onCreate={handleCreate} />
                             </div>
                             <Tables
-                                head ={['Code', 'Name', 'Description', 'Active', 'Action']}
+                                head={['Code', 'Name', 'Description', 'Active', 'Action']}
                                 data={data}
                                 columns={['code', 'name', 'description', 'is_active']}
-                                edit= {(item) => <EditModal data={item} onUpdate={handleUpdate} />}
+                                edit={(item) => <EditModal data={item} onUpdate={handleUpdate} />}
                             />
                         </CardContent>
                     </Card>

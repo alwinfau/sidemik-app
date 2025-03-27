@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers;
+use App\Http\Controllers\StudyProgram;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -16,7 +17,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 });
+Route::resource('/study-program', StudyProgram::class);
 
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/fakultas', function () {
+        return Inertia::render('Fakultas/Faculty');
+    })->name('Fakultas');
+});
 Route::get('/class', function () {
     return Inertia::render('Class/index');
 })->name('class');

@@ -2,27 +2,27 @@
 
 import {
     BookCheckIcon,
-    BookOpen, CircleHelp,
+    BookOpen,
+    CircleHelp,
     DatabaseIcon,
     DollarSign,
-    Frame, HistoryIcon,
+    HistoryIcon,
     InboxIcon,
-    LaptopMinimalCheck, Layers,
-    Layers2, LayersIcon,
-    LayoutGrid, LibraryIcon,
+    LaptopMinimalCheck,
+    LayersIcon,
+    LayoutGrid,
+    LibraryIcon,
     LucideHandshake,
     LucideIcon,
     LucideLandmark,
-    Map,
     NewspaperIcon,
-    PieChart,
     Repeat2,
     Settings2,
     SwatchBookIcon,
     TrophyIcon,
     UserPlus2Icon,
     Users,
-    Users2
+    Users2,
 } from 'lucide-react';
 import * as React from 'react';
 
@@ -161,11 +161,11 @@ const data: AppData = {
                 },
                 {
                     title: 'Faculty',
-                    url: '#',
+                    url: route('Fakultas'),
                 },
                 {
                     title: 'Study Program',
-                    url: '#',
+                    url: '/study-program',
                 },
             ],
         },
@@ -292,7 +292,7 @@ const data: AppData = {
         {
             name: 'History',
             url: '#',
-            icon: HistoryIcon
+            icon: HistoryIcon,
         },
         {
             name: 'Help Center',
