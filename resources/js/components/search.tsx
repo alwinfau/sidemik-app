@@ -20,7 +20,7 @@ const SearchName = ({ onSearch }) => {
             />
             <button 
                 onClick={handleSearch} 
-                className="bg-blue-500 text-white px-5 py-3 rounded"
+                className="bg-blue-500 text-white px-5 py-3 sm:px-2  md:py rounded "
             >
                 Search
             </button>

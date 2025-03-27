@@ -12,7 +12,7 @@ type ClassType = {
     code: string
     name: string
     description: string
-    is_active: "True" | "False"
+    is_active: "true" | "false"
 };
 
 const Class = () => {
@@ -22,7 +22,7 @@ const Class = () => {
             code: 'A',
             name: 'Class A',
             description: 'Class A description',
-            is_active: 'True', 
+            is_active: 'true', 
             
         }
     ]);
