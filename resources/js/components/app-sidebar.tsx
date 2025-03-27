@@ -141,7 +141,7 @@ const data: AppData = {
                 },
                 {
                     title: 'Class',
-                    url: '#',
+                    url: '/class',
                 },
                 {
                     title: 'Student Batch',
