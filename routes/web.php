@@ -10,12 +10,24 @@ use Inertia\Inertia;
 //})->name('home');
 
 Route::get('/', Controllers\DashboardController::class)->middleware(['auth','verified'])->name('home');
+//
+//Route::middleware(['auth', 'verified'])->group(function () {
+//    Route::get('/dashboard', function () {
+//        return Inertia::render('dashboard');
+//    })->name('dashboard');
+//});
 
+<<<<<<< HEAD
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
+=======
+// api.php
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+    return response()->json(['message' => 'Dashboard Access Granted']);
+>>>>>>> 8399728 (auth)
 });
 Route::resource('/study-program', StudyProgram::class);
 
@@ -28,6 +40,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('/class', function () {
     return Inertia::render('Class/index');
 })->name('class');
+
 
 Route::resource('resources/university-profile', Controllers\UniversityProfileController::class)->names([
     'resources/university-profile' => 'university-profile',

@@ -1,13 +1,21 @@
+<<<<<<< HEAD
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import AuthLayoutTemplate from '@/layouts/auth/auth-simple-layout';
 import { Link } from '@inertiajs/react';
 import { IconBrandApple, IconBrandGoogle, IconBrandLayers } from 'justd-icons';
 import React from 'react';
+=======
+import AuthLayoutTemplate from '@/layouts/auth/auth-split-layout';
+import React from 'react';
+import { Head, Link } from '@inertiajs/react';
+import { IconBrandLayers } from 'justd-icons';
+>>>>>>> 8399728 (auth)
 
 export default function AuthLayout({ children, title, description, ...props }: { children: React.ReactNode; title: string; description: string }) {
     return (
         <AuthLayoutTemplate title={title} description={description} {...props}>
+<<<<<<< HEAD
             <div className={'flex min-h-screen items-center justify-center'}>
                 <div className={'dark:border-background flex w-full max-w-5xl sm:rounded-lg md:border md:border-gray-100 md:shadow-md'}>
                     <div className={'flex flex-col gap-y-8 px-6 py-4 md:w-2/3'}>
@@ -62,9 +70,19 @@ export default function AuthLayout({ children, title, description, ...props }: {
                                 &copy; Copyright 2025 - ST.Bhinneka
                             </span>
                         </div>
+=======
+            <Head title={'Sign in'}/>
+                <div className={'flex items-center justify-start gap-x-2'}>
+                    <Link href={'/'}>
+                        <IconBrandLayers className="h-10 w-10 fill-current text-gray-500"/>
+                    </Link>
+                    <div className={'flex flex-col'}>
+                        <h3 className={'font-bold text-emerald-500'}>SIDEMIK</h3>
+                        <span className={'text-sm text-gray-500'}>Academic Information System</span>
+>>>>>>> 8399728 (auth)
                     </div>
                 </div>
-            </div>
+                {children}
         </AuthLayoutTemplate>
     );
 }
