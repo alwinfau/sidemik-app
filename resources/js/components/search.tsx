@@ -10,8 +10,7 @@ const SearchName = ({ onSearch }) => {
     };
 
     return (
-        <div className='flex items-center gap-2'>
-            <label htmlFor="search">Search</label>
+        <div className='flex justify-end gap-2'>
             <input
                 onChange={(e) => setSearch(e.target.value)}
                 id="search"
@@ -20,7 +19,7 @@ const SearchName = ({ onSearch }) => {
             />
             <button 
                 onClick={handleSearch} 
-                className="bg-blue-500 text-white px-5 py-3 sm:px-2  md:py rounded "
+                className="bg-blue-500 text-white px-2.5 py-1 sm:px-2 sm:py-2  md:py rounded "
             >
                 Search
             </button>

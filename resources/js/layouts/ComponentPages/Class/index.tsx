@@ -42,7 +42,7 @@ const Class = () => {
                             <CardTitle>Class</CardTitle>
                             <CardDescription>Manage your class</CardDescription>
                             <FilterStatus />
-                            <SearchName />
+                            <SearchName/>
                         </CardHeader>
                         <CardContent>
                             <div className="justfy-end mb-2 flex">
