@@ -77,17 +77,7 @@ const Prodi = () => {
     return (
         <>
             <AppLayout>
-                <div className="p-4">
-                    <ScrollArea className="h-200 w-400 rounded-md border whitespace-nowrap">
-                        <ScrollBar orientation="horizontal" />
-                        <Card className="w-full">
-                            <CardHeader>
-                                <CardTitle>Prodi</CardTitle>
-                                <CardDescription>Manage your Prodi</CardDescription>
-                                <FilterStatus />
-                                <SearchName />
-                            </CardHeader>
-                            <CardContent>
+                <div className="m-5">
                                 <div className="mb-4 flex justify-end">
                                     <CreateModal onCreate={handleCreate} />
                                 </div>
@@ -150,9 +140,6 @@ const Prodi = () => {
                                     ]}
                                     edit={(item) => <EditModal data={item} onUpdate={handleUpdate} />}
                                 />
-                            </CardContent>
-                        </Card>
-                    </ScrollArea>
                 </div>
             </AppLayout>
         </>

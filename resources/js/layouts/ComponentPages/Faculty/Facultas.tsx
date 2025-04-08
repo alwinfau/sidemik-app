@@ -55,7 +55,7 @@ const Fakultas = () => {
                             <CardTitle>Faculty</CardTitle>
                             <CardDescription>Manage Your Faculty</CardDescription>
                             <FilterStatus />
-                            <SearchName></SearchName>
+                            <SearchName />
                         </CardHeader>
                         <CardContent>
                             <div className="mb-4 flex justify-end">

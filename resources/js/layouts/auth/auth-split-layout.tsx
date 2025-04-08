@@ -2,6 +2,7 @@ import AppLogoIcon from '@/components/app-logo-icon';
 import { type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { type PropsWithChildren } from 'react';
+import { IconBrandLayers } from 'justd-icons';
 
 interface AuthLayoutProps {
     title?: string;
@@ -16,7 +17,7 @@ export default function AuthSplitLayout({ children, title, description }: PropsW
             <div className="bg-muted relative hidden h-full flex-col p-10 text-white lg:flex dark:border-r">
                 <div className="absolute inset-0 bg-zinc-900" />
                 <Link href={route('home')} className="relative z-20 flex items-center text-lg font-medium">
-                    <AppLogoIcon className="mr-2 size-8 fill-current text-white" />
+                    <IconBrandLayers className="mr-2 size-8 fill-current text-white" />
                     {name}
                 </Link>
                 {quote && (

@@ -9,10 +9,10 @@ type Itables<T> = {
     edit: (item: T) => React.ReactNode;
 };
 
-export function Tables<T>({ data, head, columns, edit }: Itables<T>) {
+export function  Tables<T>({ data, head, columns, edit }: Itables<T>) {
     return (
         <>
-            <div>
+            <div >
                 <Table>
                     <TableHeader>
                         <TableRow>

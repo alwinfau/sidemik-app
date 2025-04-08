@@ -1,5 +1,13 @@
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useState } from 'react';
@@ -65,9 +73,18 @@ const CreateModal = ({ onCreate }: CreateModalProps) => {
         kompetensi_prodi: '',
         capaian_pembelajaran_prodi: '',
     });
+
+    const handleChange = <K extends keyof typeof formData>(key: K, value: string) => {
+        setFormData((prev) => ({
+            ...prev,
+            [key]: value,
+        }));
+    };
+
     const handleSubmit = () => {
         onCreate(formData);
     };
+
     const labelMapping: Record<string, string> = {
         fakultas_id: 'Faculty',
         kode_ps: 'Code Prodi',
@@ -85,16 +102,17 @@ const CreateModal = ({ onCreate }: CreateModalProps) => {
         max_dosen_penguji: 'Maximum lectures of Examiners',
         pejabat_prodi_id: 'Oficial Prodi',
         akreditasi_prodi_id: 'Prodi Accreditation',
-        alamat_prodi: 'Prodi Adress',
-        telp_prodi: 'Prodi Telphon Number',
+        alamat_prodi: 'Prodi Address',
+        telp_prodi: 'Prodi Telephone Number',
         alamat_email_prodi: 'Email Prodi',
         alamat_web_prodi: 'Website Prodi',
         deskripsi_prodi: 'Description Prodi',
         visi_prodi: 'Vision Prodi',
-        misi_prodi: 'Mision Prodi',
+        misi_prodi: 'Mission Prodi',
         kompetensi_prodi: 'Competency Prodi',
         capaian_pembelajaran_prodi: 'Goals Prodi',
     };
+
     return (
         <Dialog>
             <div className="flex w-full justify-start">
@@ -104,7 +122,7 @@ const CreateModal = ({ onCreate }: CreateModalProps) => {
                     </Button>
                 </DialogTrigger>
             </div>
-            <DialogContent className="sm:max-w-[800px]">
+            <DialogContent className="sm:max-w-[800px] pointer-events-auto z-[9999]">
                 <DialogHeader>
                     <DialogTitle>Create Prodi</DialogTitle>
                     <DialogDescription>Add New Prodi</DialogDescription>
@@ -114,22 +132,16 @@ const CreateModal = ({ onCreate }: CreateModalProps) => {
                         {Object.entries(formData).map(([key, value]) => {
                             if (['tugas_akhir_syarat', 'ukom_syarat'].includes(key)) {
                                 return (
-                                    <div key={key} className="col-span-1">
+                                    <div key={key} className="col-span-2">
                                         <Label>{labelMapping[key] || key.replace('_', ' ').toUpperCase()}</Label>
                                         <select
-                                            className="w-full rounded border p-2"
+                                            className="w-full rounded border p-2 text-white"
                                             value={value || ''}
                                             onChange={(e) => handleChange(key as keyof typeof formData, e.target.value)}
                                         >
-                                            <option className="text-black" value="" disabled>
-                                                Pilih
-                                            </option>
-                                            <option className="text-black" value="true">
-                                                True
-                                            </option>
-                                            <option className="text-black" value="false">
-                                                False
-                                            </option>
+                                            <option className='text-black' value="" disabled>Pilih</option>
+                                            <option className='text-black' value="true">True</option>
+                                            <option className='text-black' value="false">False</option>
                                         </select>
                                     </div>
                                 );
@@ -140,7 +152,6 @@ const CreateModal = ({ onCreate }: CreateModalProps) => {
                                         <Label>{labelMapping[key] || key.replace('_', ' ').toUpperCase()}</Label>
                                         <textarea
                                             className="h-24 w-full rounded border p-2"
-                                            placeholder=""
                                             value={value}
                                             onChange={(e) => handleChange(key as keyof typeof formData, e.target.value)}
                                         />
@@ -153,7 +164,6 @@ const CreateModal = ({ onCreate }: CreateModalProps) => {
                                     <input
                                         type="text"
                                         className="w-full rounded border p-2"
-                                        placeholder=""
                                         value={value}
                                         onChange={(e) => handleChange(key as keyof typeof formData, e.target.value)}
                                     />
@@ -171,4 +181,5 @@ const CreateModal = ({ onCreate }: CreateModalProps) => {
         </Dialog>
     );
 };
+
 export default CreateModal;

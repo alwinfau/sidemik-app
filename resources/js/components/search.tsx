@@ -1,6 +1,10 @@
 import { useState } from 'react';
 
-const SearchName = ({ onSearch }) => {
+type props = {
+    onSearch? : any
+}
+
+const SearchName = ({ onSearch } : props) => {
     const [search, setSearch] = useState('');
 
     const handleSearch = () => {
@@ -10,10 +14,17 @@ const SearchName = ({ onSearch }) => {
     };
 
     return (
-        <div className="flex justify-end gap-2">
-            <label htmlFor="search"></label>
-            <input onChange={(e) => setSearch(e.target.value)} id="search" placeholder="Search..." className="w-[300px] rounded border px-2 py-2" />
-            <button onClick={handleSearch} className="rounded bg-blue-500 px-2 py-2 text-white">
+        <div className='flex justify-end gap-2'>
+            <input
+                onChange={(e) => setSearch(e.target.value)}
+                id="search"
+                placeholder='Search...'
+                className="w-[300px] border px-2 py-1 rounded"
+            />
+            <button 
+                onClick={handleSearch} 
+                className="bg-blue-500 text-white px-2.5 py-1 sm:px-2 sm:py-2  md:py rounded "
+            >
                 Search
             </button>
         </div>
