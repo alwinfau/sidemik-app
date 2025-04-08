@@ -54,9 +54,9 @@ const FacultyForm = ({ formData, setFormData }: FacultyFormProps) => {
                                     value={value || ''}
                                     onChange={(e) => handleChange(key as keyof FakultasType, e.target.value)}
                                 >
-                                    <option value="">Pilih Status</option>
-                                    <option value="AKTIF">AKTIF</option>
-                                    <option value="NON_AKTIF">NON AKTIF</option>
+                                    <option className='text-black' value="">Pilih Status</option>
+                                    <option className='text-black' value="AKTIF">AKTIF</option>
+                                    <option className='text-black' value="NON_AKTIF">NON AKTIF</option>
                                 </select>
                             </div>
                         );

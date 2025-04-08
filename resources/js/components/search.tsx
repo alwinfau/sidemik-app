@@ -1,6 +1,10 @@
 import { useState } from 'react';
 
-const SearchName = ({ onSearch }) => {
+type props = {
+    onSearch? : any
+}
+
+const SearchName = ({ onSearch } : props) => {
     const [search, setSearch] = useState('');
 
     const handleSearch = () => {

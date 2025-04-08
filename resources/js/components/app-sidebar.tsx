@@ -266,7 +266,7 @@ const data: AppData = {
             items: [
                 {
                     title: 'Academic Period',
-                    url: '#',
+                    url: '/AcademicPeriod',
                 },
                 {
                     title: 'Payments',
@@ -318,7 +318,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </SidebarMenu>
             </SidebarHeader>
             <SidebarContent>
-                <NavMain items={data.navMain} />
+                <NavMain items={data.navMain}/>
                 <NavProjects projects={data.projects} />
             </SidebarContent>
             <SidebarFooter>
