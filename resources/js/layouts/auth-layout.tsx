@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Head, Link } from '@inertiajs/react';
-import AuthLayoutTemplate from '@/layouts/auth/auth-simple-layout'; // atau auth-split-layout, sesuaikan dengan kebutuhan akhir
+import AuthLayoutTemplate from '@/layouts/auth/auth-simple-layout';
 import { IconBrandApple, IconBrandGoogle, IconBrandLayers } from 'justd-icons';
 
 export default function AuthLayout({ children, title, description, ...props }: { children: React.ReactNode; title: string; description: string }) {

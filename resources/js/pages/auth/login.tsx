@@ -148,47 +148,23 @@ export default function Login({ status, canResetPassword }: LoginProps) {
     const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    const submit: FormEventHandler = async (e) => {
+    const submit: FormEventHandler = (e) => {
         e.preventDefault();
         setProcessing(true);
         setErrors({});
         setErrorMessage(null);
 
-        try {
-            const response = await axios.post('https://demoapisidemik-main-i8jv1d.laravel.cloud/api/oauth2/v1/token/access-token', {
-                    email: data.email,
-                    password: data.password,
-            });
-            console.log("login response", response);
-            const token = response.data.data.token;
-            localStorage.setItem('token', token);
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-            router.visit('/dashboard');
-            // window.location.href = "/dashboard";
-        } catch (error: any) {
-            console.error("Login Error:", error);
-
-            if (axios.isAxiosError(error)) {
-                console.log("Error Response:", error.response);
-
-                const status = error.response?.status;
-                const data = error.response?.data;
-
-                if (status === 401) {
-                    setErrorMessage("Invalid email or password.");
-                } else if (status === 422) {
-                    setErrors(data.errors || {});
-                } else if (status === 500) {
-                    setErrorMessage("Server error. Please try again later.");
-                } else {
-                    setErrorMessage(data?.meta?.message || 'Login failed');
-                }
-            } else {
-                setErrorMessage("An unexpected error occurred.");
+        router.post(route('login'), data, {
+            onSuccess: () => {
+                router.visit('/dashboard');
+            },
+            onError: (errors) => {
+                setErrors(errors);
+            },
+            onFinish: () => {
+                setProcessing(false);
             }
-        } finally {
-            setProcessing(false);
-        }
+        });
     };
 
     return (
