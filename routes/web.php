@@ -9,21 +9,21 @@ use Inertia\Inertia;
 Route::get('/', Controllers\DashboardController::class)->middleware(['auth','verified'])->name('home');
 
 // Route dashboard
-Route::middleware(['auth', 'verified'])->group(function () {
+// Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
-});
+// });
 
 // Resource Study Program
 Route::resource('/study-program', StudyProgram::class);
 
 // Route Fakultas
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/fakultas', function () {
+// Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/faculty', function () {
         return Inertia::render('Fakultas/Faculty');
     })->name('Fakultas');
-});
+// });
 
 // Route Class
 Route::get('/class', function () {

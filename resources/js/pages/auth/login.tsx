@@ -115,7 +115,7 @@
 
 import { Head, router } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
-import { FormEventHandler, useState } from 'react';
+import { FormEventHandler, useEffect, useState } from 'react';
 import axios from 'axios';
 
 import InputError from '@/components/input-error';
@@ -129,7 +129,6 @@ import AuthLayout from '@/layouts/auth-layout';
 type LoginForm = {
     email: string;
     password: string;
-    remember: boolean;
 };
 
 interface LoginProps {
@@ -141,31 +140,62 @@ export default function Login({ status, canResetPassword }: LoginProps) {
     const [data, setData] = useState<LoginForm>({
         email: '',
         password: '',
-        remember: false,
     });
 
     const [processing, setProcessing] = useState(false);
     const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    const submit: FormEventHandler = (e) => {
+    const submit: FormEventHandler = async (e) => {
         e.preventDefault();
         setProcessing(true);
         setErrors({});
         setErrorMessage(null);
+    
+        try {
+            const response = await axios.post("https://demoapisidemik-main-i8jv1d.laravel.cloud/api/oauth2/v1/token/access-token", {
+                ...data,
+            });
 
-        router.post(route('login'), data, {
-            onSuccess: () => {
-                router.visit('/dashboard');
-            },
-            onError: (errors) => {
-                setErrors(errors);
-            },
-            onFinish: () => {
-                setProcessing(false);
+            console.log(response)
+
+    
+            // Jika login berhasil, arahkan ke dashboard
+            if (response.status === 200) {
+             
+                const token = response.data.data.token;
+                const username = response.data.data.user.name
+                const email = response.data.data.user.email
+    
+                localStorage.setItem('token', token);
+                localStorage.setItem('username', username);
+                localStorage.setItem('email', email);
+                router.visit('/dashboard'); 
             }
-        });
+
+
+        } catch (error: any) {
+            // Tangani error dari API
+            if (error.response && error.response.data) {
+                const responseData = error.response.data;
+    
+                // Jika ada pesan error spesifik
+                if (responseData.message) {
+                    setErrorMessage(responseData.message);
+                }
+    
+                // Kalau errornya per-field
+                if (responseData.errors) {
+                    setErrors(responseData.errors);
+                }
+            } else {
+                setErrorMessage("An unexpected error occurred.");
+            }
+        } finally {
+            setProcessing(false);
+        }
     };
+    
 
     return (
         <AuthLayout title="Log in to your account" description="Enter your email and password below to log in">
@@ -214,14 +244,14 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                     </div>
 
                     <div className="flex items-center space-x-3">
-                        <Checkbox
+                        {/* <Checkbox
                             id="remember"
                             name="remember"
                             checked={data.remember}
                             onClick={() => setData({ ...data, remember: !data.remember })}
                             tabIndex={3}
                             disabled={processing}
-                        />
+                        /> */}
                         <Label htmlFor="remember">Remember me</Label>
                     </div>
 

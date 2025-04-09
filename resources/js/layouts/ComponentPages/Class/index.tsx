@@ -37,25 +37,21 @@ const Class = () => {
         <>
             <AppLayout>
                 <div className="p-4">
-                    <Card className="w-full">
-                        <CardHeader>
+                    <CardHeader>
                             <CardTitle>Class</CardTitle>
                             <CardDescription>Manage your class</CardDescription>
-                            <FilterStatus />
-                            <SearchName/>
                         </CardHeader>
-                        <CardContent>
-                            <div className="justfy-end mb-2 flex">
-                                <CreateModal onCreate={handleCreate} />
-                            </div>
-                            <Tables
-                                head={['Code', 'Name', 'Description', 'Active', 'Action']}
-                                data={data}
-                                columns={['code', 'name', 'description', 'is_active']}
-                                edit={(item) => <EditModal data={item} onUpdate={handleUpdate} />}
-                            />
-                        </CardContent>
-                    </Card>
+                        <FilterStatus />
+                        <SearchName/>
+                        <div className="justfy-end mb-2 flex">
+                            <CreateModal onCreate={handleCreate} />
+                        </div>
+                        <Tables
+                            head={['Code', 'Name', 'Description', 'Active', 'Action']}
+                            data={data}
+                            columns={['code', 'name', 'description', 'is_active']}
+                            edit={(item) => <EditModal data={item} onUpdate={handleUpdate} />}
+                        />
                 </div>
             </AppLayout>
         </>
