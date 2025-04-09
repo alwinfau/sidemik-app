@@ -77,6 +77,12 @@ const Prodi = () => {
     return (
         <>
             <AppLayout>
+                <CardHeader>
+                    <CardTitle>Study Program</CardTitle>
+                    <CardDescription>Manage your Study Program</CardDescription>
+                </CardHeader>
+                <FilterStatus />
+                <SearchName />
                 <div className="m-5">
                                 <div className="mb-4 flex justify-end">
                                     <CreateModal onCreate={handleCreate} />

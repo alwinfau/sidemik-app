@@ -1,100 +1,115 @@
 import FilterStatus from '@/components/Filter';
 import SearchName from '@/components/search';
 import { Tables } from '@/components/table';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CreateModal from './CreateModal';
 import EditModal from './EditModal';
+import { useAxios } from '@/hooks/useAxios';
 
 type FakultasType = {
     id?: string;
-    kode_fakultas: string;
-    nama_fakultas: string;
-    nama_fakultas_en: string;
-    nama_singkat_fakultas: string;
-    alamat_fakultas: string;
-    telp_fakultas: string;
-    periode_akademik_id: number | null;
-    status_fakultas: 'AKTIF' | 'NON_AKTIF' | null;
-    visi_fakultas: string;
-    misi_fakultas: string;
-    ket_fakultas: string;
+    code: string;
+    name: string;
+    eng_name: string;
+    short_name: string;
+    address: string;
+    telephone: string;
+    academic_period_id: number | null;
+    is_active: 'AKTIF' | 'NON_AKTIF' | null;
+    vission: string;
+    mission: string;
+    description: string;
 };
+
 const Fakultas = () => {
-    const [data, setData] = useState<FakultasType[]>([
-        {
-            kode_fakultas: '',
-            nama_fakultas: '',
-            nama_fakultas_en: '',
-            nama_singkat_fakultas: '',
-            alamat_fakultas: '',
-            telp_fakultas: '',
-            periode_akademik_id: null,
-            status_fakultas: null,
-            visi_fakultas: '',
-            misi_fakultas: '',
-            ket_fakultas: '',
-        },
-    ]);
+    const {get} = useAxios();
+    const {del} = useAxios();
+    const [data, setData] = useState<any>([]);
+
     const handleCreate = (newData: Omit<FakultasType, 'id'>) => {
         setData([...data, { ...newData, id: String(data.length + 1) }]);
     };
     const handleUpdate = (updateData: FakultasType) => {
-        setData(data.map((item) => (item.id === updateData.id ? updateData : item)));
+        setData(data.map((item: any) => (item.id === updateData.id ? updateData : item)));
+        
     };
+    
+    const handleDelete = async (id: string) => {    
+        try {
+            await del(`/faculty/${id}`);
+            setData(data.filter((item: any) => item.id !== id));
+            
+        } catch (error) {
+            console.error('Gagal menghapus data fakultas:', error);
+            
+        }
+    };
+    
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const fakultas = await get<any>('/faculty');
+                setData(fakultas.data.data); 
+            } catch (error) {
+                console.error('Gagal mengambil data fakultas:', error);
+            } finally {
+                console.log("selesai")
+            }
+        };
+        
+        fetchData();
+    }, []);
+    
+    console.log(data)
 
     return (
         <AppLayout>
             <div className="w-full">
-                <ScrollArea className="h-200 w-full rounded-md border whitespace-nowrap">
-                    <ScrollBar orientation="horizontal" />
-                    <Card className="w-full">
-                        <CardHeader>
-                            <CardTitle>Faculty</CardTitle>
-                            <CardDescription>Manage Your Faculty</CardDescription>
-                            <FilterStatus />
-                            <SearchName />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="mb-4 flex justify-end">
-                                <CreateModal onCreate={handleCreate} />
-                            </div>
-                            <Tables
-                                head={[
-                                    'Faculty Code',
-                                    'Faculty Name',
-                                    'Faculty Name (EN)',
-                                    'Short Name',
-                                    'Faculty Address',
-                                    'Phone Number',
-                                    'Academic Period',
-                                    'Status',
-                                    'Vision',
-                                    'Mission',
-                                    'Description',
-                                    'Action',
-                                ]}
-                                data={data}
-                                columns={[
-                                    'kode_fakultas',
-                                    'nama_fakultas',
-                                    'nama_fakultas_en',
-                                    'nama_singkat_fakultas',
-                                    'alamat_fakultas',
-                                    'telp_fakultas',
-                                    'periode_akademik_id',
-                                    'status_fakultas',
-                                    'visi_fakultas',
-                                    'misi_fakultas',
-                                    'ket_fakultas',
-                                ]}
-                                edit={(item) => <EditModal data={item} onUpdate={handleUpdate} />}
-                            />
-                        </CardContent>
-                    </Card>
-                </ScrollArea>
+                <CardHeader>
+                    <CardTitle>Faculty</CardTitle>
+                    <CardDescription>Manage Your Faculty</CardDescription>
+                    <FilterStatus />
+                    <SearchName />
+                    <div className="mb-4 flex justify-end">
+                        <CreateModal onCreate={handleCreate} />
+                    </div>
+                </CardHeader>
+                <div className='mx-6'>
+
+                <Tables
+                    head={[
+                        'Faculty Code',
+                        'Faculty Name',
+                        'Faculty Name (EN)',
+                        'Short Name',
+                        'Faculty Address',
+                        'Phone Number',
+                        'Academic Period',
+                        'Status',
+                        'Vision',
+                        'Mission',
+                        'Description',
+                        'Action',
+                    ]}
+                    data={data}
+                    columns={[
+                        'code',
+                        'name',
+                        'eng_name',
+                        'short_name',
+                        'address',
+                        'telephone',
+                        (item) => item.academic_period?.name ?? '-',
+                        'is_active',
+                        'vision',
+                        'mission',
+                        'description',
+                    ]}
+                    edit={(item) => <EditModal data={item} onUpdate={handleUpdate} />} onDelete={handleDelete}
+                />
+                </div>
             </div>
         </AppLayout>
     );

@@ -53,9 +53,6 @@ const PeriodeAcademic = () =>{
     return(
         <AppLayout>
             <div className="w-full">
-            <ScrollArea className="h-200 w-full rounded-md border whitespace-nowrap">
-                <ScrollBar orientation="horizontal" />
-                <Card className="w-full">
                     <CardHeader>
                         <CardTitle>Academic Period</CardTitle>
                         <CardDescription>Manage Your Academic Period</CardDescription>
@@ -101,8 +98,6 @@ const PeriodeAcademic = () =>{
                             edit={(item : any) => <EditModal data={item} onUpdate={handleUpdate} />}
                         />
                     </CardContent>
-                </Card>
-            </ScrollArea>
             </div>
         </AppLayout>
     )

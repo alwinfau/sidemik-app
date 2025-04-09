@@ -161,7 +161,7 @@ const data: AppData = {
                 },
                 {
                     title: 'Faculty',
-                    url: route('Fakultas'),
+                    url: '/faculty',
                 },
                 {
                     title: 'Study Program',
