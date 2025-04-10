@@ -28,7 +28,7 @@ type FakultasType = {
     telephone: string;
     academic_period_id: number | null;
     is_active: '1' | '0' | null;
-    vission: string;
+    vision: string;
     mission: string;
     description: string;
 };
@@ -47,7 +47,7 @@ const labelMapping: Record<string, string> = {
     telephone: 'Faculty Telephone Number',
     academic_period_id: 'Period Academic',
     is_active: 'Status Faculty',
-    vission: 'Vision Faculty',
+    vision: 'Vision Faculty',
     mission: 'Mission Faculty',
     description: 'Description Faculty',
 };
@@ -84,17 +84,19 @@ const EditModal = ({ data, onUpdate }: EditModalProps) => {
             telephone: formData.telephone,
             academic_period_id: formData.academic_period_id ? Number(formData.academic_period_id) : null,
             is_active: formData.is_active === '1' ? 1 : 0,
-            vission: formData.vission,
+            vision: formData.vision,
             mission: formData.mission,
             description: formData.description,
         };
+
         await put(`/faculty/${formData.id}`, payload);
         onUpdate(formData);
         setOpen(false);
-        } catch (error: any) {
-            console.error('Gagal update fakultas:', error?.response?.data || error.message || error);
-        }
-    };
+    console.log('Data berhasil diupdate');
+    } catch (error: any) {
+    console.error('Gagal update fakultas:', error?.response?.data || error.message || error);
+    }
+};
 
 useEffect(() => {
     const fetchAcademicPeriods = async () => {
@@ -163,7 +165,7 @@ useEffect(() => {
                     );
                 }
 
-                if (['vission', 'mission', 'description'].includes(key)) {
+                if (['vision', 'mission', 'description'].includes(key)) {
                     return (
                     <div key={key} className="col-span-2">
                         <Label>{labelMapping[key]}</Label>

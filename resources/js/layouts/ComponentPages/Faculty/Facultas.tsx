@@ -30,14 +30,7 @@ const Fakultas = () => {
     const [data, setData] = useState<any>([]);
 
     const handleCreate = (newData: Omit<FakultasType, 'id'>) => {
-        setData([
-            ...data,
-            {
-                ...newData,
-                id: String(data.length + 1),
-                is_active: String(newData.is_active) === '1' ? 'AKTIF' : 'NON AKTIF',
-            }
-        ]);          
+        setData([...data, { ...newData, id: String(data.length + 1) }]);
     };
     const handleUpdate = (updateData: FakultasType) => {
         setData(data.map((item: any) => (item.id === updateData.id ? updateData : item)));
