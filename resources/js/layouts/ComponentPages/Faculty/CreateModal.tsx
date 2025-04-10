@@ -28,7 +28,7 @@ type FakultasType = {
     telephone: string;
     academic_period_id: number | null;
     is_active: '1' | '0' | null;
-    vission: string;
+    vision: string;
     mission: string;
     description: string;
 };
@@ -37,18 +37,20 @@ type FacultyFormProps = {
     formData: Omit<FakultasType, 'id'>;
     setFormData: (data: Omit<FakultasType, 'id'>) => void;
     academicPeriods: AcademicPeriodType[];
+    formErrors: Partial<Record<keyof Omit<FakultasType, 'id'>, string>>;
 };
+
 
 const labelMapping: Record<string, string> = {
     code: 'Code Faculty',
-    name: 'Name Faculty',
+    name: 'Name Faculty (IDN)',
     eng_name: 'Name Faculty (EN)',
     short_name: 'Short Name Of Faculty',
     address: 'Faculty Address',
     telephone: 'Faculty Telephone Number',
     academic_period_id: 'Period Academic',
     is_active: 'Status Faculty',
-    vission: 'Vision Faculty',
+    vision: 'Vision Faculty',
     mission: 'Mission Faculty',
     description: 'Description Faculty',
 };
@@ -62,6 +64,7 @@ const CreateModal = ({ onCreate }: CreateModalProps) => {
     const { post, get } = useAxios();
     const [open, setOpen] = useState(false); 
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [formErrors, setFormErrors] = useState<Partial<Record<keyof Omit<FakultasType, 'id'>, string>>>({});
     const [formData, setFormData] = useState<Omit<FakultasType, 'id'>>({
         code: '',
         name: '',
@@ -71,7 +74,7 @@ const CreateModal = ({ onCreate }: CreateModalProps) => {
         telephone: '',
         academic_period_id: null,
         is_active: null,
-        vission: '',
+        vision: '',
         mission: '',
         description: '',
     });
@@ -90,28 +93,48 @@ const CreateModal = ({ onCreate }: CreateModalProps) => {
 
         fetchAcademicPeriods();
     }, []);
+    const getStatusLabel = (val: string | number): string =>
+        val == 1 || val == '1' ? 'AKTIF' : 'NON AKTIF';
+    
+    const validateform =()=>{
+        const errors: Partial<Record<keyof Omit <FakultasType, 'id'>, string>> = {};
+
+        Object.entries(formData).forEach(([key, value]) =>{
+            if (
+                (typeof value === 'string' && value.trim()=='')||
+                (value === null)
+            ){
+                errors[key as keyof Omit<FakultasType, 'id'>] = `${labelMapping[key]} is required`;
+            }
+        })
+        setFormErrors(errors)
+        return Object.keys(errors).length === 0;
+    }
+
 
     const handleSubmit = async () => {
-        try {
-            const response = await post('/faculty', formData);
-            onCreate(formData);
-            console.log('Fakultas berhasil dibuat:', response.data);
-            setOpen(false);
-            setErrorMessage(null); 
-        } catch (error: any) {
+            if (!validateform()) return;
+            try {
+                const response = await post('/faculty', formData);
+                onCreate(formData);
+                setOpen(false);
+                setErrorMessage(null);
+                setFormErrors({}); 
+            } catch (error: any) {
             console.error('Gagal membuat fakultas:', error);
-    
-            // 🔽 Taruh ini di sini
+            
             const metaMessage = error?.response?.data?.meta?.message;
             const fields = error?.response?.data?.data?.fields;
-    
-            const message = metaMessage
-                ? `${metaMessage}${fields ? ' (' + fields.join(', ') + ')' : ''}`
+            const translatedFields = fields?.map((field: string) => labelMapping[field] || field);
+            const cleanedMessage = metaMessage?.replace(/ in:.*$/, '') ?? '';
+            const message = cleanedMessage
+                ? `${cleanedMessage}${translatedFields ? ' (' + translatedFields.join(', ') + ')' : ''}`
                 : 'Terjadi kesalahan';
     
-            setErrorMessage(message); // tampilkan ke UI
+            setErrorMessage(message);
         }
     };
+    
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <div className="flex w-full justify-start">
@@ -130,6 +153,7 @@ const CreateModal = ({ onCreate }: CreateModalProps) => {
                     formData={formData}
                     setFormData={setFormData}
                     academicPeriods={academicPeriods}
+                    formErrors={formErrors}
                 />
                 <DialogFooter className="flex flex-col items-start">
                     {errorMessage && (
@@ -145,8 +169,8 @@ const CreateModal = ({ onCreate }: CreateModalProps) => {
 };
 
 
-const FacultyForm = ({ formData, setFormData, academicPeriods }: FacultyFormProps) => {
-    const handleChange = (key: keyof FakultasType, value: string | number | null) => {
+const FacultyForm = ({ formData, setFormData, academicPeriods, formErrors }: FacultyFormProps) => {
+    const handleChange = (key: keyof Omit<FakultasType, 'id'>, value: string | number | null) => {
         setFormData({ ...formData, [key]: value });
     };
 
@@ -160,25 +184,31 @@ const FacultyForm = ({ formData, setFormData, academicPeriods }: FacultyFormProp
                                 <Label>{labelMapping[key]}</Label>
                                 <select
                                     className="w-full rounded border p-2"
-                                    value={value || ''}
-                                    onChange={(e) => handleChange(key as keyof FakultasType, e.target.value)}
+                                    value={value ?? ''}
+                                    onChange={(e) => handleChange(key as keyof Omit<FakultasType, 'id'>, e.target.value)}
                                 >
                                     <option className="text-black" value="">Pilih Status</option>
                                     <option className="text-black" value="1">AKTIF</option>
                                     <option className="text-black" value="0">NON AKTIF</option>
                                 </select>
+                                {formErrors[key as keyof Omit<FakultasType, 'id'>] && (
+                                    <p className="text-red-500 text-sm">{formErrors[key as keyof Omit<FakultasType, 'id'>]}</p>
+                                )}
                             </div>
                         );
                     }
 
                     if (key === 'academic_period_id') {
                         return (
-                            <div key={key}>
+                            <div key={key} className="col-span-2">
                                 <Label>{labelMapping[key]}</Label>
                                 <select
                                     className="w-full rounded border p-2"
                                     value={value ?? ''}
-                                    onChange={(e) => handleChange(key as keyof FakultasType, parseInt(e.target.value))}
+                                    onChange={(e) => {
+                                        const val = e.target.value;
+                                        handleChange(key as keyof Omit<FakultasType, 'id'>, val === '' ? null : parseInt(val));
+                                    }}
                                 >
                                     <option className="text-black" value="">Pilih Periode Akademik</option>
                                     {academicPeriods.map((period) => (
@@ -187,32 +217,41 @@ const FacultyForm = ({ formData, setFormData, academicPeriods }: FacultyFormProp
                                         </option>
                                     ))}
                                 </select>
+                                {formErrors[key as keyof Omit<FakultasType, 'id'>] && (
+                                    <p className="text-red-500 text-sm">{formErrors[key as keyof Omit<FakultasType, 'id'>]}</p>
+                                )}
                             </div>
                         );
                     }
 
-                    if (['vission', 'mission', 'description'].includes(key)) {
+                    if (['vision', 'mission', 'description'].includes(key)) {
                         return (
                             <div key={key} className="col-span-2">
                                 <Label>{labelMapping[key]}</Label>
                                 <textarea
                                     className="h-24 w-full rounded border p-2"
                                     value={value || ''}
-                                    onChange={(e) => handleChange(key as keyof FakultasType, e.target.value)}
+                                    onChange={(e) => handleChange(key as keyof Omit<FakultasType, 'id'>, e.target.value)}
                                 />
+                                {formErrors[key as keyof Omit<FakultasType, 'id'>] && (
+                                    <p className="text-red-500 text-sm">{formErrors[key as keyof Omit<FakultasType, 'id'>]}</p>
+                                )}
                             </div>
                         );
                     }
 
                     return (
-                        <div key={key}>
+                        <div key={key} className="col-span-1">
                             <Label>{labelMapping[key]}</Label>
                             <input
                                 type="text"
                                 className="w-full rounded border p-2"
                                 value={value || ''}
-                                onChange={(e) => handleChange(key as keyof FakultasType, e.target.value)}
+                                onChange={(e) => handleChange(key as keyof Omit<FakultasType, 'id'>, e.target.value)}
                             />
+                            {formErrors[key as keyof Omit<FakultasType, 'id'>] && (
+                                <p className="text-red-500 text-sm">{formErrors[key as keyof Omit<FakultasType, 'id'>]}</p>
+                            )}
                         </div>
                     );
                 })}
@@ -220,4 +259,5 @@ const FacultyForm = ({ formData, setFormData, academicPeriods }: FacultyFormProp
         </div>
     );
 };
+
 export default CreateModal;
