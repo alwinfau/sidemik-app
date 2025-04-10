@@ -8,6 +8,7 @@ import CreateModal from './CreateModal';
 import EditModal from './EditModal';
 import { useAxios } from '@/hooks/useAxios';
 
+
 type FakultasType = {
     id?: string;
     code: string;
@@ -16,9 +17,9 @@ type FakultasType = {
     short_name: string;
     address: string;
     telephone: string;
-    academic_period_id: number | null;
-    is_active: 'AKTIF' | 'NON_AKTIF' | null;
-    vission: string;
+    academic_period_id: number ;
+    is_active: '1' | '0' ;
+    vision: string;
     mission: string;
     description: string;
 };
@@ -40,7 +41,6 @@ const Fakultas = () => {
         try {
             await del(`/faculty/${id}`);
             setData(data.filter((item: any) => item.id !== id));
-            
         } catch (error) {
             console.error('Gagal menghapus data fakultas:', error);
             
@@ -51,7 +51,11 @@ const Fakultas = () => {
         const fetchData = async () => {
             try {
                 const fakultas = await get<any>('/faculty');
-                setData(fakultas.data.data); 
+                const transformated = fakultas.data.data.map((item:any) => ({
+                    ...item,
+                    is_active: item.is_active === 1 ? 'AKTIF':'NON AKTIF',
+                }))
+                setData(transformated); 
             } catch (error) {
                 console.error('Gagal mengambil data fakultas:', error);
             } finally {
@@ -78,7 +82,7 @@ const Fakultas = () => {
                 </CardHeader>
                 <div className='mx-6'>
 
-                <Tables
+                <Tables <FakultasType>
                     head={[
                         'Faculty Code',
                         'Faculty Name',
@@ -102,11 +106,22 @@ const Fakultas = () => {
                         'address',
                         'telephone',
                         (item) => item.academic_period?.name ?? '-',
-                        'is_active',
+                        (item) => (
+                        <span
+                            className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                                item.is_active === 'AKTIF'
+                                ? 'bg-green-100 text-green-700'
+                                : 'bg-red-100 text-red-700'
+                            }`}
+                            >
+                            {item.is_active}
+                        </span>
+                        ),
                         'vision',
                         'mission',
                         'description',
-                    ]}
+                      ]}
+                      
                     edit={(item) => <EditModal data={item} onUpdate={handleUpdate} />} onDelete={handleDelete}
                 />
                 </div>
