@@ -1,12 +1,12 @@
-import PeriodeAcademic from "@/layouts/ComponentPages/Academic Period/AcademicPeriod";
+import PeriodeAcademic from '@/layouts/ComponentPages/AcademicPeriod/AcademicPeriod';
 
 type Props = {};
 
 const AcademicPeriodPages = (props: Props) => {
-    return(
+    return (
         <>
             <PeriodeAcademic></PeriodeAcademic>
         </>
-    )
-}
-export default AcademicPeriodPages
+    );
+};
+export default AcademicPeriodPages;

@@ -1,132 +1,129 @@
-import FilterStatus from '@/components/Filter';
-import SearchName from '@/components/search';
-import { Tables } from '@/components/table';
-import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import AppLayout from '@/layouts/app-layout';
-import { useEffect, useState } from 'react';
-import CreateModal from './CreateModal';
-import EditModal from './EditModal';
+import { Button } from '@/components/ui/button';
+import { DataTable } from '@/components/ui/Components_1/DataTable';
+import ConfirmDeleteDialog from '@/components/ui/Components_1/DeleteModal';
+import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@/components/ui/toast';
 import { useAxios } from '@/hooks/useAxios';
+import AppLayout from '@/layouts/app-layout';
+import { BreadcrumbItem } from '@/types';
+import { CirclePlus } from 'lucide-react';
+import { Head } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
+import { columns, FakultasType } from './Column';
+import ModalForm from './Modal';
 
 
-type FakultasType = {
-    id?: string;
-    code: string;
-    name: string;
-    eng_name: string;
-    short_name: string;
-    address: string;
-    telephone: string;
-    academic_period_id: number ;
-    is_active: '1' | '0' ;
-    vision: string;
-    mission: string;
-    description: string;
-};
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Fakultas',
+        href: '/faculty',
+    },
+];
 
-const Fakultas = () => {
-    const {get} = useAxios();
-    const {del} = useAxios();
-    const [data, setData] = useState<any>([]);
-
-    const handleCreate = (newData: Omit<FakultasType, 'id'>) => {
-        setData([...data, { ...newData, id: String(data.length + 1) }]);
-    };
-    const handleUpdate = (updateData: FakultasType) => {
-        setData(data.map((item: any) => (item.id === updateData.id ? updateData : item)));
-        
-    };
+const FakultasPage = () => {
+    const { get, post, put, del } = useAxios();
+    const [data, setData] = useState<FakultasType[]>([]);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [editing, setEditing] = useState<FakultasType | undefined>();
+    const [deleteId, setDeleteId] = useState<number | null>(null);
+    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     
-    const handleDelete = async (id: string) => {    
+    const fetchData = async () => {
         try {
-            await del(`/faculty/${id}`);
-            setData(data.filter((item: any) => item.id !== id));
-        } catch (error) {
-            console.error('Gagal menghapus data fakultas:', error);
-            
+            setIsLoading(true);
+            const res: any = await get('/faculty');
+            setData(res.data.data);
+        } catch (err) {
+            setToast({ message: 'Failed to get faculty', type: 'error' });
+        } finally {
+            setIsLoading(false);
         }
     };
-    
+
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const fakultas = await get<any>('/faculty');
-                const transformated = fakultas.data.data.map((item:any) => ({
-                    ...item,
-                    is_active: item.is_active === 1 ? 'AKTIF':'NON AKTIF',
-                }))
-                setData(transformated); 
-            } catch (error) {
-                console.error('Gagal mengambil data fakultas:', error);
-            } finally {
-                console.log("selesai")
-            }
-        };
-        
         fetchData();
     }, []);
-    
-    console.log(data)
+
+    const handleSubmit = async (data: Omit<FakultasType, 'id'>, id?: number) => {
+        try {
+            setIsLoading(true);
+            if (id) {
+                const res: any = await put(`/faculty/${id}`, data);
+                setData((prev) => prev.map((p) => (p.id === id ? res.data : p)));
+                setToast({ message: 'Prodi Accreditation updated successfully', type: 'success' });
+            } else {
+                const res: any = await post('/faculty', data);
+                setData((prev) => [...prev, res.data]);
+                setToast({ message: 'Prodi Accreditation created successfully', type: 'success' });
+            }
+        } catch (error: any) {
+            setToast({ message: 'Failed to submit Prodi Accreditation', type: 'error' });
+        } finally {
+            setIsLoading(false);
+            setModalOpen(false);
+        }
+    };
+
+    const handleDelete = async () => {
+        if (!deleteId) return;
+        setIsLoading(true);
+        try {
+            await del(`/faculty/${deleteId}`);
+            setData((prev) => prev.filter((item) => item.id !== deleteId));
+            setToast({ message: 'Faculty deleted successfully', type: 'success' });
+        } catch (err) {
+            setToast({ message: 'Failed to delete Faculty', type: 'error' });
+        } finally {
+            setIsLoading(false);
+            setDeleteId(null);
+        }
+    };
 
     return (
-        <AppLayout>
-            <div className="w-full">
-                <CardHeader>
-                    <CardTitle>Faculty</CardTitle>
-                    <CardDescription>Manage Your Faculty</CardDescription>
-                    <FilterStatus />
-                    <SearchName />
-                    <div className="mb-4 flex justify-end">
-                        <CreateModal onCreate={handleCreate} />
-                    </div>
-                </CardHeader>
-                <div className='mx-6'>
-
-                <Tables <FakultasType>
-                    head={[
-                        'Faculty Code',
-                        'Faculty Name',
-                        'Faculty Name (EN)',
-                        'Short Name',
-                        'Faculty Address',
-                        'Phone Number',
-                        'Academic Period',
-                        'Status',
-                        'Vision',
-                        'Mission',
-                        'Description',
-                        'Action',
-                    ]}
-                    data={data}
-                    columns={[
-                        'code',
-                        'name',
-                        'eng_name',
-                        'short_name',
-                        'address',
-                        'telephone',
-                        (item) => item.academic_period?.name ?? '-',
-                        (item) => (
-                        <span
-                            className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                                item.is_active === 'AKTIF'
-                                ? 'bg-green-100 text-green-700'
-                                : 'bg-red-100 text-red-700'
-                            }`}
-                            >
-                            {item.is_active}
-                        </span>
-                        ),
-                        'vision',
-                        'mission',
-                        'description',
-                      ]}
-                      
-                    edit={(item) => <EditModal data={item} onUpdate={handleUpdate} />} onDelete={handleDelete}
-                />
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title="Fakultas" />
+            <div className="m-6">
+                <div className="mb-4 flex justify-between">
+                    <h2 className="text-2xl font-bold">Fakultas</h2>
+                    <Button
+                        onClick={() => {
+                            setEditing(undefined);
+                            setModalOpen(true);
+                        }}
+                        className="flex items-center rounded bg-green-500 p-3 font-bold text-white hover:bg-green-600"
+                        >
+                            <CirclePlus className="h-6 w-6" /> Add Facult
+                    </Button>
                 </div>
+
+                <DataTable
+                    columns={columns(
+                        (row) => {
+                            setEditing(row);
+                            setModalOpen(true);
+                        },
+                        (id) => setDeleteId(parseInt(id)),
+                    )}
+                    data={data || []}
+                    isLoading={isLoading}
+                    />
+
+                <ModalForm open={modalOpen} onOpenChange={setModalOpen} submit={handleSubmit} defaultValues={editing} />
+                <ConfirmDeleteDialog open={deleteId !== null} onCancel={() => setDeleteId(null)} onConfirm={handleDelete} />
+                <ToastProvider>
+                    {toast && (
+                        <Toast variant={toast.type === 'error' ? 'destructive' : 'default'}>
+                            <div className="grid gap-1">
+                                <ToastTitle>{toast.type === 'success' ? 'Success' : 'Error'}</ToastTitle>
+                                <ToastDescription>{toast.message}</ToastDescription>
+                            </div>
+                        </Toast>
+                    )}
+                    <ToastViewport />
+                </ToastProvider>
             </div>
         </AppLayout>
     );
 };
-export default Fakultas;
+
+export default FakultasPage;

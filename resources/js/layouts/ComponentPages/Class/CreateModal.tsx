@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogTitle, DialogHeader, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { DialogDescription } from '@radix-ui/react-dialog';
 import { useState } from 'react';
@@ -9,7 +9,7 @@ type ClassType = {
     code: string;
     name: string;
     description: string;
-    is_active: "true" | "false" | null;
+    is_active: 'true' | 'false' | null;
 };
 
 type CreateModalProps = {
@@ -39,13 +39,15 @@ const CreateModal = ({ onCreate }: CreateModalProps) => {
         code: 'Code',
         name: 'Name Class',
         description: 'Description',
-        is_active: 'Status Class'
+        is_active: 'Status Class',
     };
 
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="default" className='bg-blue-600'>Create</Button>
+                <Button variant="default" className="bg-blue-600">
+                    Create
+                </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
@@ -58,18 +60,24 @@ const CreateModal = ({ onCreate }: CreateModalProps) => {
                             <Label>{labelMapping[key] || key.replace('_', ' ').toUpperCase()}</Label>
                             {key === 'is_active' ? (
                                 <select
-                                    className='rounded border p-2 w-full'
-                                    value={formData.is_active || ""}
+                                    className="w-full rounded border p-2"
+                                    value={formData.is_active || ''}
                                     onChange={(e) => handleChange(key as keyof typeof formData, e.target.value)}
                                 >
-                                    <option className='text-black' value="" disabled>Select</option>
-                                    <option className='text-black' value="true">True</option>
-                                    <option className='text-black' value="false">False</option>
+                                    <option className="text-black" value="" disabled>
+                                        Select
+                                    </option>
+                                    <option className="text-black" value="true">
+                                        True
+                                    </option>
+                                    <option className="text-black" value="false">
+                                        False
+                                    </option>
                                 </select>
                             ) : (
                                 <input
                                     type="text"
-                                    className='rounded border p-2'
+                                    className="rounded border p-2"
                                     value={formData[key as keyof typeof formData] as string}
                                     onChange={(e) => handleChange(key as keyof typeof formData, e.target.value)}
                                 />
@@ -78,7 +86,9 @@ const CreateModal = ({ onCreate }: CreateModalProps) => {
                     ))}
                 </div>
                 <DialogFooter>
-                    <Button type="button" onClick={handleSubmit}>Save</Button>
+                    <Button type="button" onClick={handleSubmit}>
+                        Save
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

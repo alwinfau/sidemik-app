@@ -40,11 +40,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/compon
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar';
 import { UserInfo } from '@/components/user-info';
 import { UserMenuContent } from '@/components/user-menu-content';
-import { SharedData } from '@/types';
-import { usePage } from '@inertiajs/react';
 
 export function NavUser() {
-    const { auth } = usePage<SharedData>().props;
     const { isMobile } = useSidebar();
     return (
         <SidebarMenu>
@@ -52,7 +49,7 @@ export function NavUser() {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <SidebarMenuButton size="lg" className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
-                            <UserInfo user={auth.user} />
+                            <UserInfo />
                             <ChevronsUpDown className="ml-auto size-4" />
                         </SidebarMenuButton>
                     </DropdownMenuTrigger>
@@ -63,7 +60,7 @@ export function NavUser() {
                         align={'end'}
                         sideOffset={4}
                     >
-                        <UserMenuContent user={auth.user} />
+                        <UserMenuContent />
                     </DropdownMenuContent>
                 </DropdownMenu>
             </SidebarMenuItem>

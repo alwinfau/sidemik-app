@@ -1,7 +1,9 @@
 'use client';
 
 import {
+    BookA,
     BookCheckIcon,
+    BookCopy,
     BookOpen,
     CircleHelp,
     DatabaseIcon,
@@ -10,7 +12,6 @@ import {
     InboxIcon,
     LaptopMinimalCheck,
     LayersIcon,
-    LayoutGrid,
     LibraryIcon,
     LucideHandshake,
     LucideIcon,
@@ -31,21 +32,9 @@ import { NavProjects } from '@/components/nav-project';
 import { NavUser } from '@/components/nav-user';
 import { TeamSwitcher } from '@/components/team-switcher';
 
-import { Label } from '@/components/ui/label';
-import {
-    Sidebar,
-    SidebarContent,
-    SidebarFooter,
-    SidebarHeader,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-    SidebarRail,
-} from '@/components/ui/sidebar';
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarRail } from '@/components/ui/sidebar';
 import { NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
 
-// This is sample data.
 export interface AppData {
     teams: {
         name: string;
@@ -121,19 +110,19 @@ const data: AppData = {
             items: [
                 {
                     title: 'Students',
-                    url: '#',
+                    url: '/students',
                 },
                 {
                     title: 'Course',
-                    url: '#',
+                    url: '/course',
                 },
                 {
                     title: 'Course Type',
-                    url: '#',
+                    url: '/course-type',
                 },
                 {
                     title: 'Course Group',
-                    url: '#',
+                    url: '/course-group',
                 },
                 {
                     title: 'Room',
@@ -146,6 +135,10 @@ const data: AppData = {
                 {
                     title: 'Student Batch',
                     url: '#',
+                },
+                {
+                    title: 'Final Project Type',
+                    url: '/final-project-type',
                 },
             ],
         },
@@ -167,8 +160,21 @@ const data: AppData = {
                     title: 'Study Program',
                     url: '/study-program',
                 },
+                {
+                    title: 'Academic Period',
+                    url: '/academic-period',
+                },
+                {
+                    title: 'Academic Year',
+                    url: '/academic-year',
+                },
+                {
+                    title: 'Univ Level Academic',
+                    url: '/univ-level-education',
+                },
             ],
         },
+
         {
             title: 'Employee',
             url: '#',
@@ -176,11 +182,35 @@ const data: AppData = {
             items: [
                 {
                     title: 'Lecture',
-                    url: '#',
+                    url: '/employee',
                 },
                 {
                     title: 'Administrative Staff',
                     url: '#',
+                },
+                {
+                    title: 'Employee Document',
+                    url: '/employee-document',
+                },
+                {
+                    title: 'Document Type',
+                    url: '/document-type',
+                },
+                {
+                    title: 'Active Statuses',
+                    url: '/active-status',
+                },
+                {
+                    title: 'Employee Relationship',
+                    url: '/employee-relationship',
+                },
+                {
+                    title: 'Academic Position',
+                    url: '/academic-position',
+                },
+                {
+                    title: 'Academic Position Types',
+                    url: '/academic-position-types',
                 },
             ],
         },
@@ -265,10 +295,6 @@ const data: AppData = {
             icon: Settings2,
             items: [
                 {
-                    title: 'Academic Period',
-                    url: '/AcademicPeriod',
-                },
-                {
                     title: 'Payments',
                     url: '#',
                 },
@@ -279,6 +305,32 @@ const data: AppData = {
                 {
                     title: 'Notification',
                     url: '#',
+                },
+            ],
+        },
+        {
+            title: 'Accreditation',
+            url: '#',
+            icon: BookA,
+            items: [
+                {
+                    title: 'Accreditation Prodi',
+                    url: '/prodi-accreditation',
+                },
+                {
+                    title: 'Accreditation Agency',
+                    url: '/accreditation-agency',
+                },
+            ],
+        },
+        {
+            title: 'Education',
+            url: '#',
+            icon: BookCopy,
+            items: [
+                {
+                    title: 'Education Level',
+                    url: '/education-level',
                 },
             ],
         },
@@ -309,16 +361,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <TeamSwitcher teams={data.teams} />
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton size={'lg'} asChild>
+                        {/* <SidebarMenuButton size={'lg'} asChild>
                             <Link href={'/dashboard'}>
-                                <LayoutGrid /> <Label>Dashboard</Label>
+                                <AppLogo />
                             </Link>
-                        </SidebarMenuButton>
+                        </SidebarMenuButton> */}
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
             <SidebarContent>
-                <NavMain items={data.navMain}/>
+                <NavMain items={data.navMain} />
                 <NavProjects projects={data.projects} />
             </SidebarContent>
             <SidebarFooter>

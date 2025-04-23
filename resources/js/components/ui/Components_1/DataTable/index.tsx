@@ -1,0 +1,143 @@
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table"
+import { Skeleton } from "@/components/ui/skeleton"
+import { DataTableSkeleton } from "./skeleton-table"
+
+interface DataTableProps<TData> {
+  columns: ColumnDef<TData, any>[]
+  data: TData[]
+  page?: number
+  totalPages?: number
+  onPageChange?: (page: number) => void
+  onSortChange?: (column: string, order: "asc" | "desc") => void
+  onSearch?: (query: string) => void
+  isLoading?: boolean
+}
+
+export function DataTable<TData>({
+  columns,
+  data,
+  page = 2,
+  totalPages = 1,
+  onPageChange = () => {},
+  onSortChange = () => {},
+  onSearch = () => {},
+  isLoading
+}: DataTableProps<TData>) {
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    manualSorting: true,
+    manualPagination: true,
+  })
+
+  return (
+    <div className="space-y-4">
+      <Input
+        placeholder="Search..."
+        onChange={(e) => onSearch(e.target.value)}
+        className="max-w-sm bg-white mt-3"
+      />
+
+      <div className="rounded-md border bg-white">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((group) => (
+              <TableRow key={group.id}>
+                {group.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    onClick={() => {
+                      const isAsc = header.column.getIsSorted() === "asc"
+                      const order = isAsc ? "desc" : "asc"
+                      onSortChange(header.column.id, order)
+                    }}
+                    className={`cursor-pointer ${
+                      header.column.id === "actions" ? "sticky right-0 z-10 bg-white" : ""
+                    } px-6`}
+                  >
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                    {header.column.getIsSorted() === "asc"
+                      ? " 🔼"
+                      : header.column.getIsSorted() === "desc"
+                      ? " 🔽"
+                      : ""}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+
+          <TableBody>
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="p-0">
+                  <DataTableSkeleton
+                    columns={columns.length}
+                    rows={0}
+                    hasStickyAction={columns.some(col => col.id === "actions")}
+                  />
+                </TableCell>
+              </TableRow>
+            ) : data.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="text-center py-6">
+                  Data not found.
+                </TableCell>
+              </TableRow>
+            ) : (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id} className="hover:bg-gray-200 hover:font-medium">
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell
+                      key={cell.id}
+                      className={`px-6 ${
+                        cell.column.id === "actions" ? "sticky right-0 z-10 bg-white" : ""
+                      }`}
+                    >
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+
+        </Table>
+      </div>
+
+      <div className="flex items-center justify-between">
+        <Button disabled={page <= 1} onClick={() => onPageChange(page - 1)}>
+          Previous
+        </Button>
+        <p>
+          Page {page} of {totalPages}
+        </p>
+        <Button
+          disabled={page >= totalPages}
+          onClick={() => onPageChange(page + 1)}
+        >
+          Next
+        </Button>
+      </div>
+    </div>
+  )
+}

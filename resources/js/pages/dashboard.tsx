@@ -10,8 +10,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Dashboard() {
-    const token = localStorage.getItem('token');
-    console.log("TOKEN",token)
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
