@@ -147,6 +147,7 @@ const data: AppData = {
                     title: 'Student Batch',
                     url: '#',
                 },
+
             ],
         },
         {
@@ -269,6 +270,10 @@ const data: AppData = {
                     url: '/AcademicPeriod',
                 },
                 {
+                    title: 'Academic Year',
+                    url: '/AcademicYear',
+                },
+                {
                     title: 'Payments',
                     url: '#',
                 },
@@ -314,6 +319,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                                 <LayoutGrid /> <Label>Dashboard</Label>
                             </Link>
                         </SidebarMenuButton>
+                        {/* <SidebarMenuButton>
+                            <Link href={'/AcademicYear'}>
+                                <LayoutGrid /> <Label>Academic Year</Label>
+                            </Link>
+                        </SidebarMenuButton>
+                             */}
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>

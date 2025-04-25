@@ -40,6 +40,11 @@ Route::get('/AcademicPeriod', function() {
     return Inertia::render('AcademicPeriod/AcademicPeriod');
 })->name('AcademicPeriod');
 
+// Route Academic Year
+Route::get('/AcademicYear', function() {    
+    return Inertia::render('Tahun_Ajaran/AcademicYear');
+})->name('AcademicYear');   
+
 // Tambahan route file
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
