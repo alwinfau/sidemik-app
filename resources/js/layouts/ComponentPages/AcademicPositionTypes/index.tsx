@@ -8,7 +8,7 @@ import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import ModalForm from './Modal';
+import ModalForm from './modal';
 import type { AcademicPositionTypes } from './Column';
 import  {columns } from './Column';
 

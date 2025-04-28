@@ -112,6 +112,12 @@ Route::get('/academic-position', function() {
 Route::get('/academic-position-types', function() {
     return Inertia::render(component:'AcademicPostionTypes/AcademicPositionTypes');
 })->name('AcademicPositionTypes');
+
+// Route Province
+Route::get('/province', function() {
+    return Inertia::render(component:'Province/Province');
+})->name('Province');
+
 // Tambahan route file
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

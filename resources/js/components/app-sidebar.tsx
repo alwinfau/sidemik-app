@@ -140,6 +140,10 @@ const data: AppData = {
                     title: 'Final Project Type',
                     url: '/final-project-type',
                 },
+                {
+                    title: 'Province',
+                    url: '/province'
+                }
             ],
         },
         {
