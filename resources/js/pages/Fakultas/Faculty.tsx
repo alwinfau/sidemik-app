@@ -4,7 +4,7 @@ type Props = {};
 const FakultasPages = (props: Props) => {
     return (
         <>
-            <Fakultas></Fakultas>
+            <Fakultas />
         </>
     );
 };

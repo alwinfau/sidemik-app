@@ -8,7 +8,7 @@ const FilterStatus = () => {
     };
 
     return (
-        <div className="flex items-center gap-4 rounded-lg bg-transparant p-4">
+        <div className="bg-transparant flex items-center gap-4 rounded-lg p-4">
             <label className="text-white-900 font-medium">Filter Status:</label>
             <select
                 className="rounded-lg border bg-white p-2 text-black focus:ring focus:ring-blue-300"

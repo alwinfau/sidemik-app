@@ -9,7 +9,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-  } from "@/components/ui/alert-dialog";
+  } from "@/components/ui/Components_1/Select/alert-dialog";
   
   type ConfirmUpdateDialogProps = {
     trigger: React.ReactNode;

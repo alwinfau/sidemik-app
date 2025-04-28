@@ -23,5 +23,5 @@ export const useAxios = () => {
         return response.data;
     }, []);
 
-  return { get, post, put, del };
+    return { get, post, put, del };
 };

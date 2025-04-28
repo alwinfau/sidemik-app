@@ -28,7 +28,7 @@ type FakultasType = {
     telephone: string;
     academic_period_id: number | null;
     is_active: '1' | '0' | null;
-    vision: string;
+    vission: string;
     mission: string;
     description: string;
 };
@@ -75,23 +75,23 @@ const EditModal = ({ data, onUpdate }: EditModalProps) => {
             throw new Error('ID fakultas tidak ditemukan');
         }
 
-        const payload = {
-            code: formData.code,
-            name: formData.name,
-            eng_name: formData.eng_name,
-            short_name: formData.short_name,
-            address: formData.address,
-            telephone: formData.telephone,
-            academic_period_id: formData.academic_period_id ? Number(formData.academic_period_id) : null,
-            is_active: formData.is_active === '1' ? 1 : 0,
-            vision: formData.vision,
-            mission: formData.mission,
-            description: formData.description,
-        };
+    const payload = {
+        code: formData.code,
+        name: formData.name,
+        eng_name: formData.eng_name,
+        short_name: formData.short_name,
+        address: formData.address,
+        telephone: formData.telephone,
+        academic_period_id: formData.academic_period_id ? Number(formData.academic_period_id) : null,
+        is_active: formData.is_active === '1' ? 1 : 0,
+        vision: formData.vision,
+        mission: formData.mission,
+        description: formData.description,
+    };
 
-        await put(`/faculty/${formData.id}`, payload);
-        onUpdate(formData);
-        setOpen(false);
+    await put(`/faculty/${formData.id}`, payload);
+    onUpdate(formData);
+    setOpen(false);
     console.log('Data berhasil diupdate');
     } catch (error: any) {
     console.error('Gagal update fakultas:', error?.response?.data || error.message || error);
@@ -126,26 +126,26 @@ useEffect(() => {
             {Object.entries(formData)
                 .filter(([key]) => key in labelMapping)
                 .map(([key, value]) => {
-                if (key === 'is_active') {
-                    return (
-                    <div key={key} className="col-span-2">
-                        <Label>{labelMapping[key]}</Label>
-                        <select
-                        className="w-full rounded border p-2"
-                        value={value ?? ''}
-                        onChange={(e) => handleChange(key as keyof FakultasType, e.target.value)}
-                        >
-                        <option value="">Pilih Status</option>
-                        <option value="1">AKTIF</option>
-                        <option value="0">NON AKTIF</option>
-                        </select>
-                    </div>
-                    );
-                }
-
-                if (key === 'academic_period_id') {
-                    return (
-                    <div key={key}>
+                    if (key === 'is_active') {
+                        return (
+                        <div key={key} className="col-span-2">
+                            <Label>{labelMapping[key]}</Label>
+                            <select
+                            className="w-full rounded border p-2"
+                            value={value ?? ''}
+                            onChange={(e) => handleChange(key as keyof FakultasType, e.target.value)}
+                            >
+                            <option value="">Pilih Status</option>
+                            <option value="1">AKTIF</option>
+                            <option value="0">NON AKTIF</option>
+                            </select>
+                        </div>
+                        );
+                    }
+                    
+                    if (key === 'academic_period_id') {
+                        return (
+                            <div key={key}>
                         <Label>{labelMapping[key]}</Label>
                         <select
                         className="w-full rounded border p-2"

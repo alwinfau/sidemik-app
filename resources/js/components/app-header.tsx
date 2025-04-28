@@ -14,7 +14,6 @@ import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-react';
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
-import { ThemeProvider } from './theme-provider';
 
 const mainNavItems: NavItem[] = [
     {

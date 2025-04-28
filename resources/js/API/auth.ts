@@ -1,5 +1,8 @@
 // src/api/auth.ts
+import config from '@/config';
+import { router } from '@inertiajs/react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 interface LoginData {
     email: string;
@@ -10,8 +13,38 @@ interface LoginResponse {
     token: string;
 }
 
+// export interface UserData {
+//     data: {
+//         username: string;
+//         email: string;
+//         token: string;
+//     };
+// }
+
 export const login = async (data: LoginData): Promise<void> => {
-    const response = await axios.post<LoginResponse>('https://demoapisidemik-main-i8jv1d.laravel.cloud/api/oauth2/v1/token/access-token', data);
-    const { token } = response.data;
-    localStorage.setItem('token', token);
+    try {
+        const response = await axios.post<any>(`${config.auth_url}/access-token`, data);
+        const token = response.data.data.token;
+        const username = response.data.data.user.name;
+        const email = response.data.data.user.email;
+
+        Cookies.set('token', token, {
+            expires: 1,
+            path: '/',
+            sameSite: 'Lax',
+            httpOnly: false,
+            // sameSite: 'None', // aktifkan kalau pakai HTTPS
+            // secure: true, // aktifkan kalau pakai HTTPS
+        });
+
+        localStorage.setItem('username', username);
+        localStorage.setItem('email', email);
+
+        if (token) {
+            router.visit('/dashboard');
+        }
+    } catch (error) {
+        console.error('Login failed:', error);
+        router.visit('/login');
+    }
 };
