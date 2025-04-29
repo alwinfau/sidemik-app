@@ -1,4 +1,3 @@
-
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/Components_1/DataTable';
 import ConfirmDeleteDialog from '@/components/ui/Components_1/DeleteModal';
@@ -29,11 +28,13 @@ const CourseTypes = () => {
 
     const fetchData = async () => {
         try {
+            setIsLoading(true);
             const res: any = await get('/course-type');
             setData(res.data.data);
-            return res;
         } catch (err) {
             console.error('Error fetching:', err);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -50,6 +51,7 @@ const CourseTypes = () => {
 
     const handleSubmit = async (data: Omit<CourseType, 'id'>, id?: number | undefined) => {
         try {
+            setIsLoading(true);
             if (id) {
                 const res: any = await put(`/course-type/${id}`, data);
                 setData((prev) => prev.map((p: any) => (p.id === id ? res.data : p)));
@@ -70,6 +72,9 @@ const CourseTypes = () => {
                 setToast({ message: 'Failed to submit Type Course', type: 'error' });
             }
             console.log('Error submitting data:', error);
+        } finally {
+            setIsLoading(true);
+            setModalOpen(false);
         }
     };
 
@@ -114,6 +119,7 @@ const CourseTypes = () => {
                         (id) => setDeleteId(parseInt(id)),
                     )}
                     data={data || []}
+                    isLoading={isLoading}
                 />
                 <ModalForm open={modalOpen} onOpenChange={setModalOpen} submit={handleSubmit} defaultValues={editing} />
                 <ConfirmDeleteDialog open={deleteId !== null} onCancel={() => setDeleteId(null)} onConfirm={handleDelete} isLoading={isLoading} />

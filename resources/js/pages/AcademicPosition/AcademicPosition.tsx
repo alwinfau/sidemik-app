@@ -1,4 +1,4 @@
-import AcademicPositionPage from "@/layouts/ComponentPages/AcademicPosition/AcademicPosition";
+import AcademicPositionPage from '@/layouts/ComponentPages/AcademicPosition/AcademicPosition';
 type Props = {};
 
 const AcademicPosition = (props: Props) => {

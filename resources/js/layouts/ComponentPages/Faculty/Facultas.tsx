@@ -5,12 +5,11 @@ import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } fro
 import { useAxios } from '@/hooks/useAxios';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
-import { CirclePlus } from 'lucide-react';
 import { Head } from '@inertiajs/react';
+import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { columns, FakultasType } from './Column';
 import ModalForm from './Modal';
-
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -27,12 +26,16 @@ const FakultasPage = () => {
     const [deleteId, setDeleteId] = useState<number | null>(null);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    
-    const fetchData = async () => {
+    const [page, setPage] = useState<number>(1);
+    const [totalPages, setTotalPages] = useState<number>(1);
+
+    const fetchData = async (currentPage = 1) => {
         try {
             setIsLoading(true);
-            const res: any = await get('/faculty');
+            const res: any = await get(`faculty?page=${currentPage}&limit=2`);
             setData(res.data.data);
+            setPage(res.data.current_page);
+            setTotalPages(res.data.last_page);
         } catch (err) {
             setToast({ message: 'Failed to get faculty', type: 'error' });
         } finally {
@@ -44,23 +47,31 @@ const FakultasPage = () => {
         fetchData();
     }, []);
 
-    const handleSubmit = async (data: Omit<FakultasType, 'id'>, id?: number) => {
+    const handleSubmit = async (data: Omit<FakultasType, 'id'>, id?: number | undefined) => {
         try {
             setIsLoading(true);
             if (id) {
                 const res: any = await put(`/faculty/${id}`, data);
-                setData((prev) => prev.map((p) => (p.id === id ? res.data : p)));
-                setToast({ message: 'Prodi Accreditation updated successfully', type: 'success' });
+                setData((prev) => prev.map((p: any) => (p.id === id ? res.data : p)));
+                await fetchData();
+                setModalOpen(false);
+                setToast({ message: 'faculty updated successfully', type: 'success' });
+                return res;
             } else {
                 const res: any = await post('/faculty', data);
                 setData((prev) => [...prev, res.data]);
-                setToast({ message: 'Prodi Accreditation created successfully', type: 'success' });
+                await fetchData();
+                setModalOpen(false);
+                setToast({ message: 'faculty created successfully', type: 'success' });
+                return res;
             }
         } catch (error: any) {
-            setToast({ message: 'Failed to submit Prodi Accreditation', type: 'error' });
+            if (error.response.status === 500) {
+                setToast({ message: 'Failed to submit faculty', type: 'error' });
+            }
+            throw error.response.data;
         } finally {
             setIsLoading(false);
-            setModalOpen(false);
         }
     };
 
@@ -71,6 +82,7 @@ const FakultasPage = () => {
             await del(`/faculty/${deleteId}`);
             setData((prev) => prev.filter((item) => item.id !== deleteId));
             setToast({ message: 'Faculty deleted successfully', type: 'success' });
+            window.location.reload();
         } catch (err) {
             setToast({ message: 'Failed to delete Faculty', type: 'error' });
         } finally {
@@ -91,8 +103,8 @@ const FakultasPage = () => {
                             setModalOpen(true);
                         }}
                         className="flex items-center rounded bg-green-500 p-3 font-bold text-white hover:bg-green-600"
-                        >
-                            <CirclePlus className="h-6 w-6" /> Add Facult
+                    >
+                        <CirclePlus className="h-6 w-6" /> Add Facult
                     </Button>
                 </div>
 
@@ -106,7 +118,13 @@ const FakultasPage = () => {
                     )}
                     data={data || []}
                     isLoading={isLoading}
-                    />
+                    page={page}
+                    totalPages={totalPages}
+                    onPageChange={(newPage) => {
+                        setPage(newPage);
+                        fetchData(newPage);
+                    }}
+                />
 
                 <ModalForm open={modalOpen} onOpenChange={setModalOpen} submit={handleSubmit} defaultValues={editing} />
                 <ConfirmDeleteDialog open={deleteId !== null} onCancel={() => setDeleteId(null)} onConfirm={handleDelete} />

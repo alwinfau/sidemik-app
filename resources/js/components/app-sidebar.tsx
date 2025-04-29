@@ -172,6 +172,14 @@ const data: AppData = {
                     title: 'Univ Level Academic',
                     url: '/univ-level-education',
                 },
+                {
+                    title: 'Curiculum Year',
+                    url: '/curiculum-year',
+                },
+                {
+                    title: 'Curiculum Prodi',
+                    url: '/study-program-curriculums',
+                },
             ],
         },
 

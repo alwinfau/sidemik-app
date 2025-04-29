@@ -1,16 +1,16 @@
 import { Button } from '@/components/ui/button';
 import { FormSelectInput, FormTextInput } from '@/components/ui/Components_1/FormInput';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { SelectItem } from '@/components/ui/select';
+import { Switch } from '@/components/ui/swicth';
+import { useAxios } from '@/hooks/useAxios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoaderCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/swicth';
-import { useAxios } from '@/hooks/useAxios';
-import { SelectItem } from '@/components/ui/select';
 
 type ModalProps = {
     open: boolean;
@@ -57,7 +57,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 address: defaultValues.address || '',
                 telephone: defaultValues.telephone || '',
                 academic_period_id: String(defaultValues.academic_period_id) || '0',
-                is_active: defaultValues.is_active || false,
+                is_active: Boolean(defaultValues.is_active) || false,
                 vision: defaultValues.vision || '',
                 mission: defaultValues.mission || '',
                 description: defaultValues.description || '',
@@ -112,9 +112,20 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 });
             }
         } catch (error: any) {
+            const errorsData = error?.data;
+            let lastErrorMessage = '';
+            let firstErrorMessage = error.meta.message;
+
+            Object.entries(errorsData).forEach(([field, messages], index) => {
+                const messageText = (messages as string[])[0];
+                lastErrorMessage = messageText;
+            });
+
+            let finalErrorMessage = firstErrorMessage.includes('Duplicate record') ? firstErrorMessage : lastErrorMessage;
+
             setError('root', {
                 type: 'manual',
-                message: error?.response?.meta?.message || 'Something went wrong',
+                message: finalErrorMessage,
             });
         }
     };
@@ -129,13 +140,49 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mx-3 space-y-4">
-                            <FormTextInput id="code" label="Faculty Code" {...register('code')} error={errors.code?.message} />
-                            <FormTextInput id="name" label="Faculty Name" {...register('name')} error={errors.name?.message} />
-                            <FormTextInput id="eng_name" label="English Name" {...register('eng_name')} error={errors.eng_name?.message} />
-                            <FormTextInput id="short_name" label="Short Name" {...register('short_name')} error={errors.short_name?.message} />
-                            <FormTextInput id="address" label="Address" {...register('address')} error={errors.address?.message} />
-                            <FormTextInput id="telephone" label="Telephone" {...register('telephone')} error={errors.telephone?.message} />
-                            
+                            <FormTextInput
+                                placeholder="Enter Code Faculty"
+                                id="code"
+                                label="Faculty Code"
+                                {...register('code')}
+                                error={errors.code?.message}
+                            />
+                            <FormTextInput
+                                placeholder="Enter Name Faculty (IDN)"
+                                id="name"
+                                label="Faculty Name"
+                                {...register('name')}
+                                error={errors.name?.message}
+                            />
+                            <FormTextInput
+                                placeholder="Enter Name Faculty (ENG)"
+                                id="eng_name"
+                                label="English Name"
+                                {...register('eng_name')}
+                                error={errors.eng_name?.message}
+                            />
+                            <FormTextInput
+                                placeholder="Enter Short Name"
+                                id="short_name"
+                                label="Short Name"
+                                {...register('short_name')}
+                                error={errors.short_name?.message}
+                            />
+                            <FormTextInput
+                                placeholder="Enter Address Faculty"
+                                id="address"
+                                label="Address"
+                                {...register('address')}
+                                error={errors.address?.message}
+                            />
+                            <FormTextInput
+                                placeholder="Enter Phone Faculty"
+                                id="telephone"
+                                label="Telephone"
+                                {...register('telephone')}
+                                error={errors.telephone?.message}
+                            />
+
                             <Controller
                                 name="academic_period_id"
                                 control={control}
@@ -159,15 +206,37 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <div className="flex items-center space-x-4">
                                 <Label htmlFor="is_active">Active</Label>
                                 <Controller
+                                    defaultValue={false}
                                     name="is_active"
                                     control={control}
-                                    render={({ field }) => <Switch checked={field.value} onCheckedChange={field.onChange} />}
+                                    render={({ field }) => <Switch checked={field.value} onCheckedChange={(checked) => field.onChange(checked)} />}
                                 />
                             </div>
 
-                            <FormTextInput id="vision" type='textarea' label="Vision" {...register('vision')} error={errors.vision?.message} />
-                            <FormTextInput id="mission" type='textarea' label="Mission" {...register('mission')} error={errors.mission?.message} />
-                            <FormTextInput id="description" type='textarea' label="Description" {...register('description')} error={errors.description?.message} />
+                            <FormTextInput
+                                placeholder="Enter Vision Faculty"
+                                id="vision"
+                                type="textarea"
+                                label="Vision"
+                                {...register('vision')}
+                                error={errors.vision?.message}
+                            />
+                            <FormTextInput
+                                placeholder="Enter Mision Faculty"
+                                id="mission"
+                                type="textarea"
+                                label="Mission"
+                                {...register('mission')}
+                                error={errors.mission?.message}
+                            />
+                            <FormTextInput
+                                placeholder="Enter Description Faculty"
+                                id="description"
+                                type="textarea"
+                                label="Description"
+                                {...register('description')}
+                                error={errors.description?.message}
+                            />
 
                             {errors.root && <p className="text-red-600">{errors.root.message}</p>}
 

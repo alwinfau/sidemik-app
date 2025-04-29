@@ -19,10 +19,7 @@ export type FakultasType = {
     };
 };
 
-export const columns = (
-    onEdit: (row: FakultasType) => void,
-    onDelete: (id: string) => void
-): ColumnDef<FakultasType>[] => [
+export const columns = (onEdit: (row: FakultasType) => void, onDelete: (id: string) => void): ColumnDef<FakultasType>[] => [
     {
         id: 'rowNumber',
         header: 'No',
@@ -37,7 +34,7 @@ export const columns = (
     {
         header: 'Academic Period',
         accessorFn: (row) => row.academic_period?.short_name ?? null,
-        id: 'short_name',
+        id: 'academic_period',
     },
     { accessorKey: 'vision', header: 'Vision' },
     { accessorKey: 'mission', header: 'Mission' },
@@ -45,9 +42,7 @@ export const columns = (
     {
         accessorKey: 'is_active',
         header: 'Status',
-        cell: ({ getValue }) => (
-            <div className="text-center">{getValue<boolean>() ? 'Active' : 'Inactive'}</div>
-        ),
+        cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Active' : 'Inactive'}</div>,
     },
     {
         id: 'actions',

@@ -1,4 +1,4 @@
-import UnivLevel from "@/layouts/ComponentPages/UnivEducationLevel";
+import UnivLevel from '@/layouts/ComponentPages/UnivEducationLevel';
 
 type Props = {};
 

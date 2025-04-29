@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { FormSelectInput, FormTextInput } from "@/components/ui/Components_1/FormInput";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { useEffect, useState } from "react";
+import { Button } from '@/components/ui/button';
+import { FormTextInput } from '@/components/ui/Components_1/FormInput';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { useEffect, useState } from 'react';
 
 const ModalForm = ({
     open,

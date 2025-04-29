@@ -17,19 +17,17 @@ type ModalProps = {
     defaultValues?: any;
 };
 
-
 const schema = z.object({
     edu_level_code: z.string().min(3, 'Code harus lebih dari 3 Karakter'),
     edu_study_period: z.string().min(3, 'Education Study harus lebih dari 3 Karakter'),
     max_cuti_in_sem: z.coerce.number().positive('Nomor Harus lebih dari 0'),
     max_studi_in_sem: z.coerce.number().positive('Nomor Harus lebih dari 0'),
     univ_edulevel_description: z.string().min(5, 'Description Harus Lebih dari 5 karakter'),
-    education_levels_id: z.string()
-})
+    education_levels_id: z.string(),
+});
 type FormInputs = z.infer<typeof schema>;
 
 const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) => {
-
     const {
         register,
         handleSubmit,
@@ -52,12 +50,12 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         } catch (err) {
             console.error('Error fetching:', err);
         }
-    }
+    };
     useEffect(() => {
         fecthLevel();
-    },)
-    useEffect(() =>{
-        if(defaultValues){
+    });
+    useEffect(() => {
+        if (defaultValues) {
             reset({
                 edu_level_code: defaultValues.edu_level_code || '',
                 edu_study_period: defaultValues.edu_study_period || '',
@@ -65,8 +63,8 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 max_studi_in_sem: defaultValues.max_studi_in_sem || 0,
                 univ_edulevel_description: defaultValues.univ_edulevel_description || '',
                 education_levels_id: String(defaultValues.education_levels_id) || '0',
-            })
-        }else {
+            });
+        } else {
             reset({
                 edu_level_code: '',
                 edu_study_period: '',
@@ -74,22 +72,22 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 max_studi_in_sem: 0,
                 univ_edulevel_description: '',
                 education_levels_id: '',
-            })
+            });
         }
-    }, [defaultValues, reset])
+    }, [defaultValues, reset]);
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
         try {
             const result = await submit(data, defaultValues?.id);
-            console.log(data)
+            console.log(data);
             if (result != null) {
                 if (!isSubmitting && !defaultValues) {
                     reset({
-                    edu_level_code: '',
-                    edu_study_period: '',
-                    max_cuti_in_sem: 0,
-                    max_studi_in_sem: 0,
-                    univ_edulevel_description: '',
-                    education_levels_id: '',
+                        edu_level_code: '',
+                        edu_study_period: '',
+                        max_cuti_in_sem: 0,
+                        max_studi_in_sem: 0,
+                        univ_edulevel_description: '',
+                        education_levels_id: '',
                     });
                 }
             }
@@ -100,7 +98,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             });
         }
     };
-    return(
+    return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
                 <DialogHeader>
@@ -117,23 +115,29 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 {...register('edu_level_code')}
                                 error={errors.edu_level_code?.message}
                             />
-                                <FormTextInput
+                            <FormTextInput
                                 id="edu_study_period"
                                 label=" Edu Study Period"
                                 type="text"
                                 {...register('edu_study_period')}
                                 error={errors.edu_study_period?.message}
                             />
-                               <FormTextInput id="max_cuti_in_sem" label="Max Cuti" type="number" {...register('max_cuti_in_sem')} error={errors.max_cuti_in_sem?.message} />
+                            <FormTextInput
+                                id="max_cuti_in_sem"
+                                label="Max Cuti"
+                                type="number"
+                                {...register('max_cuti_in_sem')}
+                                error={errors.max_cuti_in_sem?.message}
+                            />
 
-                                <FormTextInput
+                            <FormTextInput
                                 id="max_studi_in_sem"
                                 label="Max Studi"
                                 type="number"
                                 {...register('max_studi_in_sem')}
                                 error={errors.max_studi_in_sem?.message}
                             />
-                                <FormTextInput
+                            <FormTextInput
                                 id="univ_edulevel_description"
                                 label="Description"
                                 type="textarea"
@@ -175,6 +179,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 </ScrollArea>
             </DialogContent>
         </Dialog>
-    )
-}
-export default ModalForm
+    );
+};
+export default ModalForm;

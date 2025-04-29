@@ -6,24 +6,24 @@ export type CourseType = {
     id?: number;
     code: string;
     name_idn: string;
-    name_eng:string;
+    name_eng: string;
     course_desc: string;
     theory_sks: number;
     practice_sks: number;
     simulation_sks: number;
-    sks_total: number
+    sks_total: number;
     general_courses: boolean;
     sap_ada: boolean;
     syllabus_ada: boolean;
-    course_materials_ada:boolean;
+    course_materials_ada: boolean;
     diktat_ada: boolean;
     course_type: {
-        name: string
-    }
+        name: string;
+    };
     course_group: {
-        name: string
-    }
-}
+        name: string;
+    };
+};
 export const columns = (onEdit: (row: CourseType) => void, onDelete: (id: string) => void): ColumnDef<CourseType>[] => [
     { id: 'rowNumber', header: 'No', cell: ({ row }) => <div className="text-center">{row.index + 1}</div> },
     { accessorKey: 'code', header: 'Code' },
@@ -36,38 +36,38 @@ export const columns = (onEdit: (row: CourseType) => void, onDelete: (id: string
     {
         id: 'general_courses',
         header: 'General Course',
-        cell: ({ row }) => <div>{row.original.general_courses ? 'Iya' : 'Tidak'}</div>
+        cell: ({ row }) => <div>{row.original.general_courses ? 'Iya' : 'Tidak'}</div>,
     },
     {
-    id: 'sap_ada',
-    header: 'Sap',
-    cell: ({ row }) => <div>{row.original.sap_ada ? 'Iya' : 'Tidak'}</div>
+        id: 'sap_ada',
+        header: 'Sap',
+        cell: ({ row }) => <div>{row.original.sap_ada ? 'Iya' : 'Tidak'}</div>,
     },
     {
-    id: 'syllabus_ada',
-    header: 'Syllabus',
-    cell: ({ row }) => <div>{row.original.syllabus_ada ? 'Iya' : 'Tidak'}</div>
+        id: 'syllabus_ada',
+        header: 'Syllabus',
+        cell: ({ row }) => <div>{row.original.syllabus_ada ? 'Iya' : 'Tidak'}</div>,
     },
     {
-    id: 'course_materials_ada',
-    header: 'Course Material',
-    cell: ({ row }) => <div>{row.original.course_materials_ada ? 'Iya' : 'Tidak'}</div>
+        id: 'course_materials_ada',
+        header: 'Course Material',
+        cell: ({ row }) => <div>{row.original.course_materials_ada ? 'Iya' : 'Tidak'}</div>,
     },
     {
-    id: 'diktat_ada',
-    header: 'Diktat',
-    cell: ({ row }) => <div>{row.original.diktat_ada ? 'Iya' : 'Tidak'}</div>
+        id: 'diktat_ada',
+        header: 'Diktat',
+        cell: ({ row }) => <div>{row.original.diktat_ada ? 'Iya' : 'Tidak'}</div>,
     },
-    
-    { 
+
+    {
         header: 'Type Course',
-        accessorFn: (row) => row.course_type?.name?? null,
-        id: 'course_types'
+        accessorFn: (row) => row.course_type?.name ?? null,
+        id: 'course_types',
     },
-    { 
+    {
         header: 'Course Group',
-        accessorFn: (row) => row.course_group?.name?? null,
-        id: 'course_group'
+        accessorFn: (row) => row.course_group?.name ?? null,
+        id: 'course_group',
     },
     {
         id: 'actions',
@@ -84,4 +84,4 @@ export const columns = (onEdit: (row: CourseType) => void, onDelete: (id: string
         ),
     },
 ];
-export default columns
+export default columns;

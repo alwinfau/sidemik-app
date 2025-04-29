@@ -8,9 +8,9 @@ import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import ModalForm from './modal';
 import type { AcademicPositionTypes } from './Column';
-import  {columns } from './Column';
+import { columns } from './Column';
+import ModalForm from './modal';
 
 const breadcrumbs: BreadcrumbItem[] = [{ title: 'Academic Position Type ', href: '/academic-positions-types' }];
 
@@ -40,6 +40,13 @@ const AcademicPositionTypes = () => {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        if (toast) {
+            const timer = setTimeout(() => setToast(null), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [toast]);
+
     const handleSubmit = async (data: Omit<AcademicPositionTypes, 'id'>, id?: number) => {
         try {
             setIsLoading(true);
@@ -60,7 +67,7 @@ const AcademicPositionTypes = () => {
             }
         } catch (error: any) {
             if (error.response.status === 500) {
-            setToast({ message: 'Failed to submit Academic position type', type: 'error' });
+                setToast({ message: 'Failed to submit Academic position type', type: 'error' });
             }
         } finally {
             setIsLoading(false);

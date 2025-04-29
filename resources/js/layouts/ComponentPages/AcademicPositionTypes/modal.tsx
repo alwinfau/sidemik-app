@@ -1,13 +1,11 @@
 import { Button } from '@/components/ui/button';
-import { FormSelectInput, FormTextInput } from '@/components/ui/Components_1/FormInput';
+import { FormTextInput } from '@/components/ui/Components_1/FormInput';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { SelectItem } from '@/components/ui/select';
-import { useAxios } from '@/hooks/useAxios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoaderCircle } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { useEffect } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 type ModalProps = {
@@ -42,14 +40,12 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 job_type_code: defaultValues.job_type_code || '',
                 job_type_name: defaultValues.job_type_name || '',
                 job_type_description: defaultValues.job_type_description || '',
-                
-            })
+            });
         } else {
             reset({
                 job_type_code: '',
                 job_type_name: '',
                 job_type_description: '',
-                
             });
         }
     }, [defaultValues, reset]);
@@ -58,7 +54,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         try {
             const result = await submit(data, defaultValues?.id);
             if (result != null) {
-                if ( !isSubmitting && !defaultValues) {
+                if (!isSubmitting && !defaultValues) {
                     reset({
                         job_type_code: '',
                         job_type_name: '',
@@ -85,30 +81,28 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mx-3 space-y-4">
                             <FormTextInput
-                                id='job_type_code'
-                                label='Job Type Code'
-                                type='text'
+                                id="job_type_code"
+                                label="Job Type Code"
+                                type="text"
                                 {...register('job_type_code')}
                                 error={errors.job_type_code?.message}
                             />
 
                             <FormTextInput
-                                id='job_type_name'
-                                label='Job Type Name'
-                                type='text'
+                                id="job_type_name"
+                                label="Job Type Name"
+                                type="text"
                                 {...register('job_type_name')}
                                 error={errors.job_type_name?.message}
                             />
 
                             <FormTextInput
-                                id='job_type_description'
-                                label='Job Type Description'
-                                type='text'
+                                id="job_type_description"
+                                label="Job Type Description"
+                                type="text"
                                 {...register('job_type_description')}
                                 error={errors.job_type_description?.message}
                             />
-
-                            
 
                             {errors.root && <p className="text-red-600">{errors.root.message}</p>}
 
@@ -128,6 +122,5 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
 };
 
 export default ModalForm;
-
 
 // import { Button } from "@/components/ui/button";

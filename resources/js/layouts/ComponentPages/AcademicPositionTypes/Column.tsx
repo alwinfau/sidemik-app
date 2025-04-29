@@ -9,7 +9,6 @@ export type AcademicPositionTypes = {
     job_type_description: string;
 };
 
-
 export const columns = (onEdit: (row: AcademicPositionTypes) => void, onDelete: (id: string) => void): ColumnDef<AcademicPositionTypes>[] => [
     { id: 'rowNumber', header: 'No', cell: ({ row }) => <div className="text-center">{row.index + 1}</div> },
     { accessorKey: 'job_type_code', header: 'Job Type Code' },
@@ -31,4 +30,3 @@ export const columns = (onEdit: (row: AcademicPositionTypes) => void, onDelete: 
     },
 ];
 export default columns;
-

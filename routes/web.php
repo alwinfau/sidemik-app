@@ -123,6 +123,18 @@ Route::get('/univ-level-education', function() {
     return Inertia::render(component:'UnivEducationLevel/UnivEduLevl');
 })->name('univ-level-education');
 
+// Route Curiculum Year
+Route::get('/curiculum-year', function() {
+    return Inertia::render(component:'CuriculumYears/CuriculumYears');
+})->name('curiculum-year');
+
+// Route Curiculum Prodi
+Route::get('/study-program-curriculums', function() {
+    return Inertia::render(component:'CuriculumProdi/CuriculumProPage');
+})->name('study-program-curriculums');
+
+
+
 // Tambahan route file
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

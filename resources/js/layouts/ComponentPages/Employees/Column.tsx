@@ -35,7 +35,6 @@ export type EmployeesType = {
 };
 
 export const columns = (onEdit: (row: EmployeesType) => void, onDelete: (id: string) => void): ColumnDef<EmployeesType>[] => [
-
     { accessorKey: 'emp_nip', header: 'NIP' },
     { accessorKey: 'emp_full_name', header: 'Full Name' },
     { accessorKey: 'emp_front_title', header: 'Front Title' },

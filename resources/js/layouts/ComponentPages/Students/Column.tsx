@@ -27,8 +27,7 @@ export type StudentType = {
     student_path: string;
     status: boolean | null;
     img_path: string;
-
-}
+};
 
 export const columns = (onEdit: (row: StudentType) => void, onDelete: (id: string) => void): ColumnDef<StudentType>[] => [
     {

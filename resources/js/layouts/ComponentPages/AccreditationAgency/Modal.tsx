@@ -9,7 +9,6 @@ import { z } from 'zod';
 
 import { AccreditationagencyType } from './Column';
 
-
 type ModalProps = {
     open: boolean;
     onOpenChange: (open: boolean) => void;
@@ -21,8 +20,8 @@ const schema = z.object({
     accreditation_agency_code: z.string().min(3, 'Code Harus Lebih Dari 3 Karakter'),
     accreditation_agency_name: z.string().min(5, 'Nama Harus Lebih Dari 5 Karakter'),
     website_url: z.string().url(),
-})
-type FormInputs = z.infer<typeof schema>
+});
+type FormInputs = z.infer<typeof schema>;
 
 const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) => {
     const {
@@ -45,7 +44,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             reset({
                 accreditation_agency_code: '',
                 accreditation_agency_name: '',
-                website_url: ''
+                website_url: '',
             });
         }
     }, [defaultValues, reset]);
@@ -62,13 +61,24 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 }
             }
         } catch (error: any) {
-            console.log(error.response.meta.message);
+            const errorsData = error?.data;
+            let lastErrorMessage = '';
+            let firstErrorMessage = error?.meta?.message;
+            console.log(error);
+
+            Object.entries(errorsData).forEach(([field, messages], index) => {
+                const messageText = (messages as string[])[0];
+                lastErrorMessage = messageText;
+            });
+
+            let finalErrorMessage = firstErrorMessage.includes('Duplicate record') ? firstErrorMessage : lastErrorMessage;
+
             setError('root', {
                 type: 'manual',
-                message: error.response.meta.message,
+                message: finalErrorMessage,
             });
         }
-    }
+    };
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -82,13 +92,15 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="accreditation_agency_code"
                                 label="Code"
+                                placeholder="Masukan Code"
                                 type="text"
                                 {...register('accreditation_agency_code')}
                                 error={errors.accreditation_agency_code?.message}
-                            />      
+                            />
                             <FormTextInput
                                 id="accreditation_agency_name"
                                 label="Accreditation Agency Name"
+                                placeholder="Masukan nama agensi"
                                 type="text"
                                 {...register('accreditation_agency_name')}
                                 error={errors.accreditation_agency_name?.message}
@@ -96,24 +108,25 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="website_url"
                                 label="URL Agency Website"
+                                placeholder="Masukan link website"
                                 type="text"
                                 {...register('website_url')}
                                 error={errors.website_url?.message}
                             />
-                                {errors.root && <p className="text-red-600">{errors.root.message}</p>}
-                                <Button
-                                    type="submit"
-                                    className={`mb-5 rounded px-4 py-2 font-bold text-white ${defaultValues ? 'bg-blue-600 hover:bg-blue-500' : 'bg-green-500 hover:bg-green-600'} `}
-                                    disabled={isSubmitting}
-                                >
-                                    {isSubmitting ? 'Loading...' : defaultValues ? 'Update' : 'Create'}
-                                </Button>
+                            {errors.root && <p className="text-red-600">{errors.root.message}</p>}
+                            <Button
+                                type="submit"
+                                className={`mb-5 rounded px-4 py-2 font-bold text-white ${defaultValues ? 'bg-blue-600 hover:bg-blue-500' : 'bg-green-500 hover:bg-green-600'} `}
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? 'Loading...' : defaultValues ? 'Update' : 'Create'}
+                            </Button>
                         </div>
                     </form>
                 </ScrollArea>
             </DialogContent>
         </Dialog>
-    )
-}
+    );
+};
 
 export default ModalForm;

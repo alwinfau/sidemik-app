@@ -1,13 +1,13 @@
-import AccreditationPage from "@/layouts/ComponentPages/AccreditationAgency/Accreditationagency";
+import AccreditationPage from '@/layouts/ComponentPages/AccreditationAgency/Accreditationagency';
 
 type Props = {};
 
 const AccreditationAgencyPages = (props: Props) => {
-    return(
+    return (
         <>
-        <AccreditationPage></AccreditationPage>
+            <AccreditationPage></AccreditationPage>
         </>
-    )
-}
+    );
+};
 
 export default AccreditationAgencyPages;

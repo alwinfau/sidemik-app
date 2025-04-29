@@ -6,10 +6,9 @@ import { useAxios } from '@/hooks/useAxios';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
 import { CirclePlus } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { columns, PeriodeAcademicType } from './Column';
 import ModalForm from './Modal';
-import { useEffect, useState } from 'react';
-
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -26,7 +25,7 @@ const PeriodeAcademic = () => {
     const [deleteId, setDeleteId] = useState<number | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-    
+
     const fetchData = async () => {
         setIsLoading(true);
         try {
@@ -37,8 +36,8 @@ const PeriodeAcademic = () => {
         } finally {
             setIsLoading(false);
         }
-    };   
-    useEffect(() =>{
+    };
+    useEffect(() => {
         fetchData();
     }, []);
 
@@ -71,7 +70,9 @@ const PeriodeAcademic = () => {
             if (error.response.status === 500) {
                 setToast({ message: 'Failed to submit Academic Period', type: 'error' });
             }
-            console.log('Error submitting data:', error);
+            throw error.response.data;
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -115,7 +116,7 @@ const PeriodeAcademic = () => {
                         (id) => setDeleteId(parseInt(id)),
                     )}
                     data={data || []}
-                    isLoading = {isLoading}
+                    isLoading={isLoading}
                 />
                 <ModalForm open={modalOpen} onOpenChange={setModalOpen} submit={handleSubmit} defaultValues={editing} />
                 <ConfirmDeleteDialog open={deleteId !== null} onCancel={() => setDeleteId(null)} onConfirm={handleDelete} isLoading={isLoading} />
@@ -133,27 +134,6 @@ const PeriodeAcademic = () => {
             </div>
         </AppLayout>
     );
-}
+};
 
 export default PeriodeAcademic;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

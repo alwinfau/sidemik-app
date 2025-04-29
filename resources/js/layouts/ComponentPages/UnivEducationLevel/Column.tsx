@@ -2,9 +2,6 @@ import { Button } from '@/components/ui/button';
 import { ColumnDef } from '@tanstack/react-table';
 import { Pencil, Trash2 } from 'lucide-react';
 
-
-
-
 export type UnivEducationLevelType = {
     id?: number;
     edu_level_code: string;
@@ -13,9 +10,9 @@ export type UnivEducationLevelType = {
     max_studi_in_sem: number;
     univ_edulevel_description: string;
     education_levels: {
-        education_stages_name_id:  string
-    }
-}
+        education_stages_name_id: string;
+    };
+};
 
 export const columns = (onEdit: (row: UnivEducationLevelType) => void, onDelete: (id: string) => void): ColumnDef<UnivEducationLevelType>[] => [
     { id: 'rowNumber', header: 'No', cell: ({ row }) => <div className="text-center">{row.index + 1}</div> },
@@ -43,6 +40,6 @@ export const columns = (onEdit: (row: UnivEducationLevelType) => void, onDelete:
             </div>
         ),
     },
-]
+];
 
 export default columns;

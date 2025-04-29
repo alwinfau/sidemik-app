@@ -17,8 +17,8 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    academic_year: z.string(),
-    name: z.string().min(5, "Nama harus lebih dari 5 karakterz"),
+    academic_year: z.string().regex(/^\d{4}$/, { message: 'Academic year harus berupa 4 digit tahun (misal: 2025)' }),
+    name: z.string().min(5, 'Nama harus lebih dari 5 karakterz'),
     start_date: z.string(),
     end_date: z.string(),
     description: z.string(),
@@ -71,10 +71,20 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 }
             }
         } catch (error: any) {
-            console.log(error.response.meta.message);
+            const errorsData = error?.data;
+            let lastErrorMessage = '';
+            let firstErrorMessage = error.meta.message;
+
+            Object.entries(errorsData).forEach(([field, messages], index) => {
+                const messageText = (messages as string[])[0];
+                lastErrorMessage = messageText;
+            });
+
+            let finalErrorMessage = firstErrorMessage.includes('Duplicate record') ? firstErrorMessage : lastErrorMessage;
+
             setError('root', {
                 type: 'manual',
-                message: error.response.meta.message,
+                message: finalErrorMessage,
             });
         }
     };
@@ -91,12 +101,19 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="academic_year"
                                 label="Academic Year"
+                                placeholder="Masukan tahun akademik"
                                 type="text"
                                 {...register('academic_year')}
+                                error={errors.academic_year?.message}
+                            />
+                            <FormTextInput
+                                placeholder="Masukan nama akademik"
+                                id="name"
+                                label="name"
+                                type="text"
+                                {...register('name')}
                                 error={errors.name?.message}
                             />
-
-                            <FormTextInput id="name" label="name" type="text" {...register('name')} error={errors.name?.message} />
 
                             {/* SEMENTARA INPUT DATE */}
                             <div>
@@ -121,6 +138,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="description"
                                 label="description"
+                                placeholder="Masukan Deskripsi dari tahun akademik"
                                 type="textarea"
                                 {...register('description')}
                                 error={errors.description?.message}

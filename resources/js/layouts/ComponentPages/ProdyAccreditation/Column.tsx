@@ -18,7 +18,6 @@ export type AccreditionProdiType = {
 };
 
 export const columns = (onEdit: (row: AccreditionProdiType) => void, onDelete: (id: string) => void): ColumnDef<AccreditionProdiType>[] => [
-    { id: 'rowNumber', header: 'No', cell: ({ row }) => <div className="text-center">{row.index + 1}</div> },
     { accessorKey: 'accreditation_code', header: 'Accreditation Code' },
     { accessorKey: 'accreditation_name', header: 'Accreditation Name' },
     { accessorKey: 'accreditation_score', header: 'Accreditation Score' },

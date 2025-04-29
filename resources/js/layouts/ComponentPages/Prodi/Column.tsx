@@ -4,7 +4,10 @@ import { Pencil, Trash2 } from 'lucide-react';
 
 export type Proditype = {
     id?: number;
+    sp_code: string
     idn_sp_name: string;
+    eng_sp_name: string;
+    idn_short_name: string;
     eng_short_name: string;
     min_credits_pass: number;
     min_pass_gpa: number;
@@ -16,28 +19,38 @@ export type Proditype = {
     sp_phone: string;
     sp_email_address: string;
     sp_web_address: string;
-    sp_description: Text;
-    sp_vision: Text;
-    sp_mission: Text;
-    sp_competencies: Text;
+    sp_description: string;
+    sp_vision: string;
+    sp_mission: string;
+    sp_competencies: string;
     program_learning_outcomes: string;
-    faculty_id: number;
-    academic_periods_id: number;
-    final_project_types_id: number;
-    study_program_accreditations_id: number;
-    univ_education_levels_id: number;
+    faculty: {
+        name: string;
+    };
+    academic_period: {
+        name: string;
+    };
+    final_project_type: {
+        name: string;
+    };
+    study_program_accreditations: {
+        accreditation_score: string;
+    };
+    univ_education_level: {
+        edu_study_period: string;
+    };
 };
 
-export const columns = (
-    onEdit: (row: Proditype) => void,
-    onDelete: (id: string) => void
-    ): ColumnDef<Proditype>[] => [
+export const columns = (onEdit: (row: Proditype) => void, onDelete: (id: string) => void): ColumnDef<Proditype>[] => [
     {
         id: 'rowNumber',
         header: () => <div className="text-center">No</div>,
         cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
     },
+    { accessorKey: 'sp_code', header: 'Code ' },
     { accessorKey: 'idn_sp_name', header: 'Program Name (IDN)' },
+    { accessorKey: 'eng_sp_name', header: 'Program Name (ENG)' },
+    { accessorKey: 'idn_short_name', header: 'Short Name (IDN)' },
     { accessorKey: 'eng_short_name', header: 'Short Name (ENG)' },
     { accessorKey: 'min_credits_pass', header: 'Min Credits to Pass' },
     { accessorKey: 'min_pass_gpa', header: 'Min GPA to Pass' },
@@ -60,73 +73,62 @@ export const columns = (
     {
         accessorKey: 'sp_description',
         header: 'Description',
-        cell: ({ row }) => (
-        <div className="line-clamp-2 max-w-[200px] text-sm text-muted-foreground">
-            {row.original.sp_description.toString()}
-        </div>
-        ),
+        cell: ({ row }) => <div className="text-muted-foreground line-clamp-2 max-w-[200px] text-sm">{row.original.sp_description.toString()}</div>,
     },
     {
         accessorKey: 'sp_vision',
         header: 'Vision',
-        cell: ({ row }) => (
-        <div className="line-clamp-2 max-w-[200px] text-sm text-muted-foreground">
-            {row.original.sp_vision.toString()}
-        </div>
-        ),
+        cell: ({ row }) => <div className="text-muted-foreground line-clamp-2 max-w-[200px] text-sm">{row.original.sp_vision.toString()}</div>,
     },
     {
         accessorKey: 'sp_mission',
         header: 'Mission',
-        cell: ({ row }) => (
-        <div className="line-clamp-2 max-w-[200px] text-sm text-muted-foreground">
-            {row.original.sp_mission.toString()}
-        </div>
-        ),
+        cell: ({ row }) => <div className="text-muted-foreground line-clamp-2 max-w-[200px] text-sm">{row.original.sp_mission.toString()}</div>,
     },
     {
         accessorKey: 'sp_competencies',
         header: 'Competencies',
-        cell: ({ row }) => (
-        <div className="line-clamp-2 max-w-[200px] text-sm text-muted-foreground">
-            {row.original.sp_competencies.toString()}
-        </div>
-        ),
+        cell: ({ row }) => <div className="text-muted-foreground line-clamp-2 max-w-[200px] text-sm">{row.original.sp_competencies.toString()}</div>,
     },
     {
         accessorKey: 'program_learning_outcomes',
         header: 'Learning Outcomes',
-        cell: ({ row }) => (
-        <div className="line-clamp-2 max-w-[200px] text-sm text-muted-foreground">
-            {row.original.program_learning_outcomes}
-        </div>
-        ),
+        cell: ({ row }) => <div className="text-muted-foreground line-clamp-2 max-w-[200px] text-sm">{row.original.program_learning_outcomes}</div>,
     },
-    { accessorKey: 'faculty_id', header: 'Faculty ID' },
-    { accessorKey: 'academic_periods_id', header: 'Academic Period ID' },
-    { accessorKey: 'final_project_types_id', header: 'Final Project Type ID' },
-    { accessorKey: 'study_program_accreditations_id', header: 'Accreditation ID' },
-    { accessorKey: 'univ_education_levels_id', header: 'Education Level ID' },
+    { header: 'Fakultas',
+        accessorFn: (row) => row.faculty?.name ?? null,
+        id: 'faculty',
+    },
+    { header: 'Academic Period',
+        accessorFn: (row) => row.academic_period?.name ?? null,
+        id: 'academic_period',
+    },
+    { header: 'Final Project',
+        accessorFn: (row) => row.final_project_type?.name ?? null,
+        id: 'final_project',
+    },
+    { header: 'Akreditasi Prodi',
+        accessorFn: (row) => row.study_program_accreditations?.accreditation_score ?? null,
+        id: 'study_program_accreditation',
+    },
+    { header: 'Tingkat Pendidikan Univ',
+        accessorFn: (row) => row.univ_education_level?.edu_study_period ?? null,
+        id: 'univ_education_levels',
+    },
+
+    
     {
         id: 'actions',
         header: 'Actions',
         cell: ({ row }) => (
-        <div className="flex gap-2">
-            <Button
-            className="bg-blue-700 hover:bg-blue-600"
-            size="sm"
-            onClick={() => onEdit(row.original)}
-            >
-            <Pencil/>
-            </Button>
-            <Button
-            variant="destructive"
-            size="sm"
-            onClick={() => onDelete(row.original.id!.toString())}
-            >
-            <Trash2 />
-            </Button>
-        </div>
+            <div className="flex gap-2">
+                <Button className="bg-blue-700 hover:bg-blue-600" size="sm" onClick={() => onEdit(row.original)}>
+                    <Pencil />
+                </Button>
+                <Button variant="destructive" size="sm" onClick={() => onDelete(row.original.id!.toString())}>
+                    <Trash2 />
+                </Button>
+            </div>
         ),
     },
 ];

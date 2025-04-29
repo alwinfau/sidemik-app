@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { EmployeeDocumentType } from './Column';
 
 const ModalForm = ({
-    open, 
+    open,
     onOpenChange,
     onSubmit,
     defaultValues,
@@ -24,8 +24,8 @@ const ModalForm = ({
 
     useEffect(() => {
         if (defaultValues) {
-            const {id, ...rest} = defaultValues; 
-            setFormData(rest)
+            const { id, ...rest } = defaultValues;
+            setFormData(rest);
         } else {
             setFormData({
                 document_type_id: 0,
@@ -54,42 +54,42 @@ const ModalForm = ({
                 <DialogHeader>
                     <DialogTitle>{defaultValues ? 'Edit Document' : 'Add Document'}</DialogTitle>
                 </DialogHeader>
-                <ScrollArea className='max-h-[70vh] pr-4'>
+                <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit}>
                         <div className="space-y-4">
                             <FormTextInput
-                                id='document_type_id'
-                                name='document_type_id'
-                                type='number'
+                                id="document_type_id"
+                                name="document_type_id"
+                                type="number"
                                 label="Document Type ID"
                                 value={formData.document_type_id}
                                 onChange={(value) => handleChange('document_type_id', value)}
-                                placeholder='Document Type ID'
+                                placeholder="Document Type ID"
                             />
                             <FormTextInput
-                                id='employee_id'
-                                name='employee_id'
-                                type='text'
+                                id="employee_id"
+                                name="employee_id"
+                                type="text"
                                 label="Employee ID"
                                 value={formData.employee_id}
                                 onChange={(value) => handleChange('employee_id', value)}
-                                placeholder='Employee ID'
+                                placeholder="Employee ID"
                             />
                             <FormTextInput
-                                id='document_url'
-                                name='document_url'
-                                type='text'
+                                id="document_url"
+                                name="document_url"
+                                type="text"
                                 label="Document URL"
                                 value={formData.document_url}
                                 onChange={(value) => handleChange('document_url', value)}
-                                placeholder='Document URL'
+                                placeholder="Document URL"
                             />
 
                             <Button
-                                type="submit" 
+                                type="submit"
                                 className={`mb-5 rounded px-4 py-2 font-bold text-white ${defaultValues ? 'bg-blue-600 hover:bg-blue-500' : 'bg-green-600'} `}
-                                >
-                                    {defaultValues ? 'Update': 'Create'}
+                            >
+                                {defaultValues ? 'Update' : 'Create'}
                             </Button>
                         </div>
                     </form>

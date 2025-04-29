@@ -25,7 +25,7 @@ const schema = z.object({
     theory_sks: z.coerce.number().positive('Nilai harus melebebihi angka 1'),
     practice_sks: z.coerce.number().positive('Nilai harus melebebihi angka 1'),
     simulation_sks: z.coerce.number().positive('Nilai harus melebebihi angka 1'),
-    sks_total: z.coerce.number().positive('Nilai harus melebebihi angka 1'),
+    sks_total: z.coerce.number().min(0),
     general_courses: z.boolean(),
     sap_ada: z.boolean(),
     syllabus_ada: z.boolean(),
@@ -66,10 +66,10 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         }
     };
 
-    console.log("course type ",courseTypes)
-    console.log(courseTypes)
-    console.log("course Group ",courseGroups)
-    console.log(courseGroups)
+    console.log('course type ', courseTypes);
+    console.log(courseTypes);
+    console.log('course Group ', courseGroups);
+    console.log(courseGroups);
     useEffect(() => {
         fetchData();
     }, []);
@@ -141,10 +141,34 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput id="code" label="Code" type="text" {...register('code')} error={errors.code?.message} />
                             <FormTextInput id="name_idn" label="Nama (IDN)" type="text" {...register('name_idn')} error={errors.name_idn?.message} />
                             <FormTextInput id="name_eng" label="Name (ENG)" type="text" {...register('name_eng')} error={errors.name_eng?.message} />
-                            <FormTextInput id="theory_sks" label="Theory SKS" type="number" {...register('theory_sks')} error={errors.theory_sks?.message} />
-                            <FormTextInput id="practice_sks" label="Practice SKS" type="number" {...register('practice_sks')} error={errors.practice_sks?.message} />
-                            <FormTextInput id="simulation_sks" label="Simulation SKS" type="number" {...register('simulation_sks')} error={errors.simulation_sks?.message} />
-                            <FormTextInput id="sks_total" label="Total SKS" type="number" {...register('sks_total')} error={errors.sks_total?.message} />
+                            <FormTextInput
+                                id="theory_sks"
+                                label="Theory SKS"
+                                type="number"
+                                {...register('theory_sks')}
+                                error={errors.theory_sks?.message}
+                            />
+                            <FormTextInput
+                                id="practice_sks"
+                                label="Practice SKS"
+                                type="number"
+                                {...register('practice_sks')}
+                                error={errors.practice_sks?.message}
+                            />
+                            <FormTextInput
+                                id="simulation_sks"
+                                label="Simulation SKS"
+                                type="number"
+                                {...register('simulation_sks')}
+                                error={errors.simulation_sks?.message}
+                            />
+                            <FormTextInput
+                                id="sks_total"
+                                label="Total SKS"
+                                type="number"
+                                {...register('sks_total')}
+                                error={errors.sks_total?.message}
+                            />
 
                             <Controller
                                 name="general_courses"
@@ -168,29 +192,29 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 control={control}
                                 render={({ field }) => (
                                     <FormSelectInput
-                                    id="sap_ada"
-                                    label="SAP "
+                                        id="sap_ada"
+                                        label="SAP "
                                         value={field.value ? 'true' : 'false'}
                                         onValueChange={(val) => field.onChange(val === 'true')}
                                         error={errors.sap_ada?.message}
-                                        >
+                                    >
                                         <SelectItem value="true">Ya</SelectItem>
                                         <SelectItem value="false">Tidak</SelectItem>
                                     </FormSelectInput>
                                 )}
-                                />
+                            />
 
                             <Controller
                                 name="syllabus_ada"
                                 control={control}
                                 render={({ field }) => (
                                     <FormSelectInput
-                                    id="syllabus_ada"
+                                        id="syllabus_ada"
                                         label="Syllabus "
                                         value={field.value ? 'true' : 'false'}
                                         onValueChange={(val) => field.onChange(val === 'true')}
                                         error={errors.syllabus_ada?.message}
-                                        >
+                                    >
                                         <SelectItem value="true">Ya</SelectItem>
                                         <SelectItem value="false">Tidak</SelectItem>
                                     </FormSelectInput>
@@ -207,7 +231,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         value={field.value ? 'true' : 'false'}
                                         onValueChange={(val) => field.onChange(val === 'true')}
                                         error={errors.course_materials_ada?.message}
-                                        >
+                                    >
                                         <SelectItem value="true">Ya</SelectItem>
                                         <SelectItem value="false">Tidak</SelectItem>
                                     </FormSelectInput>
@@ -219,18 +243,17 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 control={control}
                                 render={({ field }) => (
                                     <FormSelectInput
-                                    id="diktat_ada"
-                                    label="Diktat "
+                                        id="diktat_ada"
+                                        label="Diktat "
                                         value={field.value ? 'true' : 'false'}
                                         onValueChange={(val) => field.onChange(val === 'true')}
                                         error={errors.diktat_ada?.message}
-                                        >
+                                    >
                                         <SelectItem value="true">Ya</SelectItem>
                                         <SelectItem value="false">Tidak</SelectItem>
                                     </FormSelectInput>
                                 )}
                             />
-
 
                             <Controller
                                 name="course_types_id"
@@ -257,8 +280,8 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 control={control}
                                 render={({ field }) => (
                                     <FormSelectInput
-                                    id="course_groups_id"
-                                    label="Course Group"
+                                        id="course_groups_id"
+                                        label="Course Group"
                                         value={field.value}
                                         onValueChange={field.onChange}
                                         error={errors.course_groups_id?.message}
@@ -272,7 +295,13 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 )}
                             />
 
-<FormTextInput id="course_desc" label="Course Description" type="textarea" {...register('course_desc')} error={errors.course_desc?.message} />
+                            <FormTextInput
+                                id="course_desc"
+                                label="Course Description"
+                                type="textarea"
+                                {...register('course_desc')}
+                                error={errors.course_desc?.message}
+                            />
                             {errors.root && <p className="text-red-600">{errors.root.message}</p>}
 
                             <Button

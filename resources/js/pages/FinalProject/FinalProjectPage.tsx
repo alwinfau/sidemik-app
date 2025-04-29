@@ -1,12 +1,12 @@
-import FinalProjectTypePage from "@/layouts/ComponentPages/FinalProjectType/FinalProjecttype";
+import FinalProjectTypePage from '@/layouts/ComponentPages/FinalProjectType/FinalProjecttype';
 
 type Props = {};
 
 const FinalProjectPage = (props: Props) => {
-    return(
+    return (
         <>
             <FinalProjectTypePage />
         </>
-    )
-}
+    );
+};
 export default FinalProjectPage;

@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { FormSelectInput, FormTextInput } from '@/components/ui/Components_1/FormInput';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';  
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SelectItem } from '@/components/ui/select';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -105,19 +105,21 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 placeholder="Description"
                                 error={errors.document_descrtiption?.message}
                                 {...register('document_descrtiption')}
-                            />  
-                        
-                            <Button type="submit"
-                                    className={`mb-5 rounded px-4 py-2 font-bold text-white ${defaultValues ? 'bg-blue-600 hover:bg-blue-600': 'bg-green-500 hover:bg-green-600'}`}
-                                    disabled={isSubmitting}>
-                                {isSubmitting ? 'Loading...' : defaultValues? 'Update' : 'Create'}
+                            />
+
+                            <Button
+                                type="submit"
+                                className={`mb-5 rounded px-4 py-2 font-bold text-white ${defaultValues ? 'bg-blue-600 hover:bg-blue-600' : 'bg-green-500 hover:bg-green-600'}`}
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? 'Loading...' : defaultValues ? 'Update' : 'Create'}
                             </Button>
                         </div>
                     </form>
                 </ScrollArea>
             </DialogContent>
         </Dialog>
-    )
+    );
 };
 
 export default ModalForm;

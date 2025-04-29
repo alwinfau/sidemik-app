@@ -8,13 +8,15 @@ import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import ModalForm from './Modal';
 import { CourseType, columns } from './Column';
+import ModalForm from './Modal';
 
-const breadcrumbs: BreadcrumbItem[] = [{
-    title: ' Course', 
-    href: '/course' 
-}]
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: ' Course',
+        href: '/course',
+    },
+];
 
 const CoursePages = () => {
     const { get, post, put, del } = useAxios();

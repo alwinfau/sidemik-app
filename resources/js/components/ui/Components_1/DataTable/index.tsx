@@ -12,9 +12,11 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table"
 import { Skeleton } from "@/components/ui/skeleton"
+import Pagination from '@mui/material/Pagination';
 import { DataTableSkeleton } from "./skeleton-table"
 
 interface DataTableProps<TData> {
@@ -31,7 +33,7 @@ interface DataTableProps<TData> {
 export function DataTable<TData>({
   columns,
   data,
-  page = 2,
+  page = 1,
   totalPages = 1,
   onPageChange = () => {},
   onSortChange = () => {},
@@ -42,8 +44,9 @@ export function DataTable<TData>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    manualSorting: true,
-    manualPagination: true,
+    getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: true, 
+    pageCount: totalPages,
   })
 
   return (
@@ -53,6 +56,7 @@ export function DataTable<TData>({
         onChange={(e) => onSearch(e.target.value)}
         className="max-w-sm bg-white mt-3"
       />
+  
 
       <div className="rounded-md border bg-white">
         <Table>
@@ -124,20 +128,22 @@ export function DataTable<TData>({
         </Table>
       </div>
 
-      <div className="flex items-center justify-between">
-        <Button disabled={page <= 1} onClick={() => onPageChange(page - 1)}>
-          Previous
-        </Button>
-        <p>
+       {/* Pagination */}
+       <div className="mt-4 flex items-center justify-between">
+        <span>
           Page {page} of {totalPages}
-        </p>
-        <Button
-          disabled={page >= totalPages}
-          onClick={() => onPageChange(page + 1)}
-        >
-          Next
-        </Button>
+        </span>
+            <Pagination
+          count={totalPages}
+          page={page}
+          onChange={(event, value) => onPageChange(value)}
+          color="primary"
+          shape="rounded"
+          showFirstButton
+          showLastButton
+          variant="outlined" 
+        />
       </div>
-    </div>
+    </div>  
   )
 }

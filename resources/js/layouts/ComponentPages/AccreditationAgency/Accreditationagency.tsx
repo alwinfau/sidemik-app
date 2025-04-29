@@ -1,4 +1,3 @@
-
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/Components_1/DataTable';
 import ConfirmDeleteDialog from '@/components/ui/Components_1/DeleteModal';
@@ -26,19 +25,26 @@ const AccreditationPage = () => {
     const [deleteId, setDeleteId] = useState<number | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-
-    const fetchData = async () => {
-        setIsLoading(true);
+    const [page, setPage] = useState<number>(1);
+    const [totalPages, setTotalPages] = useState<number>(1);
+    const fetchData = async (currentPage = 1) => {
         try {
-            const res: any = await get('/accreditation-agency');
+            setIsLoading(true);
+            const res: any = await get(`accreditation-agency?page=${currentPage}&limit=2`);
             setData(res.data.data);
+            setPage(res.data.current_page);
+            setTotalPages(res.data.last_page);
+            console.log(res.data);
         } catch (err) {
-            console.error('Error fetching:', err);
+            setToast({ message: 'failed to get Accreditation', type: 'error' });
         } finally {
-            setIsLoading(false); 
+            setIsLoading(false);
         }
     };
-    
+
+    console.log(page);
+    console.log(totalPages);
+
     useEffect(() => {
         fetchData();
     }, []);
@@ -72,7 +78,9 @@ const AccreditationPage = () => {
             if (error.response.status === 500) {
                 setToast({ message: 'Failed to submit Accreditation Agency', type: 'error' });
             }
-            console.log('Error submitting data:', error);
+            throw error.response.data;
+        } finally {
+            setIsLoading(false);
         }
     };
     const handleDelete = async () => {
@@ -81,6 +89,7 @@ const AccreditationPage = () => {
         try {
             await del(`/accreditation-agency/${deleteId}`);
             setData((prev) => prev.filter((item: any) => item.id !== deleteId));
+            window.location.reload();
             setDeleteId(null);
             setToast({ message: 'Accreditation Agency deleted successfully', type: 'success' });
         } catch (err) {
@@ -116,6 +125,12 @@ const AccreditationPage = () => {
                     )}
                     data={data || []}
                     isLoading={isLoading}
+                    page={page}
+                    totalPages={totalPages}
+                    onPageChange={(newPage) => {
+                        setPage(newPage);
+                        fetchData(newPage);
+                    }}
                 />
                 <ModalForm open={modalOpen} onOpenChange={setModalOpen} submit={handleSubmit} defaultValues={editing} />
                 <ConfirmDeleteDialog open={deleteId !== null} onCancel={() => setDeleteId(null)} onConfirm={handleDelete} isLoading={isLoading} />
@@ -133,5 +148,5 @@ const AccreditationPage = () => {
             </div>
         </AppLayout>
     );
-}
+};
 export default AccreditationPage;

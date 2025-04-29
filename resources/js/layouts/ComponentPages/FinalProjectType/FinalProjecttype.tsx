@@ -34,7 +34,7 @@ const FinalProjectTypePage = () => {
             return res;
         } catch (err) {
             console.error('Error fetching:', err);
-        } finally{
+        } finally {
             setIsLoading(false);
         }
     };
@@ -120,7 +120,7 @@ const FinalProjectTypePage = () => {
                         (id) => setDeleteId(parseInt(id)),
                     )}
                     data={data || []}
-                    isLoading = {isLoading}
+                    isLoading={isLoading}
                 />
                 <ModalForm open={modalOpen} onOpenChange={setModalOpen} submit={handleSubmit} defaultValues={editing} />
                 <ConfirmDeleteDialog open={deleteId !== null} onCancel={() => setDeleteId(null)} onConfirm={handleDelete} isLoading={isLoading} />
@@ -138,7 +138,6 @@ const FinalProjectTypePage = () => {
             </div>
         </AppLayout>
     );
+};
 
-}
-
-export default FinalProjectTypePage
+export default FinalProjectTypePage;

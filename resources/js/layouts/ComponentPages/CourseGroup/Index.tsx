@@ -1,4 +1,3 @@
-
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/Components_1/DataTable';
 import ConfirmDeleteDialog from '@/components/ui/Components_1/DeleteModal';
@@ -38,7 +37,6 @@ const CourseGroup = () => {
             setIsLoading(false);
         }
     };
-    
 
     useEffect(() => {
         fetchData();
@@ -53,6 +51,7 @@ const CourseGroup = () => {
 
     const handleSubmit = async (data: Omit<CourseGroupType, 'id'>, id?: number | undefined) => {
         try {
+            setIsLoading(true);
             if (id) {
                 const res: any = await put(`/course-group/${id}`, data);
                 setData((prev) => prev.map((p: any) => (p.id === id ? res.data : p)));
@@ -117,7 +116,7 @@ const CourseGroup = () => {
                         (id) => setDeleteId(parseInt(id)),
                     )}
                     data={data || []}
-                    isLoading = {isLoading}
+                    isLoading={isLoading}
                 />
                 <ModalForm open={modalOpen} onOpenChange={setModalOpen} submit={handleSubmit} defaultValues={editing} />
                 <ConfirmDeleteDialog open={deleteId !== null} onCancel={() => setDeleteId(null)} onConfirm={handleDelete} isLoading={isLoading} />

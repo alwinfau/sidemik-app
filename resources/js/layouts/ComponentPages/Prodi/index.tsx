@@ -11,24 +11,33 @@ import { useEffect, useState } from 'react';
 import { columns, Proditype } from './Column';
 import ModalForm from './Modal';
 
-const breadcrumbs: BreadcrumbItem[] = [{ title: 'Product', href: '/product' }];
+const breadcrumbs: BreadcrumbItem[] = [{ title: 'Study Program', href: '/study-program' }];
 
 const ProductPage = () => {
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const { get, post, put, del } = useAxios();
-    const [data, setData] = useState<Proditype []>([]);
+    const [data, setData] = useState<Proditype[]>([]);
     const [modalOpen, setModalOpen] = useState(false);
-    const [editing, setEditing] = useState<Proditype  | undefined>();
+    const [editing, setEditing] = useState<Proditype | undefined>();
     const [deleteId, setDeleteId] = useState<number | null>(null);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+    const [page, setPage] = useState<number>(1);
+    const [totalPages, setTotalPages] = useState<number>(1);
 
-    const fetchData = async () => {
+    const fetchData = async (currentPage = 1) => {
         try {
-            const res: any = await get('/products');
-            setData(res);
+            setIsLoading(true);
+            const res: any = await get(`study-program?page=${currentPage}&limit=2`);
+            setData(res.data.data);
+            setPage(res.data.current_page);
+            setTotalPages(res.data.last_page);
         } catch (err) {
-            console.error('Error fetching:', err);
+            setToast({ message: 'Failed to get study-program', type: 'error' });
+        } finally {
+            setIsLoading(false);
         }
     };
+
     useEffect(() => {
         if (toast) {
             const timer = setTimeout(() => setToast(null), 3000);
@@ -40,36 +49,49 @@ const ProductPage = () => {
         fetchData();
     }, []);
 
-    const handleSubmit = async (product: Omit<Proditype , 'id'>, id?: number) => {
+    const handleSubmit = async (data: Omit<Proditype, 'id'>, id?: number | undefined) => {
         try {
+            setIsLoading(true);
             if (id) {
-                const res: any = await put(`/products/${id}`, product);
-                setData((prev) => prev.map((p) => (p.id === id ? res : p)));
-                setToast({ message: 'Product updated successfully', type: 'success' });
+                const res: any = await put(`/study-program/${id}`, data);
+                setData((prev) => prev.map((p: any) => (p.id === id ? res.data : p)));
+                await fetchData();
+                setModalOpen(false);
+                setToast({ message: 'study-program updated successfully', type: 'success' });
+                return res;
             } else {
-                const res: any = await post('/products', product);
-                setData((prev) => [...prev, res]);
-                setToast({ message: 'Product created successfully', type: 'success' });
+                const res: any = await post('/study-program', data);
+                setData((prev) => [...prev, res.data]);
+                await fetchData();
+                setModalOpen(false);
+                setToast({ message: 'study-program created successfully', type: 'success' });
+                return res;
             }
-            setModalOpen(false);
-        } catch (error) {
-            setToast({ message: 'Failed to submit product', type: 'error' });
+        } catch (error: any) {
+            if (error.response.status === 500) {
+                setToast({ message: 'Failed to submit study-program', type: 'error' });
+            }
+            throw error.response.data;
+        } finally {
+            setIsLoading(false);
         }
     };
 
     const handleDelete = async () => {
         if (!deleteId) return;
+        setIsLoading(true);
         try {
-            await del(`/products/${deleteId}`);
+            await del(`/study-program/${deleteId}`);
             setData((prev) => prev.filter((item) => item.id !== deleteId));
-            setDeleteId(null);
-            setToast({ message: 'Product deleted successfully', type: 'success' });
+            setToast({ message: 'study-program deleted successfully', type: 'success' });
+            window.location.reload();
         } catch (err) {
+            setToast({ message: 'Failed to delete study-program', type: 'error' });
+        } finally {
+            setIsLoading(false);
             setDeleteId(null);
-            setToast({ message: 'Failed to delete product', type: 'error' });
         }
     };
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Study-Program" />
@@ -96,6 +118,13 @@ const ProductPage = () => {
                         (id) => setDeleteId(parseInt(id)),
                     )}
                     data={data || []}
+                    isLoading={isLoading}
+                    page={page}
+                    totalPages={totalPages}
+                    onPageChange={(newPage) => {
+                        setPage(newPage);
+                        fetchData(newPage);
+                    }}
                 />
                 <ModalForm open={modalOpen} onOpenChange={setModalOpen} submit={handleSubmit} defaultValues={editing} />
                 <ConfirmDeleteDialog open={deleteId !== null} onCancel={() => setDeleteId(null)} onConfirm={handleDelete} />

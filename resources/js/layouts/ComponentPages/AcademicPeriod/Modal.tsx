@@ -1,16 +1,17 @@
-import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { FormSelectInput, FormTextInput } from '@/components/ui/Components_1/FormInput';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { string, z } from 'zod';
+import { z } from 'zod';
 
+import DateInput from '@/components/ui/Components_1/DateInput';
 import { Label } from '@/components/ui/label';
+import { SelectItem } from '@/components/ui/select';
 import { Switch } from '@/components/ui/swicth';
 import { useAxios } from '@/hooks/useAxios';
-import { SelectItem } from '@/components/ui/select';
 
 type ModalProps = {
     open: boolean;
@@ -31,16 +32,11 @@ const schema = z.object({
     end_midterm_exam: z.string().nullable(),
     start_final_exam: z.string().nullable(),
     end_final_exam: z.string().nullable(),
-    number_of_meetings: z
-        .number({ invalid_type_error: 'Harus berupa angka' })
-        .positive('Angka harus di atas 0'),
-    min_number_of_meetings: z
-        .number({ invalid_type_error: 'Harus berupa angka' })
-        .positive('Angka harus di atas 0'),
+    number_of_meetings: z.number({ invalid_type_error: 'Harus berupa angka' }).positive('Angka harus di atas 0'),
+    min_number_of_meetings: z.number({ invalid_type_error: 'Harus berupa angka' }).positive('Angka harus di atas 0'),
     is_active: z.boolean(),
     description: z.string().nullable(),
 });
-
 
 type FormInputs = z.infer<typeof schema>;
 
@@ -56,14 +52,14 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         resolver: zodResolver(schema),
     });
 
-    const {get} = useAxios();
+    const { get } = useAxios();
 
     const [AcademicYears, setAcademicYears] = useState<any>([]);
 
     const fecthAcademicYears = async () => {
         try {
             const res: any = await get('/academic-year');
-            console.log(res.data.data);     
+            console.log(res.data.data);
             if (Array.isArray(res.data.data)) {
                 setAcademicYears(res.data.data);
             } else {
@@ -73,27 +69,25 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             console.error('Error fetching', err);
         }
     };
-    
-    
+
     useEffect(() => {
         fecthAcademicYears();
     }, []);
-
 
     useEffect(() => {
         if (defaultValues) {
             reset({
                 code: defaultValues.code || '',
                 academic_year_id: String(defaultValues.academic_year_id) || '0',
-                academic_period: '',
+                academic_period: defaultValues.academic_period,
                 name: defaultValues.name || '',
                 short_name: defaultValues.short_name || '',
-                start_date: '',
-                end_date: '',
-                start_midterm_exam: '',
-                end_midterm_exam: '',
-                start_final_exam: '',
-                end_final_exam: '',
+                start_date: defaultValues.start_date,
+                end_date: defaultValues.end_date,
+                start_midterm_exam: defaultValues.start_midterm_exam,
+                end_midterm_exam: defaultValues.end_midterm_exam,
+                start_final_exam: defaultValues.start_final_exam,
+                end_final_exam: defaultValues.end_final_exam,
                 number_of_meetings: defaultValues.number_of_meetings || 0,
                 min_number_of_meetings: defaultValues.min_number_of_meetings || 0,
                 is_active: defaultValues.is_active || false,
@@ -117,11 +111,11 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 is_active: false,
                 description: '',
             });
-            }
-        }, [defaultValues, reset]);      
+        }
+    }, [defaultValues, reset]);
 
-        const onSubmit: SubmitHandler<FormInputs> = async (data) => {
-            try {
+    const onSubmit: SubmitHandler<FormInputs> = async (data) => {
+        try {
             const payload = {
                 ...data,
                 is_active: data.is_active ? 1 : 0,
@@ -134,43 +128,53 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 end_final_exam: data.end_final_exam || null,
                 description: data.description || null,
             };
-        
+
             console.log('Kirim ke server:', payload);
-        
+
             const result = await submit(payload, defaultValues?.id);
             if (result != null && !isSubmitting && !defaultValues) {
                 reset({
-                code: '',
-                academic_year_id: '',
-                academic_period: '',
-                name: '',
-                short_name: '',
-                start_date: '',
-                end_date: '',
-                start_midterm_exam: '',
-                end_midterm_exam: '',
-                start_final_exam: '',
-                end_final_exam: '',
-                number_of_meetings: 0,
-                min_number_of_meetings: 0,
-                is_active: false,
-                description: '',
+                    code: '',
+                    academic_year_id: '',
+                    academic_period: '',
+                    name: '',
+                    short_name: '',
+                    start_date: '',
+                    end_date: '',
+                    start_midterm_exam: '',
+                    end_midterm_exam: '',
+                    start_final_exam: '',
+                    end_final_exam: '',
+                    number_of_meetings: 0,
+                    min_number_of_meetings: 0,
+                    is_active: false,
+                    description: '',
                 });
             }
-            } catch (error: any) {
-            console.error('Submit error:', error.response?.data || error.message);
+        } catch (error: any) {
+            const errorsData = error?.data;
+            let lastErrorMessage = '';
+            let firstErrorMessage = error?.meta?.message;
+            console.log(error);
+
+            Object.entries(errorsData).forEach(([field, messages], index) => {
+                const messageText = (messages as string[])[0];
+                lastErrorMessage = messageText;
+            });
+
+            let finalErrorMessage = firstErrorMessage.includes('Duplicate record') ? firstErrorMessage : lastErrorMessage;
+
             setError('root', {
                 type: 'manual',
-                message: error.response?.data?.message || 'Terjadi kesalahan saat mengirim data',
+                message: finalErrorMessage,
             });
-            }
-        };
-        
+        }
+    };
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
-                <DialogHeader title='Academic Period'>
+                <DialogHeader title="Academic Period">
                     <DialogTitle>{defaultValues ? 'Edit Academic Period' : 'Add Academic Period'}</DialogTitle>
                 </DialogHeader>
                 <ScrollArea className="max-h-[70vh] pr-4">
@@ -178,102 +182,83 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                         <div className="space-y-4">
                             <FormTextInput
                                 id="code"
+                                placeholder="Masukan code akademik periode"
                                 label="Code"
                                 type="text"
                                 {...register('code')}
                                 error={errors.code?.message}
                             />
 
-                            <Controller
-                                name="academic_period"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormTextInput 
-                                        id='academic_period'
-                                        label="Academic Period" 
-                                        type="date" {...field} 
-                                        error={errors.academic_period?.message} 
-                                    />
-                                )}
+                            <DateInput
+                                label="Academic Date"
+                                id="academic_period"
+                                placeholder="Enter Academic Date"
+                                register={register('academic_period')}
+                                error={errors.academic_period}
                             />
-                            <FormTextInput 
-                                id="name" 
-                                label="Name" 
-                                type="text" 
-                                {...register('name')} 
-                                error={errors.name?.message} 
+                            <FormTextInput
+                                id="name"
+                                label="Name"
+                                placeholder="Masukan nama periode akadmemik"
+                                type="text"
+                                {...register('name')}
+                                error={errors.name?.message}
                             />
-                            <FormTextInput id="short_name" label="Short Name" type="text" {...register('short_name')} error={errors.short_name?.message} />
+                            <FormTextInput
+                                placeholder="Masukan singkatan"
+                                id="short_name"
+                                label="Short Name"
+                                type="text"
+                                {...register('short_name')}
+                                error={errors.short_name?.message}
+                            />
 
-                            <div className="grid grid-cols-2 gap-4">
-                                <Controller
-                                    name="start_date"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <FormTextInput 
-                                            label="Start Date" 
-                                            type="date" {...field} 
-                                            error={errors.start_date?.message} 
-                                            id='start_date'
-                                            />
-                                    )}
-                                />
-                                <Controller
-                                    name="end_date"
-                                    control={control}
-                                        render={({ field }) => (
-                                            <FormTextInput 
-                                            label="End Date" 
-                                            type="date" {...field} 
-                                            id = 'end_date'
-                                            error={errors.end_date?.message} 
-                                        />
-                                    )}
-                                />
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <Controller
-                                    name="start_midterm_exam"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <FormTextInput 
-                                            label="UTS Start" 
-                                            id='start_midterm_exam'
-                                            type="date" {...field} 
-                                            error={errors.start_midterm_exam?.message} 
-                                        />
-                                    )}
-                                />
-                                <Controller
-                                    name="end_midterm_exam"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <FormTextInput id='end_midterm_exam' label="UTS End" type="date" {...field} error={errors.end_midterm_exam?.message} />
-                                    )}
-                                />
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <Controller
-                                    name="start_final_exam"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <FormTextInput id='start_final_exam' label="UAS Start" type="date" {...field} error={errors.start_final_exam?.message} />
-                                    )}
-                                    />
-                                <Controller
-                                    name="end_final_exam"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <FormTextInput id='end_final_exam' label="UAS End" type="date" {...field} error={errors.end_final_exam?.message} />
-                                    )}
-                                />
-                            </div>
-
+                            <DateInput
+                                label="Start Date"
+                                id="start_date"
+                                placeholder="Enter Start Date"
+                                register={register('start_date')}
+                                error={errors.start_date}
+                            />
+                            <DateInput
+                                label="End Date"
+                                id="end_date"
+                                placeholder="Enter End Date"
+                                register={register('end_date')}
+                                error={errors.end_date}
+                            />
+                            <DateInput
+                                label="Start UTS Date"
+                                id="start_midterm_exam"
+                                placeholder="Enter UTS Date"
+                                register={register('start_midterm_exam')}
+                                error={errors.start_midterm_exam}
+                            />
+                            <DateInput
+                                label="Enter UTS Date"
+                                id="end_midterm_exam"
+                                placeholder="Enter Certificate Date"
+                                register={register('end_midterm_exam')}
+                                error={errors.end_midterm_exam}
+                            />
+                            <DateInput
+                                label="Start UAS Date"
+                                id="start_final_exam"
+                                placeholder="Enter Start UAS Date"
+                                register={register('start_final_exam')}
+                                error={errors.start_final_exam}
+                            />
+                            <DateInput
+                                label="Start END Date"
+                                id="end_final_exam"
+                                placeholder="Enter Start Date"
+                                register={register('end_final_exam')}
+                                error={errors.end_final_exam}
+                            />
                             <FormTextInput
                                 id="number_of_meetings"
                                 label="Number Of Meetings"
+                                placeholder="Masukan jumlah pertemuan"
                                 type="number"
                                 {...register('number_of_meetings', { valueAsNumber: true })}
                                 error={errors.number_of_meetings?.message}
@@ -282,6 +267,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 id="min_number_of_meetings"
                                 label="Min Number Of Meetings"
                                 type="number"
+                                placeholder="Masukan minimal pertemuan"
                                 {...register('min_number_of_meetings', { valueAsNumber: true })}
                                 error={errors.min_number_of_meetings?.message}
                             />
@@ -296,23 +282,9 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                             <Label htmlFor="is_active">{field.value ? 'Active' : 'Non Aktif'}</Label>
                                         </div>
                                     )}
-                                    />
+                                />
                             </div>
 
-                            <Controller
-                                name="description"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormTextInput
-                                        id='description'
-                                        label="Description"
-                                        type="textarea"
-                                        placeholder="Enter a description"
-                                        {...field}
-                                        error={errors.description?.message}
-                                        />
-                                )}
-                            />
 
                             <Controller
                                 name="academic_year_id"
@@ -326,12 +298,26 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         onValueChange={field.onChange}
                                         error={errors.academic_year_id?.message}
                                     >
-                                        {AcademicYears.map((AcademicYears: any) => (
-                                            <SelectItem key={AcademicYears.id} value={String(AcademicYears.id)}>
-                                                {AcademicYears.name}
+                                        {AcademicYears.map((Academic: any) => (
+                                            <SelectItem key={Academic.id} value={String(Academic.id)}>
+                                                {Academic.name}
                                             </SelectItem>
                                         ))}
-                                    </FormSelectInput>
+                                    </FormSelectInput>  
+                                )}
+                            />
+                            <Controller
+                                name="description"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormTextInput
+                                        id="description"
+                                        label="Description"
+                                        type="textarea"
+                                        placeholder="Masukan description"
+                                        {...field}
+                                        error={errors.description?.message}
+                                    />
                                 )}
                             />
                             {errors.root && <p className="text-red-600">{errors.root.message}</p>}
@@ -340,7 +326,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 type="submit"
                                 className={`mt-4 rounded px-4 py-2 font-bold text-white ${
                                     defaultValues ? 'bg-blue-600 hover:bg-blue-500' : 'bg-green-500 hover:bg-green-600'
-                                    }`}
+                                }`}
                                 disabled={isSubmitting}
                             >
                                 {isSubmitting ? 'Loading...' : defaultValues ? 'Update' : 'Create'}
