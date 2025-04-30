@@ -16,8 +16,10 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import { Skeleton } from "@/components/ui/skeleton"
+
 import Pagination from '@mui/material/Pagination';
 import { DataTableSkeleton } from "./skeleton-table"
+
 
 interface DataTableProps<TData> {
   columns: ColumnDef<TData, any>[]
@@ -92,15 +94,19 @@ export function DataTable<TData>({
 
           <TableBody>
             {isLoading ? (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="p-0">
-                  <DataTableSkeleton
-                    columns={columns.length}
-                    rows={0}
-                    hasStickyAction={columns.some(col => col.id === "actions")}
-                  />
-                </TableCell>
-              </TableRow>
+
+              [...Array(1)].map((_, rowIndex) => (
+                <TableRow key={`skeleton-row-${rowIndex}`}>
+                  {columns.map((col, colIndex) => (
+                    <TableCell
+                      key={`skeleton-cell-${rowIndex}-${colIndex}`}
+                      className={`px-2 ${col.id === "actions" ? "sticky right-0 z-6 bg-white" : ""}`}
+                    >
+                      <Skeleton className="h-4 w-full" />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
             ) : data.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={columns.length} className="text-center py-6">
@@ -113,9 +119,7 @@ export function DataTable<TData>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className={`px-6 ${
-                        cell.column.id === "actions" ? "sticky right-0 z-10 bg-white" : ""
-                      }`}
+                      className={`px-6 ${cell.column.id === "actions" ? "sticky right-0 z-10 bg-white" : ""}`}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
@@ -124,7 +128,6 @@ export function DataTable<TData>({
               ))
             )}
           </TableBody>
-
         </Table>
       </div>
 

@@ -9,6 +9,7 @@ import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { CourseType, columns } from './Column';
 import ModalForm from './Modal';
+import { useCourseType } from './useCourseType';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -18,25 +19,11 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 const CourseTypes = () => {
-    const { get, post, put, del } = useAxios();
-    const [data, setData] = useState<CourseType[]>([]);
+    
     const [modalOpen, setModalOpen] = useState(false);
     const [editing, setEditing] = useState<CourseType | undefined>();
+    const { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useCourseType();
     const [deleteId, setDeleteId] = useState<number | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-
-    const fetchData = async () => {
-        try {
-            setIsLoading(true);
-            const res: any = await get('/course-type');
-            setData(res.data.data);
-        } catch (err) {
-            console.error('Error fetching:', err);
-        } finally {
-            setIsLoading(false);
-        }
-    };
 
     useEffect(() => {
         fetchData();
@@ -48,52 +35,6 @@ const CourseTypes = () => {
             return () => clearTimeout(timer);
         }
     }, [toast]);
-
-    const handleSubmit = async (data: Omit<CourseType, 'id'>, id?: number | undefined) => {
-        try {
-            setIsLoading(true);
-            if (id) {
-                const res: any = await put(`/course-type/${id}`, data);
-                setData((prev) => prev.map((p: any) => (p.id === id ? res.data : p)));
-                await fetchData();
-                setModalOpen(false);
-                setToast({ message: 'Type Course updated successfully', type: 'success' });
-                return res;
-            } else {
-                const res: any = await post('/course-type', data);
-                setData((prev) => [...prev, res.data]);
-                await fetchData();
-                setModalOpen(false);
-                setToast({ message: 'Type Course created successfully', type: 'success' });
-                return res;
-            }
-        } catch (error: any) {
-            if (error.response.status === 500) {
-                setToast({ message: 'Failed to submit Type Course', type: 'error' });
-            }
-            console.log('Error submitting data:', error);
-        } finally {
-            setIsLoading(true);
-            setModalOpen(false);
-        }
-    };
-
-    const handleDelete = async () => {
-        if (!deleteId) return;
-        setIsLoading(true);
-        try {
-            await del(`/course-type/${deleteId}`);
-            setData((prev) => prev.filter((item: any) => item.id !== deleteId));
-            setDeleteId(null);
-            setToast({ message: 'Type Course deleted successfully', type: 'success' });
-        } catch (err) {
-            console.error(err);
-            setToast({ message: 'Failed to delete Type Course', type: 'error' });
-        } finally {
-            setDeleteId(null);
-            setIsLoading(false);
-        }
-    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -120,9 +61,34 @@ const CourseTypes = () => {
                     )}
                     data={data || []}
                     isLoading={isLoading}
+                    page={page}
+                    totalPages={totalPages}
+                    onPageChange={(newPage) => {
+                        setPage(newPage);
+                        fetchData(newPage);
+                    }}
                 />
-                <ModalForm open={modalOpen} onOpenChange={setModalOpen} submit={handleSubmit} defaultValues={editing} />
-                <ConfirmDeleteDialog open={deleteId !== null} onCancel={() => setDeleteId(null)} onConfirm={handleDelete} isLoading={isLoading} />
+                <ModalForm 
+                    open={modalOpen} 
+                    onOpenChange={setModalOpen} 
+                    submit={(value, id) => 
+                        handleSubmit(value, id, () => {
+                            setModalOpen(false)
+                        })
+                    }
+                    defaultValues={editing} 
+                />
+                <ConfirmDeleteDialog 
+                    open={deleteId !== null} 
+                    onCancel={() => setDeleteId(null)} 
+                    onConfirm={() => {
+                        if (!deleteId)return;
+                        handleDelete(deleteId, () => {
+                            setDeleteId(null);
+                        });
+                    }} 
+                    isLoading={isLoading} 
+                />
                 <ToastProvider>
                     {toast && (
                         <Toast variant={toast.type === 'error' ? 'destructive' : 'default'}>

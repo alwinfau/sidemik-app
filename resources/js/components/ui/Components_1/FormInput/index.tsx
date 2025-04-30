@@ -12,7 +12,7 @@ interface BaseFormFieldProps {
   error?: string;
 }
 
-
+// ✅ FormTextInput - sekarang support textarea
 interface FormTextInputProps extends React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
   id: string;
   label?: string;
@@ -21,7 +21,7 @@ interface FormTextInputProps extends React.InputHTMLAttributes<HTMLInputElement 
 }
 
 export const FormTextInput = React.forwardRef<HTMLInputElement | HTMLTextAreaElement, FormTextInputProps>(
-  ({ id,label, error, type = 'text', ...rest }, ref) => {
+  ({ id, label, error, type = 'text', ...rest }, ref) => {
     return (
       <div className="flex-col space-y-1">
         {label && <Label htmlFor={id}>{label}</Label>}

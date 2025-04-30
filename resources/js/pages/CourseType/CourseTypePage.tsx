@@ -1,4 +1,4 @@
-import CourseTypes from '@/layouts/ComponentPages/CourseType/CourseType';
+import CourseTypes from '@/layouts/ComponentPages/CourseType';
 
 type Props = {};
 

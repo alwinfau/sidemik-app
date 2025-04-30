@@ -13,10 +13,18 @@ export type EmployeesType = {
     emp_birth_place: string;
     emp_birth_date: string;
     emp_married_status: string;
-    study_programs_id: number;
-    active_statuses_id: number;
-    employments_relationships_id: number;
-    academic_positions_id: number;
+    study_programs_id:{
+        idn_sp_name: string;
+    };
+    active_statuses_id:{
+        activity_status_name: string;
+    };
+    employments_relationships_id:{
+        name: string;
+    };
+    academic_positions_id:{
+        academic_position_name: string;
+    };
     emp_institution_origin: string;
     emp_areas_expertise: string;
     emp_collage_email: string;
@@ -35,6 +43,11 @@ export type EmployeesType = {
 };
 
 export const columns = (onEdit: (row: EmployeesType) => void, onDelete: (id: string) => void): ColumnDef<EmployeesType>[] => [
+    {
+        id: 'rowNumber',
+        header: () => <div className="text-center">No</div>,
+        cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
+    },
     { accessorKey: 'emp_nip', header: 'NIP' },
     { accessorKey: 'emp_full_name', header: 'Full Name' },
     { accessorKey: 'emp_front_title', header: 'Front Title' },
@@ -78,3 +91,5 @@ export const columns = (onEdit: (row: EmployeesType) => void, onDelete: (id: str
         ),
     },
 ];
+
+export default columns;

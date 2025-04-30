@@ -9,13 +9,11 @@ import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { columns, EmployeesType } from './Column';
 import ModalForm from './Modal';
+import { set } from 'react-hook-form';
+import { Head } from '@inertiajs/react';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Employees',
-        href: '/employees',
-    },
-];
+    {title: 'Employees', href: '/employees'}];
 
 const Employees = () => {
     const { get, post, put, del } = useAxios();
@@ -24,54 +22,74 @@ const Employees = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [editing, setEditing] = useState<EmployeesType | undefined>();
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-    const fetchData = async () => {
-        try {
-            const res: any = await get('/products');
-            setData(res);
-        } catch (err) {
-            console.error('Error fetching:', err);
-        }
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    const handleSubmit = async (data: Omit<EmployeesType, 'id'>, id?: number) => {
-        try {
-            if (id) {
-                const res: any = await put(`/products/${id}`, data);
-                setData((prev) => prev.map((p) => (p.id === id ? res : p)));
-                setToast({ message: 'Product updated successfully', type: 'success' });
-            } else {
-                const res: any = await post('/products', data);
-                setData((prev) => [...prev, res]);
-                setToast({ message: 'Product created successfully', type: 'success' });
-            }
-            setModalOpen(false);
-        } catch (error) {
-            setToast({ message: 'Failed to submit product', type: 'error' });
-        }
-    };
-
-    const handleDelete = async () => {
-        if (!deleteId) return;
-        try {
-            await del(`/products/${deleteId}`);
-            setData((prev) => prev.filter((item) => item.id !== deleteId));
-            setDeleteId(null);
-            setToast({ message: 'Product deleted successfully', type: 'success' });
-        } catch (err) {
-            setDeleteId(null);
-            setToast({ message: 'Failed to delete product', type: 'error' });
-        }
-    };
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+       const fetchData = async () => {
+           try {
+               setIsLoading(true);
+               const res: any = await get('/employees');
+               setData(res.data.data);
+               return res;
+           } catch (err) {
+               setToast({ message: 'Failed to get Prodi Accreditation', type: 'error' });
+           } finally {
+               setIsLoading(false);
+           }
+       };
+   
+       useEffect(() => {
+           fetchData();
+       }, []);
+       
+   
+       const handleSubmit = async (data: Omit<EmployeesType, 'id'>, id?: number) => {
+           try {
+               setIsLoading(true);
+               if (id) {
+                   const res: any = await put(`/employees/${id}`, data);
+                   setData((prev) => prev.map((p) => (p.id === id ? res.data : p)));
+                   await fetchData();
+                   setModalOpen(false);
+                   setToast({ message: 'Prodi Accreditation updated successfully', type: 'success' });
+                   return res;
+               } else {
+                   const res: any = await post('/employees', data);
+                   setData((prev) => [...prev, res.data]);
+                   await fetchData();
+                   setModalOpen(false);
+                   setToast({ message: 'Prodi Accreditation created successfully', type: 'success' });
+                   return res;
+               }
+           } catch (error: any) {
+               if (error.response.status === 500) {
+                   setToast({ message: 'Failed to submit Prodi Accreditation', type: 'error' });
+               }
+           } finally {
+               setIsLoading(false);
+              
+           }
+       };
+   
+       const handleDelete = async () => {
+           if (!deleteId) return;
+           setIsLoading(true);
+           try {
+               await del(`/employees/${deleteId}`);
+               setData((prev) => prev.filter((item) => item.id !== deleteId));
+               setToast({ message: 'Prodi Accreditation deleted successfully', type: 'success' });
+           } catch (err) {
+               setToast({ message: 'Failed to delete Prodi Accreditation', type: 'error' });
+           } finally {
+               setIsLoading(false);
+               setDeleteId(null);
+           }
+       };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title="Employees" />
             <div className="m-6">
                 <div className="mb-4 flex justify-between">
-                    <h2 className="text-2xl font-bold"> Employees </h2>
+                    <h1 className="text-2xl font-bold"> Employees </h1>
                     <Button
                         onClick={() => {
                             setEditing(undefined);
@@ -89,13 +107,14 @@ const Employees = () => {
                             setEditing(row);
                             setModalOpen(true);
                         },
-                        (id) => setDeleteId(parseInt(id)),
+                        (id) => 
+                            setDeleteId(parseInt(id)),
                     )}
                     data={data || []}
+                    isLoading={isLoading}
                 />
 
-                <ModalForm open={modalOpen} onOpenChange={setModalOpen} onSubmit={handleSubmit} defaultValues={editing} />
-                <ConfirmDeleteDialog open={deleteId !== null} onCancel={() => setDeleteId(null)} onConfirm={handleDelete} />
+                
                 <ToastProvider>
                     {toast && (
                         <Toast variant={toast.type === 'error' ? 'destructive' : 'default'}>
@@ -107,9 +126,11 @@ const Employees = () => {
                     )}
                     <ToastViewport />
                 </ToastProvider>
+                <ModalForm open={modalOpen} onOpenChange={setModalOpen} submit={handleSubmit} defaultValues={editing} />
+                <ConfirmDeleteDialog open={deleteId !== null} onCancel={() => setDeleteId(null)} onConfirm={handleDelete} />
             </div>
         </AppLayout>
     );
-};
+}
 
 export default Employees;

@@ -112,7 +112,6 @@ Route::get('/academic-position', function() {
 Route::get('/academic-position-types', function() {
     return Inertia::render(component:'AcademicPostionTypes/AcademicPositionTypes');
 })->name('AcademicPositionTypes');
-
 // Route Course
 Route::get('/course', function() {
     return Inertia::render(component:'Course/CoursePages');
@@ -132,9 +131,6 @@ Route::get('/curiculum-year', function() {
 Route::get('/study-program-curriculums', function() {
     return Inertia::render(component:'CuriculumProdi/CuriculumProPage');
 })->name('study-program-curriculums');
-
-
-
 // Tambahan route file
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

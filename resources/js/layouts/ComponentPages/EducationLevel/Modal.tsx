@@ -19,7 +19,7 @@ const schema = z.object({
     education_stages: z.string().min(5, 'Education Stages harus lebih dari 5 karakter'),
     education_stages_name_id: z.string().min(5, 'Nama harus lebih dari 5 karakter'),
     education_stages_name_en: z.string().min(5, 'Nama (EN) harus lebih dari 5 karakter'),
-    education_stages_sequence: z.number().positive('Angka harus diatas 0'),
+    education_stages_sequence: z.number().min(0),
     university_level: z.boolean(),
     postgraduate: z.boolean(),
     rpl_stages: z.boolean(),

@@ -114,7 +114,7 @@ const data: AppData = {
                 },
                 {
                     title: 'Course',
-                    url: '/course',
+                    url: '#',
                 },
                 {
                     title: 'Course Type',

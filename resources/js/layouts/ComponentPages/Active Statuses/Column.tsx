@@ -6,7 +6,7 @@ export type ActiveStatus = {
     id?: number;
     active_status_code: string;
     active_status_name: string;
-    active_status_description: string | null;
+    active_status_description: string;
 };
 
 export const columns = (onEdit: (row: ActiveStatus) => void, onDelete: (id: string) => void): ColumnDef<ActiveStatus>[] => [
