@@ -1,11 +1,20 @@
-import AcademicPositionPage from "@/layouts/ComponentPages/AcademicPosition/AcademicPosition";
+import AppLayout from '@/layouts/app-layout';
+import AcademicPosition from '@/layouts/ComponentPages/AcademicPosition/AcademicPosition';
+import { BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/react';
+
 type Props = {};
 
-const AcademicPosition = (props: Props) => {
+const AcademicPositionPages = (props: Props) => {
+    const breadcrumbs: BreadcrumbItem[] = [{ title: ' Academic Position ', href: '/academic-positions' }];
+
     return (
         <>
-            <AcademicPositionPage />
+            <AppLayout breadcrumbs={breadcrumbs}>
+                <Head title="Academic Position" />
+                <AcademicPosition />
+            </AppLayout>
         </>
     );
 };
-export default AcademicPosition;
+export default AcademicPositionPages;

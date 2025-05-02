@@ -118,6 +118,12 @@ Route::get('/province', function() {
     return Inertia::render(component:'Province/Province');
 })->name('Province');
 
+// Route Regency
+Route::get('/regency', function() {
+    return Inertia::render(component:'Regencies/Index');
+})->name('Index');
+
+
 // Tambahan route file
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

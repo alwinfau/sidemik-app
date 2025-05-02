@@ -143,6 +143,10 @@ const data: AppData = {
                 {
                     title: 'Province',
                     url: '/province'
+                },
+                {
+                    title: 'Regencies',
+                    url: '/regency'
                 }
             ],
         },
@@ -172,6 +176,7 @@ const data: AppData = {
                     title: 'Academic Year',
                     url: '/academic-year',
                 },
+
             ],
         },
 

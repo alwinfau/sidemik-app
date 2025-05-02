@@ -7,7 +7,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { useAcademicPosition } from './useAcademicPosition';
+import { useRegencies } from './useRegencies';
+import Province from '@/pages/Province/Province';
+
 type ModalProps = {
     open: boolean;
     onOpenChange: (open: boolean) => void;
@@ -16,9 +18,9 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    academic_position_code: z.string().min(3),
-    academic_position_name: z.string().min(5),
-    academic_positions_types_id: z.string(),
+    description: z.string().min(1),
+    name: z.string().min(1),
+    province_id: z.string().min(1),
     
 });
 
@@ -36,30 +38,29 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         resolver: zodResolver(schema),
     });
 
-    const { AcademicPositionType, fetchAcademicPositionTypes } = useAcademicPosition();
+    const { province, fetchProvince } = useRegencies();
 
     useEffect(() => {
-        fetchAcademicPositionTypes();
+        fetchProvince();
         
     }, []);
 
     useEffect(() => {
         if (defaultValues) {
             reset({
-                academic_position_code: defaultValues.academic_position_code || '',
-                academic_position_name: defaultValues.academic_position_name || '',
-                academic_positions_types_id: String(defaultValues.academic_positions_types_id) || '1',
+                name: defaultValues.name || '',
+                description: defaultValues.description || '',
+                province_id: String(defaultValues.province_id) || '1',
             });
         } else {
             reset({
-                academic_position_code: '',
-                academic_position_name: '',
-                academic_positions_types_id: '',
+                name: '',
+                description: '',
+                province_id: '1',
 
             });
         }
     }, [defaultValues, reset]);
-
 
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
         try {
@@ -67,9 +68,9 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             if (result != null) {
                 if (!isSubmitting && !defaultValues) {
                     reset({
-                        academic_position_code: '',
-                        academic_position_name: '',
-                        academic_positions_types_id: '',  
+                        name: '',
+                        description: '',
+                        province_id: '',   
                     });
                 }
             }
@@ -95,43 +96,43 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
                 <DialogHeader>
-                    <DialogTitle>{defaultValues ? 'Edit Academic Position' : 'Add Academic Position'}</DialogTitle>
+                    <DialogTitle>{defaultValues ? 'Edit Regencies' : 'Add Regencies'}</DialogTitle>
                 </DialogHeader>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mx-3 space-y-4">
                             <FormTextInput
-                                id="academic_position_code"
-                                label="code position academic"
+                                id="name"
+                                label="Name"
                                 type='text'
-                                {...register('academic_position_code')}
-                                error={errors.academic_position_code?.message}
+                                {...register('name')}
+                                error={errors.name?.message}
                                
                             />
                             <FormTextInput
-                                id="academic_position_name"
-                                label="name position academic"
+                                id="description"
+                                label="Description"
                                 type='text'
-                                {...register('academic_position_name')}
-                                error={errors.academic_position_name?.message}
+                                {...register('description')}
+                                error={errors.description?.message}
                                
                             />
 
                             <Controller
-                                name='academic_positions_types_id'
+                                name='province_id'
                                 control={control}
-                                rules={{ required: 'academic_positions_type_id is required' }}
+                                rules={{ required: 'Province is required' }}
                                 render={({ field }) => (
                                     <FormSelectInput
-                                        id='academic_positions_type_id'
-                                        label='type position academic'
+                                        id='province_id'
+                                        label='Province'
                                         value={String(field.value)}
                                         onValueChange={field.onChange}
-                                        error={errors.academic_positions_types_id?.message}
+                                        error={errors.province_id?.message}
                                     >
-                                        {AcademicPositionType.map((AcademicPositionTypesPages: any) => (
-                                            <SelectItem key={AcademicPositionTypesPages.id} value={String(AcademicPositionTypesPages.id)}>
-                                                {AcademicPositionTypesPages.job_type_name}
+                                        {province.map((province: any) => (
+                                            <SelectItem key={province.id} value={String(province.id)}>
+                                                {province.name}
                                             </SelectItem>
                                             
                                         ))}
