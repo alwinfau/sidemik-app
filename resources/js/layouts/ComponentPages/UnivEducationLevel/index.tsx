@@ -11,13 +11,14 @@ import { useEffect, useState } from 'react';
 import { UnivEducationLevelType, columns } from './Column';
 import ModalForm from './Modal';
 
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: ' Univ Level Education ',
+        href: '/univ-level-education',
+    },
+];
 
-const breadcrumbs: BreadcrumbItem[] = [{ 
-    title: ' Univ Level Education ', 
-    href: '/univ-level-education' 
-}];
-
-const UnivLevel = () =>{
+const UnivLevel = () => {
     const { get, post, put, del } = useAxios();
     const [data, setData] = useState<UnivEducationLevelType[]>([]);
     const [modalOpen, setModalOpen] = useState(false);

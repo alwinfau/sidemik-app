@@ -1,4 +1,4 @@
-import CourseGroup from "@/layouts/ComponentPages/CourseGroup/Index";
+import CourseGroup from '@/layouts/ComponentPages/CourseGroup/Index';
 type Props = {};
 
 const Coursepage = (props: Props) => {

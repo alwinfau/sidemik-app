@@ -1,14 +1,14 @@
 import { Button } from '@/components/ui/button';
+import DateInput from '@/components/ui/Components_1/DateInput';
 import { FormSelectInput, FormTextInput } from '@/components/ui/Components_1/FormInput';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SelectItem } from '@/components/ui/select';
-import { useAxios } from '@/hooks/useAxios';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LoaderCircle } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useProdiAccreditation } from './useProdiAccreditation';
 
 type ModalProps = {
     open: boolean;
@@ -18,10 +18,10 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    accreditation_code: z.string(),
+    accreditation_code: z.string().min(1),
     accreditation_name: z.string().min(1),
-    accreditation_score: z.string(),
-    accr_cert_number: z.string(),
+    accreditation_score: z.string().min(1),
+    accr_cert_number: z.string().min(1),
     accr_cert_date: z.string(),
     valid_from: z.string(),
     valid_until: z.string(),
@@ -43,18 +43,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         resolver: zodResolver(schema),
     });
 
-    const { get } = useAxios();
-
-    const [agencies, setAgencies] = useState<any>([]);
-
-    const fetchAgency = async () => {
-        try {
-            const res: any = await get('/accreditation-agency');
-            setAgencies(res.data.data);
-        } catch (err) {
-            console.error('Error fetching:', err);
-        }
-    };
+    const { agencies, fetchAgency } = useProdiAccreditation();
 
     useEffect(() => {
         fetchAgency();
@@ -107,18 +96,28 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 }
             }
         } catch (error: any) {
+            const errorsData = error?.data;
+            let lastErrorMessage = '';
+            let firstErrorMessage = error.meta.message;
+
+            Object.entries(errorsData).forEach(([field, messages], index) => {
+                const messageText = (messages as string[])[0];
+                lastErrorMessage = messageText;
+            });
+
+            let finalErrorMessage = firstErrorMessage.includes('Duplicate record') ? firstErrorMessage : lastErrorMessage;
+
             setError('root', {
                 type: 'manual',
-                message: error?.response?.meta?.message || 'Something went wrong',
+                message: finalErrorMessage,
             });
         }
     };
-
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
                 <DialogHeader>
-                    <DialogTitle>{defaultValues ? 'Edit Academic Years' : 'Add Academic Years'}</DialogTitle>
+                    <DialogTitle>{defaultValues ? 'Edit Prodi Accreditation' : 'Add Prodi Accreditation'}</DialogTitle>
                 </DialogHeader>
                 <DialogDescription>Silakan isi data akreditasi program studi dengan lengkap dan sesuai dokumen resmi.</DialogDescription>
                 <ScrollArea className="max-h-[70vh] pr-4">
@@ -130,6 +129,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 type="text"
                                 {...register('accreditation_code')}
                                 error={errors.accreditation_code?.message}
+                                placeholder="Enter Accreditation Code"
                             />
 
                             <FormTextInput
@@ -138,6 +138,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 type="text"
                                 {...register('accreditation_name')}
                                 error={errors.accreditation_name?.message}
+                                placeholder="Enter Accreditation Name"
                             />
 
                             <FormTextInput
@@ -146,6 +147,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 type="text"
                                 {...register('accreditation_score')}
                                 error={errors.accreditation_score?.message}
+                                placeholder="Enter Accreditation Score"
                             />
 
                             <FormTextInput
@@ -154,37 +156,31 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 type="text"
                                 {...register('accr_cert_number')}
                                 error={errors.accr_cert_number?.message}
+                                placeholder="Enter Certificate Number"
                             />
 
-                            <div>
-                                <div className="mb-2">
-                                    <label htmlFor="accr_cert_date">Accreditation Date</label>
-                                </div>
-                                <div className="rounded border p-3">
-                                    <input type="date" {...register('accr_cert_date')} id="accr_cert_date" aria-label="accr_cert_date" />
-                                </div>
-                                {errors.accr_cert_date?.message}
-                            </div>
+                            <DateInput
+                                label="Certificate Date"
+                                id="accr_cert_date"
+                                placeholder="Enter Certificate Date"
+                                register={register('accr_cert_date')}
+                                error={errors.accr_cert_date}
+                            />
 
-                            <div>
-                                <div className="mb-2">
-                                    <label htmlFor="valid_from">Valid From</label>
-                                </div>
-                                <div className="rounded border p-3">
-                                    <input type="date" {...register('valid_from')} id="valid_from" aria-label="valid_from" />
-                                </div>
-                                {errors.valid_from?.message}
-                            </div>
-
-                            <div>
-                                <div className="mb-2">
-                                    <label htmlFor="valid_until">Valid Until</label>
-                                </div>
-                                <div className="rounded border p-3">
-                                    <input type="date" {...register('valid_until')} id="valid_until" aria-label="valid_until" />
-                                </div>
-                                {errors.valid_until?.message}
-                            </div>
+                            <DateInput
+                                label="Valid From"
+                                id="valid_from"
+                                placeholder="Enter Valid From"
+                                register={register('valid_from')}
+                                error={errors.valid_from}
+                            />
+                            <DateInput
+                                label="Valid Until"
+                                id="valid_until"
+                                placeholder="Enter Valid Until"
+                                register={register('valid_until')}
+                                error={errors.valid_until}
+                            />
 
                             <FormTextInput
                                 id="certificate_url"
@@ -192,6 +188,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 type="text"
                                 {...register('certificate_url')}
                                 error={errors.certificate_url?.message}
+                                placeholder="Enter Certificate URL"
                             />
 
                             <Controller
@@ -222,7 +219,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 className={`mb-5 rounded px-4 py-2 font-bold text-white ${defaultValues ? 'bg-blue-600 hover:bg-blue-500' : 'bg-green-500 hover:bg-green-600'} `}
                                 disabled={isSubmitting}
                             >
-                                {isSubmitting ? <LoaderCircle className="h-4 w-4 animate-spin" /> : defaultValues ? 'Update' : 'Create'}
+                                {isSubmitting ? `Loading...` : defaultValues ? 'Update' : 'Create'}
                             </Button>
                         </div>
                     </form>

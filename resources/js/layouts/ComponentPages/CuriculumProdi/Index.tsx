@@ -1,4 +1,3 @@
-
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/Components_1/DataTable';
 import ConfirmDeleteDialog from '@/components/ui/Components_1/DeleteModal';
@@ -6,34 +5,41 @@ import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } fro
 import { useAxios } from '@/hooks/useAxios';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/react';
 import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { CourseType, columns } from './Column';
+import { Curiculumtype, columns } from './Column';
 import ModalForm from './Modal';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Course Type',
-        href: '/course-type',
+        title: 'Curiculum Prodi',
+        href: '/study-program-curriculums',
     },
 ];
 
-const CourseTypes = () => {
+const CuriculumProdisPage = () => {
     const { get, post, put, del } = useAxios();
-    const [data, setData] = useState<CourseType[]>([]);
+    const [data, setData] = useState<Curiculumtype[]>([]);
     const [modalOpen, setModalOpen] = useState(false);
-    const [editing, setEditing] = useState<CourseType | undefined>();
+    const [editing, setEditing] = useState<Curiculumtype | undefined>();
     const [deleteId, setDeleteId] = useState<number | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [page, setPage] = useState<number>(1);
+    const [totalPages, setTotalPages] = useState<number>(1);
 
-    const fetchData = async () => {
+    const fetchData = async (currentPage = 1) => {
         try {
-            const res: any = await get('/course-type');
+            setIsLoading(true);
+            const res: any = await get(`study-program-curriculums?page=${currentPage}&limit=2`);
             setData(res.data.data);
-            return res;
+            setPage(res.data.current_page);
+            setTotalPages(res.data.last_page);
         } catch (err) {
-            console.error('Error fetching:', err);
+            setToast({ message: 'Failed to get study-program-curriculums', type: 'error' });
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -41,35 +47,25 @@ const CourseTypes = () => {
         fetchData();
     }, []);
 
-    useEffect(() => {
-        if (toast) {
-            const timer = setTimeout(() => setToast(null), 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [toast]);
-
-    const handleSubmit = async (data: Omit<CourseType, 'id'>, id?: number | undefined) => {
+    const handleSubmit = async (data: Omit<Curiculumtype, 'id'>, id?: number) => {
         try {
+            setIsLoading(true);
             if (id) {
-                const res: any = await put(`/course-type/${id}`, data);
-                setData((prev) => prev.map((p: any) => (p.id === id ? res.data : p)));
-                await fetchData();
-                setModalOpen(false);
-                setToast({ message: 'Type Course updated successfully', type: 'success' });
-                return res;
+                const res: any = await put(`/study-program-curriculums/${id}`, data);
+                setData((prev) => prev.map((p) => (p.id === id ? res.data : p)));
+                setToast({ message: 'Curiculum Prodi updated successfully', type: 'success' });
             } else {
-                const res: any = await post('/course-type', data);
+                const res: any = await post('/study-program-curriculums', data);
                 setData((prev) => [...prev, res.data]);
-                await fetchData();
-                setModalOpen(false);
-                setToast({ message: 'Type Course created successfully', type: 'success' });
-                return res;
+                setToast({ message: 'Curiculum Prodi created successfully', type: 'success' });
             }
         } catch (error: any) {
             if (error.response.status === 500) {
-                setToast({ message: 'Failed to submit Type Course', type: 'error' });
-            }
-            console.log('Error submitting data:', error);
+                setToast({ message: 'Failed to submit faculty', type: 'error' });
+            }throw error.response.data;
+        } finally {
+            setIsLoading(false);
+            setModalOpen(false);
         }
     };
 
@@ -77,24 +73,23 @@ const CourseTypes = () => {
         if (!deleteId) return;
         setIsLoading(true);
         try {
-            await del(`/course-type/${deleteId}`);
-            setData((prev) => prev.filter((item: any) => item.id !== deleteId));
-            setDeleteId(null);
-            setToast({ message: 'Type Course deleted successfully', type: 'success' });
+            await del(`/study-program-curriculums/${deleteId}`);
+            setData((prev) => prev.filter((item) => item.id !== deleteId));
+            setToast({ message: 'Curiculum Prodi deleted successfully', type: 'success' });
         } catch (err) {
-            console.error(err);
-            setToast({ message: 'Failed to delete Type Course', type: 'error' });
+            setToast({ message: 'Failed to delete Curiculum Prodi', type: 'error' });
         } finally {
-            setDeleteId(null);
             setIsLoading(false);
+            setDeleteId(null);
         }
     };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title="Curiculum Prodi" />
             <div className="m-6">
-                <div className="flex items-center justify-between">
-                    <h2 className="text-3xl font-bold">Type Course</h2>
+                <div className="mb-4 flex justify-between">
+                    <h2 className="text-2xl font-bold">Curiculum Prodi</h2>
                     <Button
                         onClick={() => {
                             setEditing(undefined);
@@ -102,9 +97,10 @@ const CourseTypes = () => {
                         }}
                         className="flex items-center rounded bg-green-600 p-3 font-bold text-white hover:bg-green-500"
                     >
-                        <CirclePlus className="h-6 w-6" /> Add Type Course
+                        <CirclePlus className="h-6 w-6" /> Add Curiculum Prodi
                     </Button>
                 </div>
+
                 <DataTable
                     columns={columns(
                         (row) => {
@@ -114,9 +110,9 @@ const CourseTypes = () => {
                         (id) => setDeleteId(parseInt(id)),
                     )}
                     data={data || []}
+                    isLoading={isLoading}
                 />
-                <ModalForm open={modalOpen} onOpenChange={setModalOpen} submit={handleSubmit} defaultValues={editing} />
-                <ConfirmDeleteDialog open={deleteId !== null} onCancel={() => setDeleteId(null)} onConfirm={handleDelete} isLoading={isLoading} />
+
                 <ToastProvider>
                     {toast && (
                         <Toast variant={toast.type === 'error' ? 'destructive' : 'default'}>
@@ -128,9 +124,12 @@ const CourseTypes = () => {
                     )}
                     <ToastViewport />
                 </ToastProvider>
+
+                <ModalForm open={modalOpen} onOpenChange={setModalOpen} submit={handleSubmit} defaultValues={editing} />
+                <ConfirmDeleteDialog open={deleteId !== null} onCancel={() => setDeleteId(null)} onConfirm={handleDelete} isLoading={isLoading} />
             </div>
         </AppLayout>
     );
 };
 
-export default CourseTypes;
+export default CuriculumProdisPage;

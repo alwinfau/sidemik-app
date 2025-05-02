@@ -17,7 +17,6 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-
 const EducationLevel = () => {
     const { get, post, put, del } = useAxios();
     const [data, setData] = useState<EductionLevelType[]>([]);
@@ -29,11 +28,14 @@ const EducationLevel = () => {
 
     const fetchData = async () => {
         try {
+            setIsLoading(true);
             const res: any = await get('/education-level');
             setData(res.data.data);
             return res;
         } catch (err) {
             console.error('Error fetching:', err);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -50,29 +52,31 @@ const EducationLevel = () => {
 
     const handleSubmit = async (data: Omit<EductionLevelType, 'id'>, id?: number | undefined) => {
         try {
-            let res: any;
+            setIsLoading(true);
             if (id) {
-                res = await put(`/education-level/${id}`, data);
-                setData((prev) => prev.map((p: any) => (p.id === id ? res.data : p)));
+                const res: any = await put(`/education-level/${id}`, data);
+                setData((prev) => prev.map((p) => (p.id === id ? res.data : p)));
+                await fetchData();
+                setModalOpen(false);
                 setToast({ message: 'Education Level updated successfully', type: 'success' });
+                return res;
             } else {
-                res = await post('/education-level', data);
+                const res: any = await post('/education-level', data);
                 setData((prev) => [...prev, res.data]);
+                await fetchData();
+                setModalOpen(false);
                 setToast({ message: 'Education Level created successfully', type: 'success' });
+                return res;
             }
-    
-            await fetchData(); // refresh data table
-            setModalOpen(false); // tutup modal setelah berhasil
-            return res;
         } catch (error: any) {
-            console.log('Error submitting data:', error);
-    
-            // Tambahkan throw agar isSubmitting kembali ke false
-            throw error;
+            if (error.response.status === 500) {
+                setToast({ message: 'Failed to submit Education Level', type: 'error' });
+            }
+        } finally {
+            setIsLoading(false);
+            setModalOpen(false);
         }
     };
-    
-    
 
     const handleDelete = async () => {
         if (!deleteId) return;
@@ -115,6 +119,7 @@ const EducationLevel = () => {
                         (id) => setDeleteId(parseInt(id)),
                     )}
                     data={data || []}
+                    isLoading={isLoading}
                 />
                 <ModalForm open={modalOpen} onOpenChange={setModalOpen} submit={handleSubmit} defaultValues={editing} />
                 <ConfirmDeleteDialog open={deleteId !== null} onCancel={() => setDeleteId(null)} onConfirm={handleDelete} isLoading={isLoading} />

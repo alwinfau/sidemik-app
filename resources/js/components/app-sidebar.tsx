@@ -140,14 +140,6 @@ const data: AppData = {
                     title: 'Final Project Type',
                     url: '/final-project-type',
                 },
-                {
-                    title: 'Province',
-                    url: '/province'
-                },
-                {
-                    title: 'Regencies',
-                    url: '/regency'
-                }
             ],
         },
         {
@@ -176,7 +168,18 @@ const data: AppData = {
                     title: 'Academic Year',
                     url: '/academic-year',
                 },
-
+                {
+                    title: 'Univ Level Academic',
+                    url: '/univ-level-education',
+                },
+                {
+                    title: 'Curiculum Year',
+                    url: '/curiculum-year',
+                },
+                {
+                    title: 'Curiculum Prodi',
+                    url: '/study-program-curriculums',
+                },
             ],
         },
 

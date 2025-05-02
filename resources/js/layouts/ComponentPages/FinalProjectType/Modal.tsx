@@ -53,7 +53,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
 
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
         try {
-        const result = await submit(data, defaultValues?.id);
+            const result = await submit(data, defaultValues?.id);
             if (result != null) {
                 if (!isSubmitting && !defaultValues) {
                     reset({
@@ -71,7 +71,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             });
         }
     };
-    return(
+    return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
                 <DialogHeader>
@@ -80,20 +80,8 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4">
-                            <FormTextInput
-                                id="code"
-                                label="Code"
-                                type="text"
-                                {...register('code')}
-                                error={errors.code?.message}
-                            />
-                            <FormTextInput 
-                                id="name" 
-                                label="name" 
-                                type="text" 
-                                {...register('name')} 
-                                error={errors.name?.message} 
-                            />
+                            <FormTextInput id="code" label="Code" type="text" {...register('code')} error={errors.code?.message} />
+                            <FormTextInput id="name" label="name" type="text" {...register('name')} error={errors.name?.message} />
                             <FormTextInput
                                 id="description"
                                 label="description"
@@ -116,7 +104,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 </ScrollArea>
             </DialogContent>
         </Dialog>
-    )
-}
+    );
+};
 
 export default ModalForm;

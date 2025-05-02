@@ -1,12 +1,12 @@
 import { Button } from '@/components/ui/button';
 import { FormSelectInput, FormTextInput } from '@/components/ui/Components_1/FormInput';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SelectItem } from '@/components/ui/select';
+import { Switch } from '@/components/ui/swicth';
 import { useEffect, useState } from 'react';
 import type { StudentType } from './Column';
-import { Switch } from '@/components/ui/swicth';
-import { Label } from '@/components/ui/label';
 
 const ModalForm = ({
     open,
@@ -41,7 +41,7 @@ const ModalForm = ({
         email: '',
         hobby: '',
         student_path: '',
-        status: null ,
+        status: null,
         img_path: '',
     });
 
@@ -94,11 +94,10 @@ const ModalForm = ({
     const [enabled, setDisabled] = useState(false);
 
     const handleSwhichChange = (val: boolean) => {
-    const statusValue = val ? 1 : 0;
-    handleChange('status', statusValue);
-    console.log('value: ', statusValue);
-};
-
+        const statusValue = val ? 1 : 0;
+        handleChange('status', statusValue);
+        console.log('value: ', statusValue);
+    };
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -146,7 +145,7 @@ const ModalForm = ({
                                 name="Gender"
                                 placeholder="Select Gender"
                                 onChange={(value) => handleChange('gender', value)}
-                                label='Gender'
+                                label="Gender"
                             >
                                 <SelectItem value="L">Laki-Laki</SelectItem>
                                 <SelectItem value="P">Prempuan</SelectItem>
@@ -155,16 +154,9 @@ const ModalForm = ({
                             {/* Status Switch */}
                             <Label>Status</Label>
                             <div className="flex items-center space-x-2">
-                                <Switch
-                                    id="airplane-mode"
-                                    checked={formData.status === 1}
-                                    onCheckedChange={handleSwhichChange}
-                                />
-                                <Label htmlFor="airplane-mode">
-                                    {formData.status === 1 ? "Aktif" : "Non Aktif"}
-                                </Label>
+                                <Switch id="airplane-mode" checked={formData.status === 1} onCheckedChange={handleSwhichChange} />
+                                <Label htmlFor="airplane-mode">{formData.status === 1 ? 'Aktif' : 'Non Aktif'}</Label>
                             </div>
-
 
                             <Button
                                 type="submit"

@@ -25,14 +25,20 @@ const AcademicYearPage = () => {
     const [deleteId, setDeleteId] = useState<number | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+    const [page, setPage] = useState<number>(1);
+    const [totalPages, setTotalPages] = useState<number>(1);
 
-    const fetchData = async () => {
+    const fetchData = async (currentPage = 1) => {
+        setIsLoading(true);
         try {
-            const res: any = await get('/academic-year');
+            const res: any = await get(`academic-year?page=${currentPage}&limit=2`);
             setData(res.data.data);
-            return res;
+            setPage(res.data.current_page);
+            setTotalPages(res.data.last_page);
         } catch (err) {
             setToast({ message: 'Failed to get Academic Year', type: 'error' });
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -49,6 +55,7 @@ const AcademicYearPage = () => {
 
     const handleSubmit = async (data: Omit<AcademicYearType, 'id'>, id?: number | undefined) => {
         try {
+            setIsLoading(true);
             if (id) {
                 const res: any = await put(`/academic-year/${id}`, data);
                 setData((prev) => prev.map((p: any) => (p.id === id ? res.data : p)));
@@ -68,6 +75,9 @@ const AcademicYearPage = () => {
             if (error.response.status === 500) {
                 setToast({ message: 'Failed to submit Academic Year', type: 'error' });
             }
+            throw error.response.data;
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -111,6 +121,13 @@ const AcademicYearPage = () => {
                         (id) => setDeleteId(parseInt(id)),
                     )}
                     data={data || []}
+                    isLoading={isLoading}
+                    page={page}
+                    totalPages={totalPages}
+                    onPageChange={(newPage) => {
+                        setPage(newPage);
+                        fetchData(newPage);
+                    }}
                 />
                 <ModalForm open={modalOpen} onOpenChange={setModalOpen} submit={handleSubmit} defaultValues={editing} />
                 <ConfirmDeleteDialog open={deleteId !== null} onCancel={() => setDeleteId(null)} onConfirm={handleDelete} isLoading={isLoading} />

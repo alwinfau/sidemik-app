@@ -1,7 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { ColumnDef } from "@tanstack/react-table";
-import { on } from "events";
-import { Pencil, Trash2 } from "lucide-react";
+import { Button } from '@/components/ui/button';
+import { ColumnDef } from '@tanstack/react-table';
+import { Pencil, Trash2 } from 'lucide-react';
 
 export type ActiveStatus = {
     id?: number;
@@ -12,16 +11,16 @@ export type ActiveStatus = {
 
 export const columns = (onEdit: (row: ActiveStatus) => void, onDelete: (id: string) => void): ColumnDef<ActiveStatus>[] => [
     {
-        id: "rowNumber",
+        id: 'rowNumber',
         header: () => <div className="text-center">No</div>,
         cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
     },
-    { accessorKey: "active_status_code", header: "Active Status Code" },
-    { accessorKey: "active_status_name", header: "Active Status Name" },
-    { accessorKey: "active_status_description", header: "Active Status Description" },
+    { accessorKey: 'active_status_code', header: 'Active Status Code' },
+    { accessorKey: 'active_status_name', header: 'Active Status Name' },
+    { accessorKey: 'active_status_description', header: 'Active Status Description' },
     {
-        id: "actions",
-        header: "Actions",
+        id: 'actions',
+        header: 'Actions',
         cell: ({ row }) => (
             <div className="flex gap-2">
                 <Button className="bg-blue-700 hover:bg-blue-600" size="sm" onClick={() => onEdit(row.original)}>
@@ -32,7 +31,7 @@ export const columns = (onEdit: (row: ActiveStatus) => void, onDelete: (id: stri
                 </Button>
             </div>
         ),
-    }
+    },
 ];
 
 export default columns;

@@ -4,10 +4,10 @@ import { Pencil, Trash2 } from 'lucide-react';
 
 export type AcademicYearType = {
     id?: number;
-    academic_year: string | null;
+    academic_year: string;
     name: string;
-    start_date: string | null;
-    end_date: string | null;
+    start_date: string;
+    end_date: string;
     description: string;
 };
 

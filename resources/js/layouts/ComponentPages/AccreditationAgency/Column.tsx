@@ -6,8 +6,8 @@ export type AccreditationagencyType = {
     id?: number;
     accreditation_agency_code: string;
     accreditation_agency_name: string;
-    website_url: string
-}
+    website_url: string;
+};
 
 export const columns = (onEdit: (row: AccreditationagencyType) => void, onDelete: (id: string) => void): ColumnDef<AccreditationagencyType>[] => [
     {
@@ -32,4 +32,4 @@ export const columns = (onEdit: (row: AccreditationagencyType) => void, onDelete
             </div>
         ),
     },
-]
+];

@@ -1,4 +1,4 @@
-import CourseTypes from "@/layouts/ComponentPages/CourseType/CourseType";
+import CourseTypes from '@/layouts/ComponentPages/CourseType';
 
 type Props = {};
 
@@ -10,4 +10,4 @@ const CourseTypePages = (props: Props) => {
     );
 };
 
-export default CourseTypePages
+export default CourseTypePages;

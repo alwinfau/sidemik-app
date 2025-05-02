@@ -1,73 +1,48 @@
-
 import { Button } from '@/components/ui/button';
 import { ColumnDef } from '@tanstack/react-table';
 import { Pencil, Trash2 } from 'lucide-react';
 
 export type FakultasType = {
-    id?: string;
+    id?: number;
     code: string;
     name: string;
     eng_name: string;
     short_name: string;
     address: string;
     telephone: string;
-    academic_period: { name: string };
-    is_active: boolean ;
+    is_active: boolean;
     vision: string;
     mission: string;
     description: string;
+    academic_period: {
+        short_name: string;
+    };
 };
 
 export const columns = (onEdit: (row: FakultasType) => void, onDelete: (id: string) => void): ColumnDef<FakultasType>[] => [
     {
         id: 'rowNumber',
-        header: () => <div className="text-center">No</div>,
+        header: 'No',
         cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
     },
+    { accessorKey: 'code', header: 'Faculty Code' },
+    { accessorKey: 'name', header: 'Faculty Name' },
+    { accessorKey: 'eng_name', header: 'English Name' },
+    { accessorKey: 'short_name', header: 'Short Name' },
+    { accessorKey: 'address', header: 'Address' },
+    { accessorKey: 'telephone', header: 'Telephone' },
     {
-        accessorKey: 'code',
-        header: 'Kode',
-    },
-    {
-        accessorKey: 'name',
-        header: 'Nama',
-    },
-    {
-        accessorKey: 'eng_name',
-        header: 'Eng Name',
-    },
-    {
-        accessorKey: 'short_name',
-        header: 'Short Name',
-    },
-    {
-        accessorKey: 'address',
-        header: 'Address',
-    },
-    {
-        accessorKey: 'telephone',
-        header: 'Telephone',
-    },
-    {
-        accessorKey: 'academic_period.name',
         header: 'Academic Period',
-        cell: ({ row }) => row.original.academic_period?.name || '-',
+        accessorFn: (row) => row.academic_period?.short_name ?? null,
+        id: 'academic_period',
     },
-    {
-        accessorKey: 'vision',
-        header: 'Vision',
-    },
-    {
-        accessorKey: 'mission',
-        header: 'Mission',
-    },
+    { accessorKey: 'vision', header: 'Vision' },
+    { accessorKey: 'mission', header: 'Mission' },
+    { accessorKey: 'description', header: 'Description' },
     {
         accessorKey: 'is_active',
         header: 'Status',
-    },
-    {
-        accessorKey: 'description',
-        header: 'Deskripsi',
+        cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Active' : 'Inactive'}</div>,
     },
     {
         id: 'actions',
@@ -84,3 +59,5 @@ export const columns = (onEdit: (row: FakultasType) => void, onDelete: (id: stri
         ),
     },
 ];
+
+export default columns;

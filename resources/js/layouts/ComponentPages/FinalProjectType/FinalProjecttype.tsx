@@ -28,11 +28,14 @@ const FinalProjectTypePage = () => {
 
     const fetchData = async () => {
         try {
+            setIsLoading(true);
             const res: any = await get('/final-project-type');
             setData(res.data.data);
             return res;
         } catch (err) {
             console.error('Error fetching:', err);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -49,6 +52,7 @@ const FinalProjectTypePage = () => {
 
     const handleSubmit = async (data: Omit<FinalProjectType, 'id'>, id?: number | undefined) => {
         try {
+            setIsLoading(true);
             if (id) {
                 const res: any = await put(`/final-project-type/${id}`, data);
                 setData((prev) => prev.map((p: any) => (p.id === id ? res.data : p)));
@@ -69,6 +73,9 @@ const FinalProjectTypePage = () => {
                 setToast({ message: 'Failed to submit Final Project Type', type: 'error' });
             }
             console.log('Error submitting data:', error);
+        } finally {
+            setIsLoading(false);
+            setModalOpen(false);
         }
     };
 
@@ -113,6 +120,7 @@ const FinalProjectTypePage = () => {
                         (id) => setDeleteId(parseInt(id)),
                     )}
                     data={data || []}
+                    isLoading={isLoading}
                 />
                 <ModalForm open={modalOpen} onOpenChange={setModalOpen} submit={handleSubmit} defaultValues={editing} />
                 <ConfirmDeleteDialog open={deleteId !== null} onCancel={() => setDeleteId(null)} onConfirm={handleDelete} isLoading={isLoading} />
@@ -130,7 +138,7 @@ const FinalProjectTypePage = () => {
             </div>
         </AppLayout>
     );
+};
 
-}
-
-export default FinalProjectTypePage
+export default FinalProjectTypePage;
+        

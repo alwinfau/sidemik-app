@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-react';
 
@@ -16,7 +16,9 @@ const ConfirmDeleteDialog = ({ open, onConfirm, onCancel, isLoading }: ConfirmDe
                 <DialogHeader>
                     <DialogTitle>Are you sure?</DialogTitle>
                 </DialogHeader>
-                <p>This action cannot be undone. Are you sure you want to delete this data?</p>
+                <DialogDescription>
+                This action cannot be undone. Are you sure you want to delete this data?
+                </DialogDescription>
                 <DialogFooter>
                     <Button variant="outline" onClick={onCancel}>
                         Cancel

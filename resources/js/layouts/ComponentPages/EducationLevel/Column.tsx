@@ -11,8 +11,8 @@ export type EductionLevelType = {
     education_stages_sequence: number;
     university_level: string;
     postgraduate: Boolean;
-    rpl_stages: Boolean
-}
+    rpl_stages: Boolean;
+};
 export const columns = (onEdit: (row: EductionLevelType) => void, onDelete: (id: string) => void): ColumnDef<EductionLevelType>[] => [
     {
         id: 'rowNumber',
@@ -27,17 +27,17 @@ export const columns = (onEdit: (row: EductionLevelType) => void, onDelete: (id:
     {
         accessorKey: 'university_level',
         header: 'University Level',
-        cell: ({ row }) => row.getValue('university_level') === '1' ? 'Iya' : 'Tidak',  // Custom display
+        cell: ({ row }) => (row.getValue('university_level') === '1' ? 'Iya' : 'Tidak'), // Custom display
     },
     {
         accessorKey: 'postgraduate',
         header: 'Post Graduate',
-        cell: ({ row }) => row.getValue('postgraduate') ? 'Iya' : 'Tidak',  // Custom display
+        cell: ({ row }) => (row.getValue('postgraduate') ? 'Iya' : 'Tidak'), // Custom display
     },
     {
         accessorKey: 'rpl_stages',
         header: 'RPL Stages',
-        cell: ({ row }) => row.getValue('rpl_stages') ? 'Iya' : 'Tidak',  // Custom display
+        cell: ({ row }) => (row.getValue('rpl_stages') ? 'Iya' : 'Tidak'), // Custom display
     },
     {
         id: 'actions',
@@ -53,4 +53,4 @@ export const columns = (onEdit: (row: EductionLevelType) => void, onDelete: (id:
             </div>
         ),
     },
-]
+];

@@ -29,10 +29,9 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         register,
         handleSubmit,
         reset,
-        setError,
         control,
         formState: { errors, isSubmitting },
-    } = useForm<FormInputs>({
+    } = useForm<z.infer<typeof schema>>({
         resolver: zodResolver(schema),
     });
 
@@ -96,6 +95,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
                 <DialogHeader>
                     <DialogTitle>{defaultValues ? 'Edit Academic Position' : 'Add Academic Position'}</DialogTitle>
+                    <DialogTitle>{defaultValues ? 'Edit Academic Position' : 'Add Academic Position'}</DialogTitle>
                 </DialogHeader>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
@@ -158,3 +158,4 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
 };
 
 export default ModalForm;
+

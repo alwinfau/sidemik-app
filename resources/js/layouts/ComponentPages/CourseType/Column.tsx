@@ -5,9 +5,9 @@ import { Pencil, Trash2 } from 'lucide-react';
 export type CourseType = {
     id?: number;
     code: string;
-    name:string;
+    name: string;
     description: string;
-}
+};
 
 export const columns = (onEdit: (row: CourseType) => void, onDelete: (id: string) => void): ColumnDef<CourseType>[] => [
     {
