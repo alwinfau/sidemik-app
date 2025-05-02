@@ -8,6 +8,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { AcademicYearType } from './Column';
+import DateInput from '@/components/ui/Components_1/DateInput';
 
 type ModalProps = {
     open: boolean;
@@ -100,7 +101,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                         <div className="space-y-4">
                             <FormTextInput
                                 id="academic_year"
-                                label="Academic Year"
+                                label="Tahun Akademik"
                                 placeholder="Masukan tahun akademik"
                                 type="text"
                                 {...register('academic_year')}
@@ -109,35 +110,29 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 placeholder="Masukan nama akademik"
                                 id="name"
-                                label="name"
+                                label="Nama"
                                 type="text"
                                 {...register('name')}
                                 error={errors.name?.message}
                             />
 
-                            {/* SEMENTARA INPUT DATE */}
-                            <div>
-                                <div className="mb-2">
-                                    <label htmlFor="start_date">Start Date</label>
-                                </div>
-                                <div className="rounded border p-3">
-                                    <input type="date" {...register('start_date')} id="start_date" aria-label="start_date" />
-                                </div>
-                            </div>
-
-                            {/* SEMENTARA INPUT DATE */}
-                            <div>
-                                <div className="mb-2">
-                                    <label htmlFor="end_date">End Date</label>
-                                </div>
-                                <div className="rounded border p-3">
-                                    <input type="date" {...register('end_date')} id="end_date" aria-label="end_date" />
-                                </div>
-                            </div>
-
+                            <DateInput
+                                label="Tanggal Mulai"
+                                id="start_date"
+                                placeholder="Enter Certificate Date"
+                                register={register('start_date')}
+                                error={errors.start_date}
+                            />
+                            <DateInput
+                                label="Sampai"
+                                id="end_date"
+                                placeholder="Enter Valid From"
+                                register={register('end_date')}
+                                error={errors.end_date}
+                            />
                             <FormTextInput
                                 id="description"
-                                label="description"
+                                label="Keterangan"
                                 placeholder="Masukan Deskripsi dari tahun akademik"
                                 type="textarea"
                                 {...register('description')}

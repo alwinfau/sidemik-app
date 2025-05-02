@@ -9,7 +9,7 @@ import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { AccreditationagencyType, columns } from './Column';
 import ModalForm from './Modal';
-
+import { useAccreditationAgency } from './useAccreditationAgency';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Accreditation Agency',
@@ -18,33 +18,11 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 const AccreditationPage = () => {
-    const { get, post, put, del } = useAxios();
-    const [data, setData] = useState<AccreditationagencyType[]>([]);
+    const { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useAccreditationAgency();
     const [modalOpen, setModalOpen] = useState(false);
     const [editing, setEditing] = useState<AccreditationagencyType | undefined>();
     const [deleteId, setDeleteId] = useState<number | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-    const [page, setPage] = useState<number>(1);
-    const [totalPages, setTotalPages] = useState<number>(1);
-    const fetchData = async (currentPage = 1) => {
-        try {
-            setIsLoading(true);
-            const res: any = await get(`accreditation-agency?page=${currentPage}&limit=2`);
-            setData(res.data.data);
-            setPage(res.data.current_page);
-            setTotalPages(res.data.last_page);
-            console.log(res.data);
-        } catch (err) {
-            setToast({ message: 'failed to get Accreditation', type: 'error' });
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    console.log(page);
-    console.log(totalPages);
-
+    
     useEffect(() => {
         fetchData();
     }, []);
@@ -56,50 +34,8 @@ const AccreditationPage = () => {
         }
     }, [toast]);
 
-    const handleSubmit = async (data: Omit<AccreditationagencyType, 'id'>, id?: number | undefined) => {
-        try {
-            setIsLoading(true);
-            if (id) {
-                const res: any = await put(`/accreditation-agency/${id}`, data);
-                setData((prev) => prev.map((p: any) => (p.id === id ? res.data : p)));
-                await fetchData();
-                setModalOpen(false);
-                setToast({ message: 'Accreditation Agency updated successfully', type: 'success' });
-                return res;
-            } else {
-                const res: any = await post('/accreditation-agency', data);
-                setData((prev) => [...prev, res.data]);
-                await fetchData();
-                setModalOpen(false);
-                setToast({ message: 'Accreditation Agency created successfully', type: 'success' });
-                return res;
-            }
-        } catch (error: any) {
-            if (error.response.status === 500) {
-                setToast({ message: 'Failed to submit Accreditation Agency', type: 'error' });
-            }
-            throw error.response.data;
-        } finally {
-            setIsLoading(false);
-        }
-    };
-    const handleDelete = async () => {
-        if (!deleteId) return;
-        setIsLoading(true);
-        try {
-            await del(`/accreditation-agency/${deleteId}`);
-            setData((prev) => prev.filter((item: any) => item.id !== deleteId));
-            window.location.reload();
-            setDeleteId(null);
-            setToast({ message: 'Accreditation Agency deleted successfully', type: 'success' });
-        } catch (err) {
-            console.error(err);
-            setToast({ message: 'Failed to deleteAccreditation Agency', type: 'error' });
-        } finally {
-            setDeleteId(null);
-            setIsLoading(false);
-        }
-    };
+    
+    
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <div className="m-6">
@@ -116,24 +52,44 @@ const AccreditationPage = () => {
                     </Button>
                 </div>
                 <DataTable
-                    columns={columns(
-                        (row) => {
-                            setEditing(row);
-                            setModalOpen(true);
-                        },
-                        (id) => setDeleteId(parseInt(id)),
-                    )}
-                    data={data || []}
-                    isLoading={isLoading}
-                    page={page}
-                    totalPages={totalPages}
-                    onPageChange={(newPage) => {
-                        setPage(newPage);
-                        fetchData(newPage);
-                    }}
-                />
-                <ModalForm open={modalOpen} onOpenChange={setModalOpen} submit={handleSubmit} defaultValues={editing} />
-                <ConfirmDeleteDialog open={deleteId !== null} onCancel={() => setDeleteId(null)} onConfirm={handleDelete} isLoading={isLoading} />
+                columns={columns(
+                    (row) => {
+                        setEditing(row);
+                        setModalOpen(true);
+                    },
+                    (id) => setDeleteId(parseInt(id)),
+                )}
+                data={data || []}
+                isLoading={isLoading}
+                page={page}
+                totalPages={totalPages}
+                onPageChange={(newPage) => {
+                    setPage(newPage);
+                    fetchData(newPage);
+                }}
+            />
+
+            <ModalForm
+                open={modalOpen}
+                onOpenChange={setModalOpen}
+                submit={(values, id) =>
+                    handleSubmit(values, id, () => {
+                        setModalOpen(false);
+                    })
+                }
+                defaultValues={editing}
+            />
+            <ConfirmDeleteDialog
+                open={deleteId !== null}
+                onCancel={() => setDeleteId(null)}
+                onConfirm={() => {
+                    if (!deleteId) return;
+                    handleDelete(deleteId, () => {
+                        setDeleteId(null);
+                    });
+                }}
+                isLoading={isLoading}
+            />
                 <ToastProvider>
                     {toast && (
                         <Toast variant={toast.type === 'error' ? 'destructive' : 'default'}>

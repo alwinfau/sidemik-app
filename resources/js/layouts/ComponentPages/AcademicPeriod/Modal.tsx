@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
-
+import { useAcademicPriod } from './useAcademicPeriod';
 import DateInput from '@/components/ui/Components_1/DateInput';
 import { Label } from '@/components/ui/label';
 import { SelectItem } from '@/components/ui/select';
@@ -51,29 +51,10 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
     } = useForm<FormInputs>({
         resolver: zodResolver(schema),
     });
-
-    const { get } = useAxios();
-
-    const [AcademicYears, setAcademicYears] = useState<any>([]);
-
-    const fecthAcademicYears = async () => {
-        try {
-            const res: any = await get('/academic-year');
-            console.log(res.data.data);
-            if (Array.isArray(res.data.data)) {
-                setAcademicYears(res.data.data);
-            } else {
-                console.error('Data tidak valid:', res.data.data);
-            }
-        } catch (err) {
-            console.error('Error fetching', err);
-        }
-    };
-
+    const {AcademicYears, fecthAcademicYears} = useAcademicPriod();
     useEffect(() => {
         fecthAcademicYears();
     }, []);
-
     useEffect(() => {
         if (defaultValues) {
             reset({
@@ -183,14 +164,14 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="code"
                                 placeholder="Masukan code akademik periode"
-                                label="Code"
+                                label="Kode"
                                 type="text"
                                 {...register('code')}
                                 error={errors.code?.message}
                             />
 
                             <DateInput
-                                label="Academic Date"
+                                label="Tahun Akademik"
                                 id="academic_period"
                                 placeholder="Enter Academic Date"
                                 register={register('academic_period')}
@@ -198,7 +179,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
                             <FormTextInput
                                 id="name"
-                                label="Name"
+                                label="Nama"
                                 placeholder="Masukan nama periode akadmemik"
                                 type="text"
                                 {...register('name')}
@@ -207,49 +188,49 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 placeholder="Masukan singkatan"
                                 id="short_name"
-                                label="Short Name"
+                                label="Nama Singkat"
                                 type="text"
                                 {...register('short_name')}
                                 error={errors.short_name?.message}
                             />
 
                             <DateInput
-                                label="Start Date"
+                                label="Dimulai sejak"
                                 id="start_date"
                                 placeholder="Enter Start Date"
                                 register={register('start_date')}
                                 error={errors.start_date}
                             />
                             <DateInput
-                                label="End Date"
+                                label="Berakhir"
                                 id="end_date"
                                 placeholder="Enter End Date"
                                 register={register('end_date')}
                                 error={errors.end_date}
                             />
                             <DateInput
-                                label="Start UTS Date"
+                                label="Tanggal UTS"
                                 id="start_midterm_exam"
                                 placeholder="Enter UTS Date"
                                 register={register('start_midterm_exam')}
                                 error={errors.start_midterm_exam}
                             />
                             <DateInput
-                                label="Enter UTS Date"
+                                label="Tanggal UTS berakhir"
                                 id="end_midterm_exam"
                                 placeholder="Enter Certificate Date"
                                 register={register('end_midterm_exam')}
                                 error={errors.end_midterm_exam}
                             />
                             <DateInput
-                                label="Start UAS Date"
+                                label="Tanggal UAS"
                                 id="start_final_exam"
                                 placeholder="Enter Start UAS Date"
                                 register={register('start_final_exam')}
                                 error={errors.start_final_exam}
                             />
                             <DateInput
-                                label="Start END Date"
+                                label="Tanggal UAS berakhir"
                                 id="end_final_exam"
                                 placeholder="Enter Start Date"
                                 register={register('end_final_exam')}
@@ -257,7 +238,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
                             <FormTextInput
                                 id="number_of_meetings"
-                                label="Number Of Meetings"
+                                label="Jumlah Pertemuan"
                                 placeholder="Masukan jumlah pertemuan"
                                 type="number"
                                 {...register('number_of_meetings', { valueAsNumber: true })}
@@ -265,7 +246,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
                             <FormTextInput
                                 id="min_number_of_meetings"
-                                label="Min Number Of Meetings"
+                                label="Minimal Jumlah Pertemuan"
                                 type="number"
                                 placeholder="Masukan minimal pertemuan"
                                 {...register('min_number_of_meetings', { valueAsNumber: true })}
@@ -293,7 +274,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="academic_year_id"
-                                        label="Academic Year"
+                                        label="Tahun Akademik"
                                         value={String(field.value)}
                                         onValueChange={field.onChange}
                                         error={errors.academic_year_id?.message}
@@ -306,19 +287,13 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     </FormSelectInput>  
                                 )}
                             />
-                            <Controller
-                                name="description"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormTextInput
-                                        id="description"
-                                        label="Description"
-                                        type="textarea"
-                                        placeholder="Masukan description"
-                                        {...field}
-                                        error={errors.description?.message}
-                                    />
-                                )}
+                            <FormTextInput
+                                id="description"
+                                placeholder="Masukan deskripsi akademik periode"
+                                label="description"
+                                type="text"
+                                {...register('description')}
+                                error={errors.description?.message}
                             />
                             {errors.root && <p className="text-red-600">{errors.root.message}</p>}
 

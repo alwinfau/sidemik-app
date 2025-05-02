@@ -11,6 +11,7 @@ import { LoaderCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useFakultas } from './useFakultas';
 
 type ModalProps = {
     open: boolean;
@@ -79,17 +80,10 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         }
     }, [defaultValues, reset]);
 
-    const { get } = useAxios();
-    const [academicPeriods, setAcademicPeriods] = useState<any[]>([]);
+    
+    const {academicPeriods, fetchAcademicPeriods} = useFakultas();
 
-    const fetchAcademicPeriods = async () => {
-        try {
-            const res: any = await get('/academic-period');
-            setAcademicPeriods(res.data.data);
-        } catch (err) {
-            console.error('Error fetching academic periods:', err);
-        }
-    };
+    
     useEffect(() => {
         fetchAcademicPeriods();
     }, []);
@@ -141,44 +135,44 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mx-3 space-y-4">
                             <FormTextInput
-                                placeholder="Enter Code Faculty"
+                                placeholder="Masukan Kode Fakultas"
                                 id="code"
-                                label="Faculty Code"
+                                label="Fakultas Kode"
                                 {...register('code')}
                                 error={errors.code?.message}
                             />
                             <FormTextInput
-                                placeholder="Enter Name Faculty (IDN)"
+                                placeholder="Masukan Nama Fakultas"
                                 id="name"
-                                label="Faculty Name"
+                                label="Nama Fakultas"
                                 {...register('name')}
                                 error={errors.name?.message}
                             />
                             <FormTextInput
-                                placeholder="Enter Name Faculty (ENG)"
+                                placeholder="Masukan Nama Fakultas (ING)"
                                 id="eng_name"
-                                label="English Name"
+                                label="Nama Fakultas(ING)"
                                 {...register('eng_name')}
                                 error={errors.eng_name?.message}
                             />
                             <FormTextInput
-                                placeholder="Enter Short Name"
+                                placeholder="Nama Singkat Fakultas"
                                 id="short_name"
-                                label="Short Name"
+                                label="Singkatan Fakultas"
                                 {...register('short_name')}
                                 error={errors.short_name?.message}
                             />
                             <FormTextInput
-                                placeholder="Enter Address Faculty"
+                                placeholder="Masukan Alamat Fakultas"
                                 id="address"
-                                label="Address"
+                                label="Alamat"
                                 {...register('address')}
                                 error={errors.address?.message}
                             />
                             <FormTextInput
-                                placeholder="Enter Phone Faculty"
+                                placeholder="Masukan No telpon Fakultas"
                                 id="telephone"
-                                label="Telephone"
+                                label="No Telphone"
                                 {...register('telephone')}
                                 error={errors.telephone?.message}
                             />
@@ -189,7 +183,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="academic_period_id"
-                                        label="Academic Period"
+                                        label="Periode Akademik"
                                         value={field.value}
                                         onValueChange={field.onChange}
                                         error={errors.academic_period_id?.message}
@@ -214,26 +208,26 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             </div>
 
                             <FormTextInput
-                                placeholder="Enter Vision Faculty"
+                                placeholder="Masukan Visi Fakultas"
                                 id="vision"
                                 type="textarea"
-                                label="Vision"
+                                label="Visi"
                                 {...register('vision')}
                                 error={errors.vision?.message}
                             />
                             <FormTextInput
-                                placeholder="Enter Mision Faculty"
+                                placeholder="Masukan Missi Fakultas"
                                 id="mission"
                                 type="textarea"
-                                label="Mission"
+                                label="Missi"
                                 {...register('mission')}
                                 error={errors.mission?.message}
                             />
                             <FormTextInput
-                                placeholder="Enter Description Faculty"
+                                placeholder="Masukan Keterangan Fakultas"
                                 id="description"
                                 type="textarea"
-                                label="Description"
+                                label="Keterangan"
                                 {...register('description')}
                                 error={errors.description?.message}
                             />

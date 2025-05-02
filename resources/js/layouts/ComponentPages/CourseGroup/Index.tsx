@@ -2,13 +2,13 @@ import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/Components_1/DataTable';
 import ConfirmDeleteDialog from '@/components/ui/Components_1/DeleteModal';
 import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@/components/ui/toast';
-import { useAxios } from '@/hooks/useAxios';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
 import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { CourseGroupType, columns } from './Column';
 import ModalForm from './Modal';
+import { useCourseGroup } from './useCourseGroup';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -18,25 +18,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 const CourseGroup = () => {
-    const { get, post, put, del } = useAxios();
-    const [data, setData] = useState<CourseGroupType[]>([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [editing, setEditing] = useState<CourseGroupType | undefined>();
     const [deleteId, setDeleteId] = useState<number | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-
-    const fetchData = async () => {
-        setIsLoading(true);
-        try {
-            const res: any = await get('/course-group');
-            setData(res.data.data);
-        } catch (err) {
-            console.error('Error fetching:', err);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    const { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useCourseGroup();
 
     useEffect(() => {
         fetchData();
@@ -48,49 +33,6 @@ const CourseGroup = () => {
             return () => clearTimeout(timer);
         }
     }, [toast]);
-
-    const handleSubmit = async (data: Omit<CourseGroupType, 'id'>, id?: number | undefined) => {
-        try {
-            setIsLoading(true);
-            if (id) {
-                const res: any = await put(`/course-group/${id}`, data);
-                setData((prev) => prev.map((p: any) => (p.id === id ? res.data : p)));
-                await fetchData();
-                setModalOpen(false);
-                setToast({ message: 'Group Course updated successfully', type: 'success' });
-                return res;
-            } else {
-                const res: any = await post('/course-group', data);
-                setData((prev) => [...prev, res.data]);
-                await fetchData();
-                setModalOpen(false);
-                setToast({ message: 'Group Course created successfully', type: 'success' });
-                return res;
-            }
-        } catch (error: any) {
-            if (error.response.status === 500) {
-                setToast({ message: 'Failed to submit Group Course', type: 'error' });
-            }
-            console.log('Error submitting data:', error);
-        }
-    };
-
-    const handleDelete = async () => {
-        if (!deleteId) return;
-        setIsLoading(true);
-        try {
-            await del(`/course-group/${deleteId}`);
-            setData((prev) => prev.filter((item: any) => item.id !== deleteId));
-            setDeleteId(null);
-            setToast({ message: 'Group Course deleted successfully', type: 'success' });
-        } catch (err) {
-            console.error(err);
-            setToast({ message: 'Failed to delete Group Course', type: 'error' });
-        } finally {
-            setDeleteId(null);
-            setIsLoading(false);
-        }
-    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -117,9 +59,34 @@ const CourseGroup = () => {
                     )}
                     data={data || []}
                     isLoading={isLoading}
+                    page={page}
+                    totalPages={totalPages}
+                    onPageChange={(newPage) => {
+                    setPage(newPage);
+                    fetchData(newPage);
+                }}
                 />
-                <ModalForm open={modalOpen} onOpenChange={setModalOpen} submit={handleSubmit} defaultValues={editing} />
-                <ConfirmDeleteDialog open={deleteId !== null} onCancel={() => setDeleteId(null)} onConfirm={handleDelete} isLoading={isLoading} />
+                <ModalForm
+                    open={modalOpen}
+                    onOpenChange={setModalOpen}
+                    submit={(values, id) =>
+                        handleSubmit(values, id, () => {
+                            setModalOpen(false);
+                        })
+                    }
+                    defaultValues={editing}
+                />
+                <ConfirmDeleteDialog
+                open={deleteId !== null}
+                onCancel={() => setDeleteId(null)}
+                onConfirm={() => {
+                    if (!deleteId) return;
+                    handleDelete(deleteId, () => {
+                        setDeleteId(null);
+                    });
+                }}
+                isLoading={isLoading}
+            />
                 <ToastProvider>
                     {toast && (
                         <Toast variant={toast.type === 'error' ? 'destructive' : 'default'}>

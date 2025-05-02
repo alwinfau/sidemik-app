@@ -1,10 +1,10 @@
 import { useAxios } from '@/hooks/useAxios';
 import { useState } from 'react';
-import { AccreditionProdiType } from './Column';
+import { WaktuKuliahType } from './Column';
 
-export const useProdiAccreditation = () => {
+export const useWaktuKuliah = () => {
     const { get, post, put, del } = useAxios();
-    const [data, setData] = useState<AccreditionProdiType[]>([]);
+    const [data, setData] = useState<WaktuKuliahType[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [page, setPage] = useState<number>(1);
@@ -14,7 +14,7 @@ export const useProdiAccreditation = () => {
     const fetchData = async (currentPage = 1) => {
         try {
             setIsLoading(true);
-            const res: any = await get(`/study-program-accreditations?page=${currentPage}&limit=`);
+            const res: any = await get(`/lecture-time?page=${currentPage}&limit=`);
             setData(res.data.data);
 
             setPage(res.data.current_page);
@@ -25,37 +25,27 @@ export const useProdiAccreditation = () => {
             setIsLoading(false);
         }
     };
-
-    const fetchAgency = async () => {
-        try {
-            const agencyResponse: any = await get('/accreditation-agency');
-            setAgencies(agencyResponse.data.data);
-        } catch (error) {
-            throw error;
-        }
-    };
-
-    const handleSubmit = async (data: Omit<AccreditionProdiType, 'id'>, id?: number, onSuccess?: () => void) => {
+    const handleSubmit = async (data: Omit<WaktuKuliahType, 'id'>, id?: number, onSuccess?: () => void) => {
         try {
             setIsLoading(true);
             if (id) {
-                const res: any = await put(`/study-program-accreditations/${id}`, data);
+                const res: any = await put(`/lecture-time/${id}`, data);
                 setData((prev) => prev.map((p) => (p.id === id ? res.data : p)));
                 await fetchData();
                 onSuccess?.();
-                setToast({ message: 'Prodi Accreditation updated successfully', type: 'success' });
+                setToast({ message: 'Waktu Kuliah updated successfully', type: 'success' });
                 return res;
             } else {
-                const res: any = await post('/study-program-accreditations', data);
+                const res: any = await post('/lecture-time', data);
                 setData((prev) => [...prev, res.data]);
                 await fetchData();
                 onSuccess?.();
-                setToast({ message: 'Prodi Accreditation created successfully', type: 'success' });
+                setToast({ message: 'Waktu Kuliah created successfully', type: 'success' });
                 return res;
             }
         } catch (error: any) {
             if (error?.response?.status === 500) {
-                setToast({ message: 'Failed to submit Prodi Accreditation', type: 'error' });
+                setToast({ message: 'Failed to submit Waktu Kuliah', type: 'error' });
             }
             throw error.response.data;
         } finally {
@@ -66,7 +56,7 @@ export const useProdiAccreditation = () => {
     const handleDelete = async (id: number, onSuccess?: () => void) => {
         try {
             setIsLoading(true);
-            await del(`/study-program-accreditations/${id}`);
+            await del(`/lecture-time/${id}`);
             setData((prev) => prev.filter((item) => item.id !== id));
             await fetchData();
             onSuccess?.();
@@ -79,5 +69,5 @@ export const useProdiAccreditation = () => {
         }
     };
 
-    return { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, totalPages, setPage, agencies, fetchAgency };
+    return { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, totalPages, setPage };
 };

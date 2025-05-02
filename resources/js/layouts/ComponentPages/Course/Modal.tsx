@@ -9,6 +9,7 @@ import { LoaderCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useCourse } from './useCourse';
 
 type ModalProps = {
     open: boolean;
@@ -49,29 +50,10 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         resolver: zodResolver(schema),
     });
 
-    const { get } = useAxios();
+    const {courseTypes, courseGroups ,fectRelasi} = useCourse();
 
-    const [courseTypes, setCourseTypes] = useState<any>([]);
-    const [courseGroups, setCourseGroups] = useState<any>([]);
-
-    const fetchData = async () => {
-        try {
-            const resTypes: any = await get('/course-type');
-            setCourseTypes(resTypes.data.data);
-
-            const resGroups: any = await get('/course-group');
-            setCourseGroups(resGroups.data.data);
-        } catch (err) {
-            console.error('Error fetching:', err);
-        }
-    };
-
-    console.log('course type ', courseTypes);
-    console.log(courseTypes);
-    console.log('course Group ', courseGroups);
-    console.log(courseGroups);
     useEffect(() => {
-        fetchData();
+        fectRelasi();
     }, []);
 
     useEffect(() => {

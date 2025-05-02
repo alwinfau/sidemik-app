@@ -42,7 +42,7 @@ export const columns = (onEdit: (row: FakultasType) => void, onDelete: (id: stri
     {
         accessorKey: 'is_active',
         header: 'Status',
-        cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Active' : 'Inactive'}</div>,
+        cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Aktif' : 'Tidak Aktif'}</div>,
     },
     {
         id: 'actions',
