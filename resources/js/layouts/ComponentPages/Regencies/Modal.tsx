@@ -1,12 +1,14 @@
 import { Button } from '@/components/ui/button';
-import { FormTextInput } from '@/components/ui/Components_1/FormInput';
+import { FormSelectInput, FormTextInput } from '@/components/ui/Components_1/FormInput';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { SelectItem } from '@/components/ui/select';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LoaderCircle } from 'lucide-react';
 import { useEffect } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useRegencies } from './useRegencies';
+import Province from '@/pages/Province/Province';
 
 type ModalProps = {
     open: boolean;
@@ -16,9 +18,10 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    job_type_code: z.string().min(5),
-    job_type_name: z.string(),
-    job_type_description: z.string(),
+    description: z.string().min(1),
+    name: z.string().min(1),
+    province_id: z.string().min(1),
+    
 });
 
 type FormInputs = z.infer<typeof schema>;
@@ -29,23 +32,32 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         handleSubmit,
         reset,
         setError,
+        control,
         formState: { errors, isSubmitting },
     } = useForm<FormInputs>({
         resolver: zodResolver(schema),
     });
 
+    const { province, fetchProvince } = useRegencies();
+
+    useEffect(() => {
+        fetchProvince();
+        
+    }, []);
+
     useEffect(() => {
         if (defaultValues) {
             reset({
-                job_type_code: defaultValues.job_type_code || '',
-                job_type_name: defaultValues.job_type_name || '',
-                job_type_description: defaultValues.job_type_description || '',
+                name: defaultValues.name || '',
+                description: defaultValues.description || '',
+                province_id: String(defaultValues.province_id) || '1',
             });
         } else {
             reset({
-                job_type_code: '',
-                job_type_name: '',
-                job_type_description: '',
+                name: '',
+                description: '',
+                province_id: '1',
+
             });
         }
     }, [defaultValues, reset]);
@@ -56,9 +68,9 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             if (result != null) {
                 if (!isSubmitting && !defaultValues) {
                     reset({
-                        job_type_code: '',
-                        job_type_name: '',
-                        job_type_description: '',
+                        name: '',
+                        description: '',
+                        province_id: '',   
                     });
                 }
             }
@@ -80,40 +92,54 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             });
         }
     };
-
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
                 <DialogHeader>
-                    <DialogTitle>{defaultValues ? 'Edit Academic Years' : 'Add Academic Years'}</DialogTitle>
+                    <DialogTitle>{defaultValues ? 'Edit Regencies' : 'Add Regencies'}</DialogTitle>
                 </DialogHeader>
-                <DialogDescription>Silakan isi data akademik posisi type.</DialogDescription>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mx-3 space-y-4">
                             <FormTextInput
-                                id="job_type_code"
-                                label="Job Type Code"
-                                type="text"
-                                {...register('job_type_code')}
-                                error={errors.job_type_code?.message}
+                                id="name"
+                                label="Name"
+                                type='text'
+                                {...register('name')}
+                                error={errors.name?.message}
+                               
+                            />
+                            <FormTextInput
+                                id="description"
+                                label="Description"
+                                type='text'
+                                {...register('description')}
+                                error={errors.description?.message}
+                               
                             />
 
-                            <FormTextInput
-                                id="job_type_name"
-                                label="Job Type Name"
-                                type="text"
-                                {...register('job_type_name')}
-                                error={errors.job_type_name?.message}
+                            <Controller
+                                name='province_id'
+                                control={control}
+                                rules={{ required: 'Province is required' }}
+                                render={({ field }) => (
+                                    <FormSelectInput
+                                        id='province_id'
+                                        label='Province'
+                                        value={String(field.value)}
+                                        onValueChange={field.onChange}
+                                        error={errors.province_id?.message}
+                                    >
+                                        {province.map((province: any) => (
+                                            <SelectItem key={province.id} value={String(province.id)}>
+                                                {province.name}
+                                            </SelectItem>
+                                            
+                                        ))}
+                                    </FormSelectInput>
+                                )}
                             />
 
-                            <FormTextInput
-                                id="job_type_description"
-                                label="Job Type Description"
-                                type="text"
-                                {...register('job_type_description')}
-                                error={errors.job_type_description?.message}
-                            />
 
                             {errors.root && <p className="text-red-600">{errors.root.message}</p>}
 
@@ -122,7 +148,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 className={`mb-5 rounded px-4 py-2 font-bold text-white ${defaultValues ? 'bg-blue-600 hover:bg-blue-500' : 'bg-green-500 hover:bg-green-600'} `}
                                 disabled={isSubmitting}
                             >
-                                {isSubmitting ? <LoaderCircle className="h-4 w-4 animate-spin" /> : defaultValues ? 'Update' : 'Create'}
+                                {isSubmitting ? `Loading...` : defaultValues ? 'Update' : 'Create'}
                             </Button>
                         </div>
                     </form>
@@ -133,5 +159,3 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
 };
 
 export default ModalForm;
-
-// import { Button } from "@/components/ui/button";

@@ -4,14 +4,14 @@ import ConfirmDeleteDialog from '@/components/ui/Components_1/DeleteModal';
 import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@/components/ui/toast';
 import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { AcademicPositionTypes, columns } from './Column';
-import ModalForm from './modal';
-import { useAcademicPositionTypes } from './useAcademicPositionType';
+import { RegenciesType, columns } from './Column';
+import ModalForm from './Modal';
+import { useRegencies } from './useRegencies';
 
-const AcademicPositionTypesPage = () => {
-    const { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useAcademicPositionTypes();
+const Regencies = () => {
+    const { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useRegencies();
     const [modalOpen, setModalOpen] = useState(false);
-    const [editing, setEditing] = useState<AcademicPositionTypes | undefined>();
+    const [editing, setEditing] = useState<RegenciesType | undefined>();
     const [deleteId, setDeleteId] = useState<number | null>(null);
 
     useEffect(() => {
@@ -28,7 +28,7 @@ const AcademicPositionTypesPage = () => {
     return (
         <div className="m-6">
             <div className="mb-4 flex justify-between">
-                <h2 className="text-2xl font-bold">Academic Position Type</h2>
+                <h2 className="text-2xl font-bold">Regency</h2>
                 <Button
                     onClick={() => {
                         setEditing(undefined);
@@ -36,7 +36,7 @@ const AcademicPositionTypesPage = () => {
                     }}
                     className="flex items-center rounded bg-green-600 p-3 font-bold text-white hover:bg-green-500"
                 >
-                    <CirclePlus className="h-6 w-6" /> Add Academic Position Type
+                    <CirclePlus className="h-6 w-6" /> Add Regency
                 </Button>
             </div>
 
@@ -94,4 +94,4 @@ const AcademicPositionTypesPage = () => {
     );
 };
 
-export default AcademicPositionTypesPage;
+export default Regencies;

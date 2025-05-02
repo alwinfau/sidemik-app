@@ -6,8 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
-
-import { DocumentType } from './Column';
+import { ProvinceType } from './Column';
 
 type ModalProps = {
     open: boolean;
@@ -17,10 +16,8 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    document_type_code: z.string().min(3, 'Code harus lebih dari 3 karakter'),
-    document_name: z.string().min(5, 'Nama harus lebih dari 5 karakter'),
-    document_type: z.string().min(3, 'Tipe dokumen harus lebih dari 3 karakter'),
-    document_description: z.string().nullable().optional(),
+    name: z.string().min(5, 'Nama harus lebih dari 5 karakter'),
+    description: z.string().nullable().optional(),
 });
 
 type FormInputs = z.infer<typeof schema>;
@@ -39,17 +36,13 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
     useEffect(() => {
         if (defaultValues) {
             reset({
-                document_type_code: defaultValues.document_type_code || '',
-                document_name: defaultValues.document_name || '',
-                document_type: defaultValues.document_type || '',
-                document_description: defaultValues.document_description || '',
+                name: defaultValues.name || '',
+                description: defaultValues.description || '',
             });
         } else {
             reset({
-                document_type_code:'',
-                    document_name: '',
-                    document_type:'',
-                    document_description:  '',
+                    name: '',
+                    description:  '',
             });
         }
     }, [defaultValues, reset]);
@@ -60,10 +53,8 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             if (result != null) {
                 if (!isSubmitting && !defaultValues) {
                     reset({
-                        document_type_code:'',
-                        document_name: '',
-                        document_type:'',
-                        document_description:  '',
+                        name: '',
+                        description:  '',
                     });
                 }
             }
@@ -78,39 +69,25 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
     return(
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
-                <DialogHeader title='Document Type'>
-                    <DialogTitle>{defaultValues ? 'Edit Document Type' : 'Add Document Type'}</DialogTitle>
+                <DialogHeader title='Course Type'>
+                    <DialogTitle>{defaultValues ? 'Edit Province' : 'Add Province'}</DialogTitle>
                 </DialogHeader>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4">
-                        <FormTextInput
-                                id="document_type_code"
-                                label="Document Type Code"
+                            <FormTextInput
+                                id="name"
+                                label="Name"
                                 type="text"
-                                {...register('document_type_code')}
-                                error={errors.document_type_code?.message}
+                                {...register('name')}
+                                error={errors.name?.message}
                             />
                             <FormTextInput
-                                id="document_name"
-                                label="Document Name"
-                                type="text"
-                                {...register('document_name')}
-                                error={errors.document_name?.message}
-                            />
-                            <FormTextInput
-                                id="document_type"
-                                label="Document Type"
-                                type="text"
-                                {...register('document_type')}
-                                error={errors.document_type?.message}
-                            />
-                            <FormTextInput
-                                id="document_description"
-                                label="Document Description"
+                                id="description"
+                                label="Description"
                                 type="textarea"
-                                {...register('document_description')}
-                                error={errors.document_description?.message}
+                                {...register('description')}
+                                error={errors.description?.message}
                             />
 
                             {errors.root && <p className="text-red-600">{errors.root.message}</p>}
