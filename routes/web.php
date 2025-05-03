@@ -122,6 +122,11 @@ Route::get('/regency', function() {
     return Inertia::render(component:'Regencies/Index');
 })->name('Index');
 
+// Route Waktu Kuliah
+Route::get('/waktu-kuliah', function() {
+    return Inertia::render(component:'WaktuKuliah/Index');
+})->name('Index');
+
 // Tambahan route file
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

@@ -169,6 +169,10 @@ const data: AppData = {
                     url: '/academic-year',
                 },
                 {
+                    title: 'Waktu Kuliah',
+                    url: '/waktu-kuliah'
+                },
+                {
                     title: 'Univ Level Academic',
                     url: '/univ-level-education',
                 },

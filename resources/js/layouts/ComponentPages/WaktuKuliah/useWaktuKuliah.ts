@@ -9,12 +9,12 @@ export const useWaktuKuliah = () => {
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
-    const [agencies, setAgencies] = useState<any>([]);
+
 
     const fetchData = async (currentPage = 1) => {
         try {
             setIsLoading(true);
-            const res: any = await get(`/lecture-time?page=${currentPage}&limit=`);
+            const res: any = await get(`/lecture-time?page=${currentPage}&limit=5`);
             setData(res.data.data);
 
             setPage(res.data.current_page);
