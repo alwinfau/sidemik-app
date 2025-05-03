@@ -1,11 +1,20 @@
-import EmploRelationshipPage from '@/layouts/ComponentPages/EmployeeRelationship/EmploRelationship';
+import AppLayout from '@/layouts/app-layout';
+import EmployeeRelationshipPages from '@/layouts/ComponentPages/EmployeeRelationship/EmploRelationship';
+import { BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/react';
+
 type Props = {};
 
-const EmploRelationship = (props: Props) => {
+const EmployeeRelationshipTypePages= (props: Props) => {
+    const breadcrumbs: BreadcrumbItem[] = [{ title: ' Employee Relationship ', href: '/employments-relationship' }];
+
     return (
         <>
-            <EmploRelationshipPage />
+            <AppLayout breadcrumbs={breadcrumbs}>
+                <Head title="EmployeeRelationshipPages" />
+                <EmployeeRelationshipPages />
+            </AppLayout>
         </>
     );
 };
-export default EmploRelationship;
+export default EmployeeRelationshipTypePages;
