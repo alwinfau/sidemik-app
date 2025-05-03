@@ -8,6 +8,7 @@ import { Switch } from '@/components/ui/swicth';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { Label } from '@/components/ui/label';
 
 type ModalProps = {
     open: boolean;
@@ -113,20 +114,27 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 error={errors.name?.message}
                             />
 
-
-                            <Controller
+                            <div className="flex items-center space-x-4">
+                                <Label htmlFor="employment_relationship_status">Employment Relationship Status</Label>
+                                <Controller
                                 defaultValue={false}
                                 name="employment_relationship_status"
                                 control={control}
                                 render={({ field }) => <Switch checked={field.value} onCheckedChange={(checked) => field.onChange(checked)} />}
                             />
+                            </div>
 
-                            <Controller
+                            <div className="flex items-center space-x-4">
+                                <Label htmlFor="pns_status">PNS Status</Label>
+                                <Controller
                                 defaultValue={false}
                                 name="pns_status"
                                 control={control}
                                 render={({ field }) => <Switch checked={field.value} onCheckedChange={(checked) => field.onChange(checked)} />}
-                            />    
+                            />
+
+                            </div>
+    
                             
                         </div>
                         <div className="flex gap-3 pt-2">
