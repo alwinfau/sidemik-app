@@ -18,8 +18,16 @@ export const columns = (onEdit: (row: EmployeeRelationshipTypes) => void, onDele
     },
     { accessorKey: "code", header: "Code" },
     { accessorKey: "name", header: "Name" },
-    { accessorKey: "employment_relationship_status", header: "Employee Relationship Status" },
-    { accessorKey: "pns_status", header: "PNS Status" },
+    {
+        accessorKey: 'employment_relationship_status',
+        header: 'Status',
+        cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Aktif' : 'Tidak Aktif'}</div>,
+    },
+    {
+        accessorKey: 'pns_status',
+        header: 'Status',
+        cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'PNS' : 'Tidak PNS'}</div>,
+    },
     {
         id: "actions",
         header: "Actions",
