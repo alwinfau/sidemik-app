@@ -114,7 +114,7 @@ const data: AppData = {
                 },
                 {
                     title: 'Course',
-                    url: '#',
+                    url: '/course',
                 },
                 {
                     title: 'Course Type',
@@ -169,6 +169,10 @@ const data: AppData = {
                     url: '/academic-year',
                 },
                 {
+                    title: 'Waktu Kuliah',
+                    url: '/waktu-kuliah',
+                },
+                {
                     title: 'Univ Level Academic',
                     url: '/univ-level-education',
                 },
@@ -220,6 +224,14 @@ const data: AppData = {
                     title: 'Academic Position Types',
                     url: '/academic-position-types',
                 },
+                {
+                    title: 'Divisi Tendik',
+                    url: '/staff-division',
+                },
+                {
+                    title: 'Jabatan Struktural',
+                    url: '/structural-position',
+                }
 
             ],
         },

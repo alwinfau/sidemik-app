@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import DateInput from '@/components/ui/Components_1/DateInput';
 import { AcademicYearType } from './Column';
 
 type ModalProps = {
@@ -17,7 +18,8 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    academic_year: z.string().regex(/^\d{4}$/, { message: 'Academic year harus berupa 4 digit tahun (misal: 2025)' }),
+    // academic_year: z.string().regex(/^\d{4}$/, { message: 'Academic year harus berupa 4 digit tahun (misal: 2025)' }),
+    academic_year: z.string(),
     name: z.string().min(5, 'Nama harus lebih dari 5 karakterz'),
     start_date: z.string(),
     end_date: z.string(),
@@ -93,52 +95,53 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
                 <DialogHeader>
-                    <DialogTitle>{defaultValues ? 'Edit Academic Years' : 'Add Academic Years'}</DialogTitle>
+                    <DialogTitle>{defaultValues ? 'Edit Tahun Akademik' : 'Tambah Tahun Akademik'}</DialogTitle>
                 </DialogHeader>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4">
-                            <FormTextInput
+                            {/* <FormTextInput
                                 id="academic_year"
-                                label="Academic Year"
+                                label="Tahun Akademik"
                                 placeholder="Masukan tahun akademik"
                                 type="text"
                                 {...register('academic_year')}
                                 error={errors.academic_year?.message}
+                            /> */}
+                            <DateInput
+                                label="Tahun Akademik"
+                                id="academic_year"
+                                placeholder="Enter Certificate Date"
+                                register={register('academic_year')}
+                                error={errors.academic_year}
                             />
                             <FormTextInput
                                 placeholder="Masukan nama akademik"
                                 id="name"
-                                label="name"
+                                label="Nama"
                                 type="text"
                                 {...register('name')}
                                 error={errors.name?.message}
                             />
 
-                            {/* SEMENTARA INPUT DATE */}
-                            <div>
-                                <div className="mb-2">
-                                    <label htmlFor="start_date">Start Date</label>
-                                </div>
-                                <div className="rounded border p-3">
-                                    <input type="date" {...register('start_date')} id="start_date" aria-label="start_date" />
-                                </div>
-                            </div>
-
-                            {/* SEMENTARA INPUT DATE */}
-                            <div>
-                                <div className="mb-2">
-                                    <label htmlFor="end_date">End Date</label>
-                                </div>
-                                <div className="rounded border p-3">
-                                    <input type="date" {...register('end_date')} id="end_date" aria-label="end_date" />
-                                </div>
-                            </div>
-
+                            <DateInput
+                                label="Tanggal Mulai"
+                                id="start_date"
+                                placeholder="Enter Certificate Date"
+                                register={register('start_date')}
+                                error={errors.start_date}
+                            />
+                            <DateInput
+                                label="Sampai"
+                                id="end_date"
+                                placeholder="Enter Valid From"
+                                register={register('end_date')}
+                                error={errors.end_date}
+                            />
                             <FormTextInput
                                 id="description"
-                                label="description"
-                                placeholder="Masukan Deskripsi dari tahun akademik"
+                                label="Keterangan"
+                                placeholder="Masukan keterangan dari tahun akademik"
                                 type="textarea"
                                 {...register('description')}
                                 error={errors.description?.message}

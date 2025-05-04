@@ -13,16 +13,16 @@ export type EmployeesType = {
     emp_birth_place: string;
     emp_birth_date: string;
     emp_married_status: string;
-    study_programs_id:{
+    study_programs_id: {
         idn_sp_name: string;
     };
-    active_statuses_id:{
+    active_statuses_id: {
         activity_status_name: string;
     };
-    employments_relationships_id:{
+    employments_relationships_id: {
         name: string;
     };
-    academic_positions_id:{
+    academic_positions_id: {
         academic_position_name: string;
     };
     emp_institution_origin: string;

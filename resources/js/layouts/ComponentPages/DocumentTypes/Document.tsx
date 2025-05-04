@@ -1,19 +1,16 @@
-import { Button } from "@/components/ui/button";
-import { DataTable } from "@/components/ui/Components_1/DataTable";
-import ConfirmDeleteDialog from "@/components/ui/Components_1/DeleteModal";
-import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from "@/components/ui/toast";
-import { useAxios } from "@/hooks/useAxios";
-import AppLayout from "@/layouts/app-layout";
-import { BreadcrumbItem } from "@/types";
-import { CirclePlus } from "lucide-react";
-import { useEffect, useState } from "react";
-import { columns, DocumentType } from "./Column";
-import ModalForm from "./Modal";
-import { set } from "react-hook-form";
+import { Button } from '@/components/ui/button';
+import { DataTable } from '@/components/ui/Components_1/DataTable';
+import ConfirmDeleteDialog from '@/components/ui/Components_1/DeleteModal';
+import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@/components/ui/toast';
+import { useAxios } from '@/hooks/useAxios';
+import AppLayout from '@/layouts/app-layout';
+import { BreadcrumbItem } from '@/types';
+import { CirclePlus } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { columns, DocumentType } from './Column';
+import ModalForm from './Modal';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    { title: "Document Type", href: "/document-types" }
-];
+const breadcrumbs: BreadcrumbItem[] = [{ title: 'Document Type', href: '/document-types' }];
 
 const DocumentTypePage = () => {
     const { get, post, put, del } = useAxios();
@@ -21,16 +18,16 @@ const DocumentTypePage = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [editing, setEditing] = useState<DocumentType | undefined>();
     const [deleteId, setDeleteId] = useState<number | null>(null);
-    const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
     const fetchData = async () => {
         try {
             setLoading(true);
-            const res: any = await get("/document-types");
+            const res: any = await get('/document-types');
             setData(res.data.data);
         } catch (err) {
-            setToast({ message: "Failed to get document types", type: "error" });
+            setToast({ message: 'Failed to get document types', type: 'error' });
         } finally {
             setLoading(false);
         }
@@ -47,7 +44,7 @@ const DocumentTypePage = () => {
         }
     }, [toast]);
 
-    const handleSubmit = async (data: Omit<DocumentType, "id">, id?: number) => {
+    const handleSubmit = async (data: Omit<DocumentType, 'id'>, id?: number) => {
         try {
             setLoading(true);
             if (id) {
@@ -55,23 +52,22 @@ const DocumentTypePage = () => {
                 setData((prev) => prev.map((p) => (p.id === id ? res.data : p)));
                 await fetchData();
                 setModalOpen(false);
-                setToast({ message: "Document updated successfully", type: "success" });
+                setToast({ message: 'Document updated successfully', type: 'success' });
 
                 return res;
             } else {
-                const res: any = await post("/document-types", data);
+                const res: any = await post('/document-types', data);
                 setData((prev) => [...prev, res.data]);
                 await fetchData();
                 setModalOpen(false);
-                setToast({ message: "Document created successfully", type: "success" });
+                setToast({ message: 'Document created successfully', type: 'success' });
 
                 return res;
             }
-           
         } catch (error: any) {
             if (error.response.status === 500) {
-                setToast({ message: "Failed to submit document", type: "error" });
-            }  
+                setToast({ message: 'Failed to submit document', type: 'error' });
+            }
         } finally {
             setLoading(false);
         }
@@ -80,17 +76,16 @@ const DocumentTypePage = () => {
     const handleDelete = async () => {
         if (deleteId) return;
         setLoading(true);
-            try {
-                await del(`/document-types/${deleteId}`);
-                setData((prev) => prev.filter((item) => item.id !== deleteId));
-                setToast({ message: "Document deleted successfully", type: "success" });
-            } catch (error) {
-                setToast({ message: "Failed to delete document", type: "error" });
-            } finally {
-                setLoading(false);
-                setDeleteId(null);
-            }
-        
+        try {
+            await del(`/document-types/${deleteId}`);
+            setData((prev) => prev.filter((item) => item.id !== deleteId));
+            setToast({ message: 'Document deleted successfully', type: 'success' });
+        } catch (error) {
+            setToast({ message: 'Failed to delete document', type: 'error' });
+        } finally {
+            setLoading(false);
+            setDeleteId(null);
+        }
     };
 
     return (
@@ -114,7 +109,7 @@ const DocumentTypePage = () => {
                             setEditing(row);
                             setModalOpen(true);
                         },
-                        (id) => setDeleteId(parseInt(id))
+                        (id) => setDeleteId(parseInt(id)),
                     )}
                     data={data || []}
                 />

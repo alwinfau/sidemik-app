@@ -5,7 +5,7 @@ import { Head } from '@inertiajs/react';
 
 type Props = {};
 
-const EmployeeRelationshipTypePages= (props: Props) => {
+const EmployeeRelationshipTypePages = (props: Props) => {
     const breadcrumbs: BreadcrumbItem[] = [{ title: ' Employee Relationship ', href: '/employments-relationship' }];
 
     return (

@@ -6,7 +6,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { ProvinceType } from './Column';
 
 type ModalProps = {
     open: boolean;
@@ -41,20 +40,20 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             });
         } else {
             reset({
-                    name: '',
-                    description:  '',
+                name: '',
+                description: '',
             });
         }
     }, [defaultValues, reset]);
 
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
         try {
-        const result = await submit(data, defaultValues?.id);
+            const result = await submit(data, defaultValues?.id);
             if (result != null) {
                 if (!isSubmitting && !defaultValues) {
                     reset({
                         name: '',
-                        description:  '',
+                        description: '',
                     });
                 }
             }
@@ -66,22 +65,16 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             });
         }
     };
-    return(
+    return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
-                <DialogHeader title='Course Type'>
+                <DialogHeader title="Course Type">
                     <DialogTitle>{defaultValues ? 'Edit Province' : 'Add Province'}</DialogTitle>
                 </DialogHeader>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4">
-                            <FormTextInput
-                                id="name"
-                                label="Name"
-                                type="text"
-                                {...register('name')}
-                                error={errors.name?.message}
-                            />
+                            <FormTextInput id="name" label="Name" type="text" {...register('name')} error={errors.name?.message} />
                             <FormTextInput
                                 id="description"
                                 label="Description"
@@ -104,7 +97,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 </ScrollArea>
             </DialogContent>
         </Dialog>
-    )
-}
+    );
+};
 
 export default ModalForm;

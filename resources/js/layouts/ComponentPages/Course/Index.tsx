@@ -1,8 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/Components_1/DataTable';
 import ConfirmDeleteDialog from '@/components/ui/Components_1/DeleteModal';
-import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@/components/ui/toast';
-import { useAxios } from '@/hooks/useAxios';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
@@ -10,6 +8,7 @@ import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { CourseType, columns } from './Column';
 import ModalForm from './Modal';
+import { useCourse } from './useCourse';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -19,63 +18,20 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 const CoursePages = () => {
-    const { get, post, put, del } = useAxios();
-    const [data, setData] = useState<CourseType[]>([]);
+    const { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useCourse();
     const [modalOpen, setModalOpen] = useState(false);
     const [editing, setEditing] = useState<CourseType | undefined>();
     const [deleteId, setDeleteId] = useState<number | null>(null);
-    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const fetchData = async () => {
-        try {
-            setIsLoading(true);
-            const res: any = await get('/course');
-            setData(res.data.data);
-        } catch (err) {
-            setToast({ message: 'Failed to get Course', type: 'error' });
-        } finally {
-            setIsLoading(false);
-        }
-    };
     useEffect(() => {
         fetchData();
     }, []);
-
-    const handleSubmit = async (data: Omit<CourseType, 'id'>, id?: number) => {
-        try {
-            setIsLoading(true);
-            if (id) {
-                const res: any = await put(`/course/${id}`, data);
-                setData((prev) => prev.map((p) => (p.id === id ? res.data : p)));
-                setToast({ message: 'Course updated successfully', type: 'success' });
-            } else {
-                const res: any = await post('/course', data);
-                setData((prev) => [...prev, res.data]);
-                setToast({ message: 'Course created successfully', type: 'success' });
-            }
-        } catch (error: any) {
-            setToast({ message: 'Failed to submit Course', type: 'error' });
-        } finally {
-            setIsLoading(false);
-            setModalOpen(false);
+    useEffect(() => {
+        if (toast) {
+            const timer = setTimeout(() => setToast(null), 3000);
+            return () => clearTimeout(timer);
         }
-    };
-
-    const handleDelete = async () => {
-        if (!deleteId) return;
-        setIsLoading(true);
-        try {
-            await del(`/course/${deleteId}`);
-            setData((prev) => prev.filter((item) => item.id !== deleteId));
-            setToast({ message: 'Course deleted successfully', type: 'success' });
-        } catch (err) {
-            setToast({ message: 'Failed to delete Course', type: 'error' });
-        } finally {
-            setIsLoading(false);
-            setDeleteId(null);
-        }
-    };
+    }, [toast]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -104,22 +60,35 @@ const CoursePages = () => {
                     )}
                     data={data || []}
                     isLoading={isLoading}
+                    page={page}
+                    totalPages={totalPages}
+                    onPageChange={(newPage) => {
+                        setPage(newPage);
+                        fetchData(newPage);
+                    }}
                 />
 
-                <ToastProvider>
-                    {toast && (
-                        <Toast variant={toast.type === 'error' ? 'destructive' : 'default'}>
-                            <div className="grid gap-1">
-                                <ToastTitle>{toast.type === 'success' ? 'Success' : 'Error'}</ToastTitle>
-                                <ToastDescription>{toast.message}</ToastDescription>
-                            </div>
-                        </Toast>
-                    )}
-                    <ToastViewport />
-                </ToastProvider>
-
-                <ModalForm open={modalOpen} onOpenChange={setModalOpen} submit={handleSubmit} defaultValues={editing} />
-                <ConfirmDeleteDialog open={deleteId !== null} onCancel={() => setDeleteId(null)} onConfirm={handleDelete} isLoading={isLoading} />
+                <ModalForm
+                    open={modalOpen}
+                    onOpenChange={setModalOpen}
+                    submit={(values, id) =>
+                        handleSubmit(values, id, () => {
+                            setModalOpen(false);
+                        })
+                    }
+                    defaultValues={editing}
+                />
+                <ConfirmDeleteDialog
+                    open={deleteId !== null}
+                    onCancel={() => setDeleteId(null)}
+                    onConfirm={() => {
+                        if (!deleteId) return;
+                        handleDelete(deleteId, () => {
+                            setDeleteId(null);
+                        });
+                    }}
+                    isLoading={isLoading}
+                />
             </div>
         </AppLayout>
     );

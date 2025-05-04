@@ -16,9 +16,9 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    kode: z.string().min(5),
-    nama: z.string(),
-    keterangan: z.string(),
+    code: z.string().min(5),
+    name: z.string(),
+    description: z.string(),
 });
 
 type FormInputs = z.infer<typeof schema>;
@@ -37,15 +37,15 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
     useEffect(() => {
         if (defaultValues) {
             reset({
-                kode: defaultValues.kode || '',
-                nama: defaultValues.nama || '',
-                keterangan: defaultValues.keterangan || null,
+                code: defaultValues.code || '',
+                name: defaultValues.name || '',
+                description: defaultValues.description || null,
             });
         } else {
             reset({
-                kode: '',
-                nama: '',
-                keterangan: '',
+                code: '',
+                name: '',
+                description: '',
             });
         }
     }, [defaultValues, reset]);
@@ -56,9 +56,9 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             if (result != null) {
                 if (!isSubmitting && !defaultValues) {
                     reset({
-                        kode: '',
-                        nama: '',
-                        keterangan: '',
+                        code: '',
+                        name: '',
+                        description: '',
                     });
                 }
             }
@@ -85,34 +85,34 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
                 <DialogHeader>
-                    <DialogTitle>{defaultValues ? 'Edit Academic Years' : 'Add Academic Years'}</DialogTitle>
+                    <DialogTitle>{defaultValues ? 'Edit Divisi Tendik' : 'Add Divisi Tendik'}</DialogTitle>
                 </DialogHeader>
                 <DialogDescription>Silakan isi data Deviv Tendik.</DialogDescription>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mx-3 space-y-4">
                             <FormTextInput
-                                id="kode"
-                                label="Kode"
+                                id="code"
+                                label="code"
                                 type="text"
-                                {...register('kode')}
-                                error={errors.kode?.message}
+                                {...register('code')}
+                                error={errors.code?.message}
                             />
 
                             <FormTextInput
-                                id="nama"
-                                label="Nama"
+                                id="name"
+                                label="name"
                                 type="text"
-                                {...register('nama')}
-                                error={errors.nama?.message}
+                                {...register('name')}
+                                error={errors.name?.message}
                             />
 
                             <FormTextInput
-                                id="keterangan"
-                                label="Keterangan"
+                                id="description"
+                                label="description"
                                 type="text"
-                                {...register('keterangan')}
-                                error={errors.keterangan?.message}
+                                {...register('description')}
+                                error={errors.description?.message}
                             />
 
                             {errors.root && <p className="text-red-600">{errors.root.message}</p>}

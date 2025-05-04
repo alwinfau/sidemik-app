@@ -5,7 +5,7 @@ import { Head } from '@inertiajs/react';
 
 type Props = {};
 
-const AcademicPositionTypes= (props: Props) => {
+const AcademicPositionTypes = (props: Props) => {
     const breadcrumbs: BreadcrumbItem[] = [{ title: ' AcademicPositionTypes ', href: '/academic-positions-types' }];
 
     return (

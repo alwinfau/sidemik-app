@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { FormSelectInput, FormTextInput } from '@/components/ui/Components_1/FormInput';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SelectItem } from '@/components/ui/select';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,7 +8,6 @@ import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useRegencies } from './useRegencies';
-import Province from '@/pages/Province/Province';
 
 type ModalProps = {
     open: boolean;
@@ -21,7 +20,6 @@ const schema = z.object({
     description: z.string().min(1),
     name: z.string().min(1),
     province_id: z.string().min(1),
-    
 });
 
 type FormInputs = z.infer<typeof schema>;
@@ -42,7 +40,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
 
     useEffect(() => {
         fetchProvince();
-        
     }, []);
 
     useEffect(() => {
@@ -57,7 +54,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 name: '',
                 description: '',
                 province_id: '1',
-
             });
         }
     }, [defaultValues, reset]);
@@ -70,7 +66,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                     reset({
                         name: '',
                         description: '',
-                        province_id: '',   
+                        province_id: '',
                     });
                 }
             }
@@ -101,31 +97,23 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mx-3 space-y-4">
-                            <FormTextInput
-                                id="name"
-                                label="Name"
-                                type='text'
-                                {...register('name')}
-                                error={errors.name?.message}
-                               
-                            />
+                            <FormTextInput id="name" label="Name" type="text" {...register('name')} error={errors.name?.message} />
                             <FormTextInput
                                 id="description"
                                 label="Description"
-                                type='text'
+                                type="text"
                                 {...register('description')}
                                 error={errors.description?.message}
-                               
                             />
 
                             <Controller
-                                name='province_id'
+                                name="province_id"
                                 control={control}
                                 rules={{ required: 'Province is required' }}
                                 render={({ field }) => (
                                     <FormSelectInput
-                                        id='province_id'
-                                        label='Province'
+                                        id="province_id"
+                                        label="Province"
                                         value={String(field.value)}
                                         onValueChange={field.onChange}
                                         error={errors.province_id?.message}
@@ -134,12 +122,10 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                             <SelectItem key={province.id} value={String(province.id)}>
                                                 {province.name}
                                             </SelectItem>
-                                            
                                         ))}
                                     </FormSelectInput>
                                 )}
                             />
-
 
                             {errors.root && <p className="text-red-600">{errors.root.message}</p>}
 

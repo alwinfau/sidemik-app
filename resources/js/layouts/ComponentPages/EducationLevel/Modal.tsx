@@ -147,7 +147,13 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 className="h-4 w-4"
                             />
 
-                            <FormTextInput id="postgraduate" label="Post Graduate" type="checkbox" {...register('postgraduate')} className="h-4 w-4" />
+                            <FormTextInput
+                                id="postgraduate"
+                                label="Post Graduate"
+                                type="checkbox"
+                                {...register('postgraduate')}
+                                className="h-4 w-4"
+                            />
 
                             <FormTextInput id="rpl_stages" label="RPL Stages" type="checkbox" {...register('rpl_stages')} className="h-4 w-4" />
                             {errors.root && <p className="text-red-600">{errors.root.message}</p>}

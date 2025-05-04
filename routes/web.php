@@ -122,7 +122,20 @@ Route::get('/regency', function() {
     return Inertia::render(component:'Regencies/Index');
 })->name('Index');
 
+// Route Waktu Kuliah
+Route::get('/waktu-kuliah', function() {
+    return Inertia::render(component:'WaktuKuliah/Index');
+})->name('Index');
 
+// Route Divisi Tendik
+Route::get('/staff-division', function() {
+    return Inertia::render(component:'DivisiTendik/index');
+})->name('index');
+
+// Route Jabatan Struktural
+Route::get('/structural-position', function() {
+    return Inertia::render(component:'JabStruk/index');
+})->name('index');
 
 // Tambahan route file
 require __DIR__.'/settings.php';

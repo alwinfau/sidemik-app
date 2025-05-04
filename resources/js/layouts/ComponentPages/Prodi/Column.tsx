@@ -4,7 +4,7 @@ import { Pencil, Trash2 } from 'lucide-react';
 
 export type Proditype = {
     id?: number;
-    sp_code: string
+    sp_code: string;
     idn_sp_name: string;
     eng_sp_name: string;
     idn_short_name: string;
@@ -95,28 +95,16 @@ export const columns = (onEdit: (row: Proditype) => void, onDelete: (id: string)
         header: 'Learning Outcomes',
         cell: ({ row }) => <div className="text-muted-foreground line-clamp-2 max-w-[200px] text-sm">{row.original.program_learning_outcomes}</div>,
     },
-    { header: 'Fakultas',
-        accessorFn: (row) => row.faculty?.name ?? null,
-        id: 'faculty',
-    },
-    { header: 'Academic Period',
-        accessorFn: (row) => row.academic_period?.name ?? null,
-        id: 'academic_period',
-    },
-    { header: 'Final Project',
-        accessorFn: (row) => row.final_project_type?.name ?? null,
-        id: 'final_project',
-    },
-    { header: 'Akreditasi Prodi',
+    { header: 'Fakultas', accessorFn: (row) => row.faculty?.name ?? null, id: 'faculty' },
+    { header: 'Academic Period', accessorFn: (row) => row.academic_period?.name ?? null, id: 'academic_period' },
+    { header: 'Final Project', accessorFn: (row) => row.final_project_type?.name ?? null, id: 'final_project' },
+    {
+        header: 'Akreditasi Prodi',
         accessorFn: (row) => row.study_program_accreditations?.accreditation_score ?? null,
         id: 'study_program_accreditation',
     },
-    { header: 'Tingkat Pendidikan Univ',
-        accessorFn: (row) => row.univ_education_level?.edu_study_period ?? null,
-        id: 'univ_education_levels',
-    },
+    { header: 'Tingkat Pendidikan Univ', accessorFn: (row) => row.univ_education_level?.edu_study_period ?? null, id: 'univ_education_levels' },
 
-    
     {
         id: 'actions',
         header: 'Actions',

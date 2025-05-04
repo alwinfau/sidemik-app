@@ -1,11 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { FormSelectInput, FormTextInput } from '@/components/ui/Components_1/FormInput';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SelectItem } from '@/components/ui/select';
 import { useAxios } from '@/hooks/useAxios';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LoaderCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -19,7 +18,7 @@ type ModalProps = {
 const schema = z.object({
     sp_code: z.string().min(1),
     idn_sp_name: z.string().min(3),
-    eng_sp_name : z.string().min(3),
+    eng_sp_name: z.string().min(3),
     eng_short_name: z.string().min(1),
     idn_short_name: z.string().min(1),
     min_credits_pass: z.coerce.number().min(1),
@@ -44,16 +43,9 @@ const schema = z.object({
     univ_education_levels_id: z.string(),
 });
 
-
-
 type FormInputs = z.infer<typeof schema>;
 
-const ModalForm = ({
-    open,
-    onOpenChange,
-    submit,
-    defaultValues,
-}: ModalProps) => {
+const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) => {
     const {
         register,
         handleSubmit,
@@ -65,14 +57,12 @@ const ModalForm = ({
         resolver: zodResolver(schema),
     });
 
-    
-
     useEffect(() => {
         if (defaultValues) {
             reset({
                 sp_code: defaultValues.sp_code || '',
                 idn_sp_name: defaultValues.idn_sp_name || '',
-                eng_sp_name: defaultValues.eng_sp_name || '' ,
+                eng_sp_name: defaultValues.eng_sp_name || '',
                 idn_short_name: defaultValues.idn_short_name || '',
                 eng_short_name: defaultValues.eng_short_name || '',
                 min_credits_pass: defaultValues.min_credits_pass || 0,
@@ -127,15 +117,15 @@ const ModalForm = ({
         }
     }, [defaultValues, reset]);
 
-    const {get} =  useAxios();
+    const { get } = useAxios();
 
-    const [ Facultas, setFakultas] = useState<any>([]);
-    const [ AcademicPeriod, setAcademicPeriod ] = useState<any>([]);
-    const [ FinalProject, setFinalProdject ] =useState<any>([]);
-    const [ AcreditationProdi, setAcreditationProdi] = useState<any>([]);
-    const [ UnivEducation, setUnivEducation] =useState<any>([])
+    const [Facultas, setFakultas] = useState<any>([]);
+    const [AcademicPeriod, setAcademicPeriod] = useState<any>([]);
+    const [FinalProject, setFinalProdject] = useState<any>([]);
+    const [AcreditationProdi, setAcreditationProdi] = useState<any>([]);
+    const [UnivEducation, setUnivEducation] = useState<any>([]);
 
-    const fecthData = async ()=>{
+    const fecthData = async () => {
         try {
             const resFacultas: any = await get('/faculty');
             setFakultas(resFacultas.data.data);
@@ -151,11 +141,10 @@ const ModalForm = ({
 
             const resUnivEducation: any = await get('/univ-education-level');
             setUnivEducation(resUnivEducation.data.data);
-            
         } catch (err) {
             console.error('Error fetching:', err);
         }
-    }
+    };
     useEffect(() => {
         fecthData();
     }, []);
@@ -183,12 +172,7 @@ const ModalForm = ({
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4 px-2">
-                            <FormTextInput
-                                id="sp_code"
-                                label="code"
-                                {...register('sp_code')}
-                                error={errors.sp_code?.message}
-                            />
+                            <FormTextInput id="sp_code" label="code" {...register('sp_code')} error={errors.sp_code?.message} />
                             <FormTextInput
                                 id="idn_sp_name"
                                 label="Program Name (ID)"

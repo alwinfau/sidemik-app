@@ -5,15 +5,13 @@ import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } fro
 import { useAxios } from '@/hooks/useAxios';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/react';
 import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { columns, EmployeesType } from './Column';
 import ModalForm from './Modal';
-import { set } from 'react-hook-form';
-import { Head } from '@inertiajs/react';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {title: 'Employees', href: '/employees'}];
+const breadcrumbs: BreadcrumbItem[] = [{ title: 'Employees', href: '/employees' }];
 
 const Employees = () => {
     const { get, post, put, del } = useAxios();
@@ -23,66 +21,64 @@ const Employees = () => {
     const [editing, setEditing] = useState<EmployeesType | undefined>();
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-       const fetchData = async () => {
-           try {
-               setIsLoading(true);
-               const res: any = await get('/employees');
-               setData(res.data.data);
-               return res;
-           } catch (err) {
-               setToast({ message: 'Failed to get Prodi Accreditation', type: 'error' });
-           } finally {
-               setIsLoading(false);
-           }
-       };
-   
-       useEffect(() => {
-           fetchData();
-       }, []);
-       
-   
-       const handleSubmit = async (data: Omit<EmployeesType, 'id'>, id?: number) => {
-           try {
-               setIsLoading(true);
-               if (id) {
-                   const res: any = await put(`/employees/${id}`, data);
-                   setData((prev) => prev.map((p) => (p.id === id ? res.data : p)));
-                   await fetchData();
-                   setModalOpen(false);
-                   setToast({ message: 'Prodi Accreditation updated successfully', type: 'success' });
-                   return res;
-               } else {
-                   const res: any = await post('/employees', data);
-                   setData((prev) => [...prev, res.data]);
-                   await fetchData();
-                   setModalOpen(false);
-                   setToast({ message: 'Prodi Accreditation created successfully', type: 'success' });
-                   return res;
-               }
-           } catch (error: any) {
-               if (error.response.status === 500) {
-                   setToast({ message: 'Failed to submit Prodi Accreditation', type: 'error' });
-               }
-           } finally {
-               setIsLoading(false);
-              
-           }
-       };
-   
-       const handleDelete = async () => {
-           if (!deleteId) return;
-           setIsLoading(true);
-           try {
-               await del(`/employees/${deleteId}`);
-               setData((prev) => prev.filter((item) => item.id !== deleteId));
-               setToast({ message: 'Prodi Accreditation deleted successfully', type: 'success' });
-           } catch (err) {
-               setToast({ message: 'Failed to delete Prodi Accreditation', type: 'error' });
-           } finally {
-               setIsLoading(false);
-               setDeleteId(null);
-           }
-       };
+    const fetchData = async () => {
+        try {
+            setIsLoading(true);
+            const res: any = await get('/employees');
+            setData(res.data.data);
+            return res;
+        } catch (err) {
+            setToast({ message: 'Failed to get Prodi Accreditation', type: 'error' });
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const handleSubmit = async (data: Omit<EmployeesType, 'id'>, id?: number) => {
+        try {
+            setIsLoading(true);
+            if (id) {
+                const res: any = await put(`/employees/${id}`, data);
+                setData((prev) => prev.map((p) => (p.id === id ? res.data : p)));
+                await fetchData();
+                setModalOpen(false);
+                setToast({ message: 'Prodi Accreditation updated successfully', type: 'success' });
+                return res;
+            } else {
+                const res: any = await post('/employees', data);
+                setData((prev) => [...prev, res.data]);
+                await fetchData();
+                setModalOpen(false);
+                setToast({ message: 'Prodi Accreditation created successfully', type: 'success' });
+                return res;
+            }
+        } catch (error: any) {
+            if (error.response.status === 500) {
+                setToast({ message: 'Failed to submit Prodi Accreditation', type: 'error' });
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleDelete = async () => {
+        if (!deleteId) return;
+        setIsLoading(true);
+        try {
+            await del(`/employees/${deleteId}`);
+            setData((prev) => prev.filter((item) => item.id !== deleteId));
+            setToast({ message: 'Prodi Accreditation deleted successfully', type: 'success' });
+        } catch (err) {
+            setToast({ message: 'Failed to delete Prodi Accreditation', type: 'error' });
+        } finally {
+            setIsLoading(false);
+            setDeleteId(null);
+        }
+    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -107,14 +103,12 @@ const Employees = () => {
                             setEditing(row);
                             setModalOpen(true);
                         },
-                        (id) => 
-                            setDeleteId(parseInt(id)),
+                        (id) => setDeleteId(parseInt(id)),
                     )}
                     data={data || []}
                     isLoading={isLoading}
                 />
 
-                
                 <ToastProvider>
                     {toast && (
                         <Toast variant={toast.type === 'error' ? 'destructive' : 'default'}>
@@ -131,6 +125,6 @@ const Employees = () => {
             </div>
         </AppLayout>
     );
-}
+};
 
 export default Employees;

@@ -15,7 +15,7 @@ export type FakultasType = {
     mission: string;
     description: string;
     academic_period: {
-        short_name: string;
+        name: string;
     };
 };
 
@@ -25,24 +25,24 @@ export const columns = (onEdit: (row: FakultasType) => void, onDelete: (id: stri
         header: 'No',
         cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
     },
-    { accessorKey: 'code', header: 'Faculty Code' },
-    { accessorKey: 'name', header: 'Faculty Name' },
-    { accessorKey: 'eng_name', header: 'English Name' },
-    { accessorKey: 'short_name', header: 'Short Name' },
-    { accessorKey: 'address', header: 'Address' },
+    { accessorKey: 'code', header: 'Code' },
+    { accessorKey: 'name', header: 'Nama Fakultas' },
+    { accessorKey: 'eng_name', header: 'Nama Fakultas(ENG)' },
+    { accessorKey: 'short_name', header: 'Singkatan' },
+    { accessorKey: 'address', header: 'Alamat' },
     { accessorKey: 'telephone', header: 'Telephone' },
     {
-        header: 'Academic Period',
-        accessorFn: (row) => row.academic_period?.short_name ?? null,
+        header: 'Periode Akademik',
+        accessorFn: (row) => row.academic_period?.name ?? null,
         id: 'academic_period',
     },
-    { accessorKey: 'vision', header: 'Vision' },
-    { accessorKey: 'mission', header: 'Mission' },
-    { accessorKey: 'description', header: 'Description' },
+    { accessorKey: 'vision', header: 'Visi' },
+    { accessorKey: 'mission', header: 'Missi' },
+    { accessorKey: 'description', header: 'Keterangan' },
     {
         accessorKey: 'is_active',
         header: 'Status',
-        cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Active' : 'Inactive'}</div>,
+        cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Aktif' : 'Tidak Aktif'}</div>,
     },
     {
         id: 'actions',

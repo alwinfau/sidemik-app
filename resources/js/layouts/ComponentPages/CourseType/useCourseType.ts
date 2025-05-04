@@ -10,7 +10,7 @@ export const useCourseType = () => {
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
 
-    const fetchData = async (currentPage =1) => {
+    const fetchData = async (currentPage = 1) => {
         try {
             setIsLoading(true);
             const res: any = await get(`/course-type?page=${currentPage}&limit=2`);
@@ -46,19 +46,19 @@ export const useCourseType = () => {
             if (error.response.status === 500) {
                 setToast({ message: 'Failed to submit Type Course', type: 'error' });
             }
-            throw error.response.status.data
+            throw error.response.status.data;
         } finally {
             setIsLoading(true);
         }
     };
 
-    const handleDelete = async (id:number, onSuccess?: ()=> void ) => {
+    const handleDelete = async (id: number, onSuccess?: () => void) => {
         try {
-            setIsLoading(true)
+            setIsLoading(true);
             await del(`/course-type/${id}`);
             setData((prev) => prev.filter((item: any) => item.id !== id));
             await fetchData();
-            onSuccess?.()
+            onSuccess?.();
             setToast({ message: 'Type Course deleted successfully', type: 'success' });
         } catch (err) {
             setToast({ message: 'Failed to delete Type Course', type: 'error' });
@@ -68,4 +68,4 @@ export const useCourseType = () => {
         }
     };
     return { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, totalPages, setPage };
-}
+};

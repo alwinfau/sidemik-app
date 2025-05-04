@@ -4,16 +4,16 @@ import { Pencil, Trash2 } from 'lucide-react';
 
 export type DevisiTendik = {
     id?: number;
-    kode: string;
-    nama: string;
-    keterangan: string;
+    code: string;
+    name: string;
+    description: string;
 };
 
 export const columns = (onEdit: (row: DevisiTendik) => void, onDelete: (id: string) => void): ColumnDef<DevisiTendik>[] => [
     { id: 'rowNumber', header: 'No', cell: ({ row }) => <div className="text-center">{row.index + 1}</div> },
-    { accessorKey: 'kode', header: ' kode' },
-    { accessorKey: 'nama', header: ' Nama' },
-    { accessorKey: 'keterangan', header: ' Keterangan' },
+    { accessorKey: 'code', header: ' Code' },
+    { accessorKey: 'name', header: ' name' },
+    { accessorKey: 'description', header: ' description' },
     {
         id: 'actions',
         header: 'Actions',

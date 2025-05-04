@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/Components_1/DataTable';
 import ConfirmDeleteDialog from '@/components/ui/Components_1/DeleteModal';
 import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@/components/ui/toast';
-import { useAxios } from '@/hooks/useAxios';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
 import { CirclePlus } from 'lucide-react';
@@ -19,7 +18,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 const CourseTypes = () => {
-    
     const [modalOpen, setModalOpen] = useState(false);
     const [editing, setEditing] = useState<CourseType | undefined>();
     const { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useCourseType();
@@ -68,26 +66,26 @@ const CourseTypes = () => {
                         fetchData(newPage);
                     }}
                 />
-                <ModalForm 
-                    open={modalOpen} 
-                    onOpenChange={setModalOpen} 
-                    submit={(value, id) => 
+                <ModalForm
+                    open={modalOpen}
+                    onOpenChange={setModalOpen}
+                    submit={(value, id) =>
                         handleSubmit(value, id, () => {
-                            setModalOpen(false)
+                            setModalOpen(false);
                         })
                     }
-                    defaultValues={editing} 
+                    defaultValues={editing}
                 />
-                <ConfirmDeleteDialog 
-                    open={deleteId !== null} 
-                    onCancel={() => setDeleteId(null)} 
+                <ConfirmDeleteDialog
+                    open={deleteId !== null}
+                    onCancel={() => setDeleteId(null)}
                     onConfirm={() => {
-                        if (!deleteId)return;
+                        if (!deleteId) return;
                         handleDelete(deleteId, () => {
                             setDeleteId(null);
                         });
-                    }} 
-                    isLoading={isLoading} 
+                    }}
+                    isLoading={isLoading}
                 />
                 <ToastProvider>
                     {toast && (

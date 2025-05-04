@@ -91,7 +91,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                         <div className="space-y-4">
                             <FormTextInput
                                 id="accreditation_agency_code"
-                                label="Code"
+                                label="Kode"
                                 placeholder="Masukan Code"
                                 type="text"
                                 {...register('accreditation_agency_code')}
@@ -99,15 +99,15 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
                             <FormTextInput
                                 id="accreditation_agency_name"
-                                label="Accreditation Agency Name"
-                                placeholder="Masukan nama agensi"
+                                label="Nama Lembaga"
+                                placeholder="Masukan nama lemabaga"
                                 type="text"
                                 {...register('accreditation_agency_name')}
                                 error={errors.accreditation_agency_name?.message}
                             />
                             <FormTextInput
                                 id="website_url"
-                                label="URL Agency Website"
+                                label="Website lembaga terkait"
                                 placeholder="Masukan link website"
                                 type="text"
                                 {...register('website_url')}

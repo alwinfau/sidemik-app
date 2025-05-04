@@ -62,7 +62,8 @@ const CuriculumProdisPage = () => {
         } catch (error: any) {
             if (error.response.status === 500) {
                 setToast({ message: 'Failed to submit faculty', type: 'error' });
-            }throw error.response.data;
+            }
+            throw error.response.data;
         } finally {
             setIsLoading(false);
             setModalOpen(false);

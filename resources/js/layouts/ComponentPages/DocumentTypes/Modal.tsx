@@ -7,8 +7,6 @@ import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { DocumentType } from './Column';
-
 type ModalProps = {
     open: boolean;
     onOpenChange: (open: boolean) => void;
@@ -46,24 +44,24 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             });
         } else {
             reset({
-                document_type_code:'',
-                    document_name: '',
-                    document_type:'',
-                    document_description:  '',
+                document_type_code: '',
+                document_name: '',
+                document_type: '',
+                document_description: '',
             });
         }
     }, [defaultValues, reset]);
 
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
         try {
-        const result = await submit(data, defaultValues?.id);
+            const result = await submit(data, defaultValues?.id);
             if (result != null) {
                 if (!isSubmitting && !defaultValues) {
                     reset({
-                        document_type_code:'',
+                        document_type_code: '',
                         document_name: '',
-                        document_type:'',
-                        document_description:  '',
+                        document_type: '',
+                        document_description: '',
                     });
                 }
             }
@@ -75,16 +73,16 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             });
         }
     };
-    return(
+    return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
-                <DialogHeader title='Document Type'>
+                <DialogHeader title="Document Type">
                     <DialogTitle>{defaultValues ? 'Edit Document Type' : 'Add Document Type'}</DialogTitle>
                 </DialogHeader>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4">
-                        <FormTextInput
+                            <FormTextInput
                                 id="document_type_code"
                                 label="Document Type Code"
                                 type="text"
@@ -127,7 +125,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 </ScrollArea>
             </DialogContent>
         </Dialog>
-    )
-}
+    );
+};
 
 export default ModalForm;
