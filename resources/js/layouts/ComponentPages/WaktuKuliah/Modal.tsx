@@ -1,12 +1,10 @@
 import { Button } from '@/components/ui/button';
-import DateInput from '@/components/ui/Components_1/DateInput';
-import { FormSelectInput, FormTextInput } from '@/components/ui/Components_1/FormInput';
+import { FormTextInput } from '@/components/ui/Components_1/FormInput';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { SelectItem } from '@/components/ui/select';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 type ModalProps = {
@@ -17,8 +15,8 @@ type ModalProps = {
 };
 const schema = z.object({
     time: z.string().min(3),
-    description: z.string().nullable()
-})
+    description: z.string().nullable(),
+});
 
 type FormInputs = z.infer<typeof schema>;
 
@@ -34,28 +32,28 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         resolver: zodResolver(schema),
     });
 
-    useEffect(() =>{
-        if(defaultValues){
+    useEffect(() => {
+        if (defaultValues) {
             reset({
                 time: defaultValues.time || '',
-                description: defaultValues.description || ''
-            })
-        } else{
+                description: defaultValues.description || '',
+            });
+        } else {
             reset({
                 time: '',
-                description: ''
-            })
+                description: '',
+            });
         }
     }, [defaultValues, reset]);
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
-        try{
+        try {
             const result = await submit(data, defaultValues?.id);
-            if(result != null){
-                if(!isSubmitting && !defaultValues){
+            if (result != null) {
+                if (!isSubmitting && !defaultValues) {
                     reset({
                         time: '',
-                        description: ''
-                    })
+                        description: '',
+                    });
                 }
             }
         } catch (error: any) {
@@ -116,6 +114,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 </ScrollArea>
             </DialogContent>
         </Dialog>
-    )
-}
+    );
+};
 export default ModalForm;

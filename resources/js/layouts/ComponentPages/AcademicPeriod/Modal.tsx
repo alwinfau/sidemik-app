@@ -1,17 +1,17 @@
 import { Button } from '@/components/ui/button';
+import DateInput from '@/components/ui/Components_1/DateInput';
 import { FormSelectInput, FormTextInput } from '@/components/ui/Components_1/FormInput';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
+
+import { Switch } from '@/components/ui/swicth';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useAcademicPriod } from './useAcademicPeriod';
-import DateInput from '@/components/ui/Components_1/DateInput';
-import { Label } from '@/components/ui/label';
 import { SelectItem } from '@/components/ui/select';
-import { Switch } from '@/components/ui/swicth';
-import { useAxios } from '@/hooks/useAxios';
 
 type ModalProps = {
     open: boolean;
@@ -23,7 +23,7 @@ type ModalProps = {
 const schema = z.object({
     code: z.string().min(3, 'Code harus lebih dari 3 karakter'),
     academic_year_id: z.string().min(1, 'Academic Year wajib diisi'),
-    academic_period: z.string().nullable(),
+    semester: z.string(),
     name: z.string().min(5, 'Name harus lebih dari 5 karakter'),
     short_name: z.string().min(3, 'Short Name harus lebih dari 3 karakter'),
     start_date: z.string().nullable(),
@@ -32,8 +32,8 @@ const schema = z.object({
     end_midterm_exam: z.string().nullable(),
     start_final_exam: z.string().nullable(),
     end_final_exam: z.string().nullable(),
-    number_of_meetings: z.number({ invalid_type_error: 'Harus berupa angka' }).positive('Angka harus di atas 0'),
-    min_number_of_meetings: z.number({ invalid_type_error: 'Harus berupa angka' }).positive('Angka harus di atas 0'),
+    number_of_meetings: z.number().nullable(),
+    min_presence: z.number().nullable(),
     is_active: z.boolean(),
     description: z.string().nullable(),
 });
@@ -51,7 +51,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
     } = useForm<FormInputs>({
         resolver: zodResolver(schema),
     });
-    const {AcademicYears, fecthAcademicYears} = useAcademicPriod();
+    const { AcademicYears, fecthAcademicYears } = useAcademicPriod();
     useEffect(() => {
         fecthAcademicYears();
     }, []);
@@ -60,7 +60,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             reset({
                 code: defaultValues.code || '',
                 academic_year_id: String(defaultValues.academic_year_id) || '0',
-                academic_period: defaultValues.academic_period,
+                semester: defaultValues.semester,
                 name: defaultValues.name || '',
                 short_name: defaultValues.short_name || '',
                 start_date: defaultValues.start_date,
@@ -70,15 +70,15 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 start_final_exam: defaultValues.start_final_exam,
                 end_final_exam: defaultValues.end_final_exam,
                 number_of_meetings: defaultValues.number_of_meetings || 0,
-                min_number_of_meetings: defaultValues.min_number_of_meetings || 0,
-                is_active: defaultValues.is_active || false,
+                min_presence: defaultValues.min_presence || 0,
+                is_active: Boolean(defaultValues.is_active) || false,
                 description: defaultValues.description || '',
             });
         } else {
             reset({
                 code: '',
                 academic_year_id: '',
-                academic_period: '',
+                semester: '',
                 name: '',
                 short_name: '',
                 start_date: '',
@@ -88,7 +88,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 start_final_exam: '',
                 end_final_exam: '',
                 number_of_meetings: 0,
-                min_number_of_meetings: 0,
+                min_presence: 0,
                 is_active: false,
                 description: '',
             });
@@ -100,7 +100,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             const payload = {
                 ...data,
                 is_active: data.is_active ? 1 : 0,
-                academic_period: data.academic_period || null,
+                semester: data.semester || null,
                 start_date: data.start_date || null,
                 end_date: data.end_date || null,
                 start_midterm_exam: data.start_midterm_exam || null,
@@ -117,7 +117,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 reset({
                     code: '',
                     academic_year_id: '',
-                    academic_period: '',
+                    semester: '',
                     name: '',
                     short_name: '',
                     start_date: '',
@@ -127,7 +127,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                     start_final_exam: '',
                     end_final_exam: '',
                     number_of_meetings: 0,
-                    min_number_of_meetings: 0,
+                    min_presence: 0,
                     is_active: false,
                     description: '',
                 });
@@ -170,13 +170,24 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 error={errors.code?.message}
                             />
 
-                            <DateInput
-                                label="Tahun Akademik"
-                                id="academic_period"
-                                placeholder="Enter Academic Date"
-                                register={register('academic_period')}
-                                error={errors.academic_period}
+                            <Controller
+                                name="semester"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormSelectInput
+                                        id="semester"
+                                        label="Semester"
+                                        value={field.value}
+                                        onValueChange={field.onChange}
+                                        error={errors.semester?.message}
+                                    >
+                                        <SelectItem value="#" disabled>Pilih Semester</SelectItem>
+                                        <SelectItem value="ganjil">Semester Ganjil</SelectItem>
+                                        <SelectItem value="genap">Semester Genap</SelectItem>
+                                    </FormSelectInput>
+                                )}
                             />
+
                             <FormTextInput
                                 id="name"
                                 label="Nama"
@@ -218,7 +229,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <DateInput
                                 label="Tanggal UTS berakhir"
                                 id="end_midterm_exam"
-                                placeholder="Enter Certificate Date"
+                                placeholder="Enter UTS Final Date"
                                 register={register('end_midterm_exam')}
                                 error={errors.end_midterm_exam}
                             />
@@ -245,12 +256,12 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 error={errors.number_of_meetings?.message}
                             />
                             <FormTextInput
-                                id="min_number_of_meetings"
-                                label="Minimal Jumlah Pertemuan"
+                                id="min_presence"
+                                label="Minimal Jumlah Presensi"
                                 type="number"
-                                placeholder="Masukan minimal pertemuan"
-                                {...register('min_number_of_meetings', { valueAsNumber: true })}
-                                error={errors.min_number_of_meetings?.message}
+                                placeholder="Masukan minimal Presensi"
+                                {...register('min_presence', { valueAsNumber: true })}
+                                error={errors.min_presence?.message}
                             />
                             <div className="pt-2">
                                 <Label>Status</Label>
@@ -265,7 +276,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     )}
                                 />
                             </div>
-
 
                             <Controller
                                 name="academic_year_id"
@@ -284,7 +294,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                                 {Academic.name}
                                             </SelectItem>
                                         ))}
-                                    </FormSelectInput>  
+                                    </FormSelectInput>
                                 )}
                             />
                             <FormTextInput

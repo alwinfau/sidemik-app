@@ -10,7 +10,6 @@ export const useEmployeeRelationshipTypes = () => {
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
 
-
     const fetchData = async (currentPage = 1) => {
         try {
             setIsLoading(true);
@@ -53,7 +52,7 @@ export const useEmployeeRelationshipTypes = () => {
         }
     };
 
-/*************  ✨ Windsurf Command ⭐  *************/
+    /*************  ✨ Windsurf Command ⭐  *************/
     /**
      * Delete an Employment Relationship by ID
      * @param id The ID of the Employment Relationship to delete

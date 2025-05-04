@@ -1,4 +1,4 @@
-import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeProvider } from '@/components/theme-provider';
 import { type BreadcrumbItem } from '@/types';
 import { type ReactNode } from 'react';
 
@@ -9,6 +9,6 @@ interface ThemeProviderProps {
 
 export default ({ children, breadcrumbs, ...props }: ThemeProviderProps) => (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      {children}
+        {children}
     </ThemeProvider>
 );

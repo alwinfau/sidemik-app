@@ -5,10 +5,9 @@ import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SelectItem } from '@/components/ui/select';
 import { Switch } from '@/components/ui/swicth';
-import { useAxios } from '@/hooks/useAxios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoaderCircle } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useFakultas } from './useFakultas';
@@ -21,17 +20,17 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    code: z.string().min(3, 'Code harus lebih dari 3 karakter'),
+    code: z.string().min(1, 'Code harus lebih dari 3 karakter'),
     name: z.string().min(5, 'Name harus lebih dari 5 karakter'),
     eng_name: z.string().min(5, 'English Name harus lebih dari 5 karakter'),
-    short_name: z.string().min(3, 'Short Name harus lebih dari 5 karakter'),
-    address: z.string(),
-    telephone: z.string().max(15, 'Telephone harus kurang dari 15 karakter'),
+    short_name: z.string().min(2, 'Short Name harus lebih dari 2 karakter'),
+    address: z.string().nullable(),
+    telephone: z.string().max(15, 'Telephone harus kurang dari 15 karakter').nullable(),
     academic_period_id: z.string(),
     is_active: z.boolean(),
-    vision: z.string(),
-    mission: z.string(),
-    description: z.string(),
+    vision: z.string().nullable(),
+    mission: z.string().nullable(),
+    description: z.string().nullable(),
 });
 
 type FormInputs = z.infer<typeof schema>;
@@ -80,10 +79,8 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         }
     }, [defaultValues, reset]);
 
-    
-    const {academicPeriods, fetchAcademicPeriods} = useFakultas();
+    const { academicPeriods, fetchAcademicPeriods } = useFakultas();
 
-    
     useEffect(() => {
         fetchAcademicPeriods();
     }, []);

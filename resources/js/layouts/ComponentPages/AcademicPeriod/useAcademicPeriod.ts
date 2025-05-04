@@ -31,7 +31,7 @@ export const useAcademicPriod = () => {
             const res: any = await get('/academic-year');
             setAcademicYears(res.data.data);
         } catch (err) {
-            throw err
+            throw err;
         }
     };
     const handleSubmit = async (data: Omit<PeriodeAcademicType, 'id'>, id?: number, onSuccess?: () => void) => {
@@ -62,7 +62,6 @@ export const useAcademicPriod = () => {
         }
     };
     const handleDelete = async (id: number, onSuccess?: () => void) => {
-        
         try {
             setIsLoading(true);
             await del(`/academic-period/${id}`);
@@ -78,4 +77,4 @@ export const useAcademicPriod = () => {
         }
     };
     return { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, totalPages, setPage, AcademicYears, fecthAcademicYears };
-}
+};

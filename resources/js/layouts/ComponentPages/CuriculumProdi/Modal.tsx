@@ -19,11 +19,11 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    code: z.string({ message: 'Code wajib diisi'}).min(3, 'Code harus lebih dari 3 karakter'),
-    level_semester: z.string({message: 'Level Semester wajib diisi'}).min(1, 'Level Semester harus lebih dari 1'),
-    min_scores: z.number({ message: 'Minimal Score wajib diisi' }).refine(val => !isNaN(val), 'Minimal skor tidak valid'),
-    required_courses: z.boolean({message: 'required wajib diisi'}),
-    course_package: z.boolean({message: 'Course wajib diisi'}),
+    code: z.string({ message: 'Code wajib diisi' }).min(3, 'Code harus lebih dari 3 karakter'),
+    level_semester: z.string({ message: 'Level Semester wajib diisi' }).min(1, 'Level Semester harus lebih dari 1'),
+    min_scores: z.number({ message: 'Minimal Score wajib diisi' }).refine((val) => !isNaN(val), 'Minimal skor tidak valid'),
+    required_courses: z.boolean({ message: 'required wajib diisi' }),
+    course_package: z.boolean({ message: 'Course wajib diisi' }),
     study_program_desc: z.string().min(5, 'Deskripsi harus lebih dari 5 karakter'),
     curriculum_years_id: z.string().min(1, 'Curriculum Year wajib dipilih'),
     courses_id: z.string().min(1, 'Course wajib dipilih'),
@@ -64,12 +64,12 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
     }, []);
 
     useEffect(() => {
-        console.log('defaultValues:', defaultValues); 
+        console.log('defaultValues:', defaultValues);
 
         if (defaultValues) {
             reset({
                 code: defaultValues.code || '',
-                level_semester: defaultValues.level_semester || '', 
+                level_semester: defaultValues.level_semester || '',
                 min_scores: Number(defaultValues.min_scores) || 0,
                 required_courses: Boolean(defaultValues.required_courses) || false,
                 course_package: Boolean(defaultValues.course_package) || false,
@@ -92,7 +92,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
     }, [defaultValues, reset]);
 
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
-        console.log('Data yang dikirim:', data); 
+        console.log('Data yang dikirim:', data);
         try {
             const result = await submit(data, defaultValues?.id);
             if (result != null && !isSubmitting && !defaultValues) {
@@ -116,13 +116,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mx-3 space-y-4">
-                            <FormTextInput
-                                id="code"
-                                label="Code"
-                                type="text"
-                                {...register('code')}
-                                error={errors.code?.message}
-                            />
+                            <FormTextInput id="code" label="Code" type="text" {...register('code')} error={errors.code?.message} />
                             <FormTextInput
                                 id="level_semester"
                                 label="Level Semester"
@@ -137,7 +131,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 {...register('min_scores', { valueAsNumber: true })}
                                 error={errors.min_scores?.message}
                             />
-                            
+
                             <Controller
                                 name="required_courses"
                                 control={control}
@@ -218,7 +212,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 {...register('study_program_desc')}
                                 error={errors.study_program_desc?.message}
                             />
-
 
                             {errors.root && <p className="text-red-600">{errors.root.message}</p>}
 

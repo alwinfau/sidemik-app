@@ -13,7 +13,7 @@ export const useAcademicYear = () => {
     const fetchData = async (currentPage = 1) => {
         try {
             setIsLoading(true);
-            const res: any = await get(`academic-year?page=${currentPage}&limit=5`);
+            const res: any = await get(`academic-year?page=${currentPage}&limit=10`);
             setData(res.data.data);
             setPage(res.data.current_page);
             setTotalPages(res.data.last_page);
@@ -24,7 +24,7 @@ export const useAcademicYear = () => {
         }
     };
 
-    const handleSubmit = async (data: Omit<AcademicYearType, 'id'>, id?: number, onSuccess?:() => void ) => {
+    const handleSubmit = async (data: Omit<AcademicYearType, 'id'>, id?: number, onSuccess?: () => void) => {
         try {
             setIsLoading(true);
             if (id) {
@@ -68,6 +68,4 @@ export const useAcademicYear = () => {
         }
     };
     return { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, totalPages, setPage };
-
-
-}
+};

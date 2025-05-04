@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/Components_1/DataTable';
 import ConfirmDeleteDialog from '@/components/ui/Components_1/DeleteModal';
 import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@/components/ui/toast';
-import { useAxios } from '@/hooks/useAxios';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
 import { CirclePlus } from 'lucide-react';
@@ -10,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { columns, PeriodeAcademicType } from './Column';
 import ModalForm from './Modal';
 import { useAcademicPriod } from './useAcademicPeriod';
+import { Head } from '@inertiajs/react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -33,9 +33,10 @@ const PeriodeAcademic = () => {
             return () => clearTimeout(timer);
         }
     }, [toast]);
-    
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title='Akademik Periode' />
             <div className="m-6">
                 <div className="flex items-center justify-between">
                     <h2 className="text-3xl font-bold">Academic Period</h2>
@@ -50,44 +51,44 @@ const PeriodeAcademic = () => {
                     </Button>
                 </div>
                 <DataTable
-                columns={columns(
-                    (row) => {
-                        setEditing(row);
-                        setModalOpen(true);
-                    },
-                    (id) => setDeleteId(parseInt(id)),
-                )}
-                data={data || []}
-                isLoading={isLoading}
-                page={page}
-                totalPages={totalPages}
-                onPageChange={(newPage) => {
-                    setPage(newPage);
-                    fetchData(newPage);
-                }}
-            />
+                    columns={columns(
+                        (row) => {
+                            setEditing(row);
+                            setModalOpen(true);
+                        },
+                        (id) => setDeleteId(parseInt(id)),
+                    )}
+                    data={data || []}
+                    isLoading={isLoading}
+                    page={page}
+                    totalPages={totalPages}
+                    onPageChange={(newPage) => {
+                        setPage(newPage);
+                        fetchData(newPage);
+                    }}
+                />
 
-            <ModalForm
-                open={modalOpen}
-                onOpenChange={setModalOpen}
-                submit={(values, id) =>
-                    handleSubmit(values, id, () => {
-                        setModalOpen(false);
-                    })
-                }
-                defaultValues={editing}
-            />
-            <ConfirmDeleteDialog
-                open={deleteId !== null}
-                onCancel={() => setDeleteId(null)}
-                onConfirm={() => {
-                    if (!deleteId) return;
-                    handleDelete(deleteId, () => {
-                        setDeleteId(null);
-                    });
-                }}
-                isLoading={isLoading}
-            />
+                <ModalForm
+                    open={modalOpen}
+                    onOpenChange={setModalOpen}
+                    submit={(values, id) =>
+                        handleSubmit(values, id, () => {
+                            setModalOpen(false);
+                        })
+                    }
+                    defaultValues={editing}
+                />
+                <ConfirmDeleteDialog
+                    open={deleteId !== null}
+                    onCancel={() => setDeleteId(null)}
+                    onConfirm={() => {
+                        if (!deleteId) return;
+                        handleDelete(deleteId, () => {
+                            setDeleteId(null);
+                        });
+                    }}
+                    isLoading={isLoading}
+                />
                 <ToastProvider>
                     {toast && (
                         <Toast variant={toast.type === 'error' ? 'destructive' : 'default'}>

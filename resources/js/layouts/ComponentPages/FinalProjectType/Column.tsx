@@ -15,9 +15,9 @@ export const columns = (onEdit: (row: FinalProjectType) => void, onDelete: (id: 
         header: () => <div className="text-center">No</div>,
         cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
     },
-    { accessorKey: 'code', header: 'Code' },
-    { accessorKey: 'name', header: 'Name' },
-    { accessorKey: 'description', header: 'Description' },
+    { accessorKey: 'code', header: 'Kode' },
+    { accessorKey: 'name', header: 'Nama' },
+    { accessorKey: 'description', header: 'Keterangan' },
 
     {
         id: 'actions',

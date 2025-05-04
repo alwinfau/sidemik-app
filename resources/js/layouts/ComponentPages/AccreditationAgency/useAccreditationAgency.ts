@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { AccreditationagencyType } from './Column';
 
 export const useAccreditationAgency = () => {
-
     const { get, post, put, del } = useAxios();
     const [data, setData] = useState<AccreditationagencyType[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -11,15 +10,14 @@ export const useAccreditationAgency = () => {
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
 
-
     const fetchData = async (currentPage = 1) => {
         try {
-                setIsLoading(true);
-                const res: any = await get(`accreditation-agency?page=${currentPage}&limit=5`);
-                setData(res.data.data);
-                setPage(res.data.current_page);
-                setTotalPages(res.data.last_page);
-                console.log(res.data);
+            setIsLoading(true);
+            const res: any = await get(`accreditation-agency?page=${currentPage}&limit=5`);
+            setData(res.data.data);
+            setPage(res.data.current_page);
+            setTotalPages(res.data.last_page);
+            console.log(res.data);
         } catch (err) {
             setToast({ message: 'failed to get Accreditation', type: 'error' });
         } finally {
@@ -27,8 +25,7 @@ export const useAccreditationAgency = () => {
         }
     };
 
-
-    const handleSubmit = async (data: Omit<AccreditationagencyType, 'id'>, id?: number, onSuccess?: () =>void ) => {
+    const handleSubmit = async (data: Omit<AccreditationagencyType, 'id'>, id?: number, onSuccess?: () => void) => {
         try {
             setIsLoading(true);
             if (id) {
@@ -73,4 +70,4 @@ export const useAccreditationAgency = () => {
         }
     };
     return { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, totalPages, setPage };
-}
+};

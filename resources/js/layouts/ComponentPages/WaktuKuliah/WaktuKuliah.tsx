@@ -2,15 +2,14 @@ import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/Components_1/DataTable';
 import ConfirmDeleteDialog from '@/components/ui/Components_1/DeleteModal';
 import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@/components/ui/toast';
+import AppLayout from '@/layouts/app-layout';
+import { BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/react';
 import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { WaktuKuliahType, columns } from './Column';
-import { BreadcrumbItem } from '@/types';
 import ModalForm from './Modal';
 import { useWaktuKuliah } from './useWaktuKuliah';
-import AppLayout from '@/layouts/app-layout';
-import { Head } from '@inertiajs/react';
-
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

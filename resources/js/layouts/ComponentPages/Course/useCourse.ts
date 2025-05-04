@@ -2,7 +2,6 @@ import { useAxios } from '@/hooks/useAxios';
 import { useState } from 'react';
 import { CourseType } from './Column';
 
-
 export const useCourse = () => {
     const { get, post, put, del } = useAxios();
     const [data, setData] = useState<CourseType[]>([]);
@@ -10,10 +9,9 @@ export const useCourse = () => {
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
-    
+
     const [courseTypes, setCourseTypes] = useState<any>([]);
     const [courseGroups, setCourseGroups] = useState<any>([]);
-
 
     const fetchData = async (currentPage = 1) => {
         try {
@@ -41,7 +39,7 @@ export const useCourse = () => {
         }
     };
 
-    const handleSubmit = async (data: Omit<CourseType, 'id'>, id?: number, onSuccess?: () =>void) => {
+    const handleSubmit = async (data: Omit<CourseType, 'id'>, id?: number, onSuccess?: () => void) => {
         try {
             setIsLoading(true);
             if (id) {
@@ -71,12 +69,12 @@ export const useCourse = () => {
 
     const handleDelete = async (id: number, onSuccess?: () => void) => {
         try {
-            setIsLoading(true); 
+            setIsLoading(true);
             await del(`/course/${id}`);
             setData((prev) => prev.filter((item) => item.id !== id));
             setToast({ message: 'Course deleted successfully', type: 'success' });
             await fetchData();
-            onSuccess?.()
+            onSuccess?.();
         } catch (err) {
             setToast({ message: 'Failed to delete Course', type: 'error' });
         } finally {
@@ -84,5 +82,19 @@ export const useCourse = () => {
             onSuccess?.();
         }
     };
-    return { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, totalPages, setPage, courseTypes, courseGroups,fectRelasi };
-}
+    return {
+        data,
+        isLoading,
+        toast,
+        fetchData,
+        handleSubmit,
+        handleDelete,
+        setToast,
+        page,
+        totalPages,
+        setPage,
+        courseTypes,
+        courseGroups,
+        fectRelasi,
+    };
+};

@@ -7,8 +7,8 @@ import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { AcademicYearType } from './Column';
 import DateInput from '@/components/ui/Components_1/DateInput';
+import { AcademicYearType } from './Column';
 
 type ModalProps = {
     open: boolean;
@@ -18,7 +18,8 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    academic_year: z.string().regex(/^\d{4}$/, { message: 'Academic year harus berupa 4 digit tahun (misal: 2025)' }),
+    // academic_year: z.string().regex(/^\d{4}$/, { message: 'Academic year harus berupa 4 digit tahun (misal: 2025)' }),
+    academic_year: z.string(),
     name: z.string().min(5, 'Nama harus lebih dari 5 karakterz'),
     start_date: z.string(),
     end_date: z.string(),
@@ -94,18 +95,25 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
                 <DialogHeader>
-                    <DialogTitle>{defaultValues ? 'Edit Academic Years' : 'Add Academic Years'}</DialogTitle>
+                    <DialogTitle>{defaultValues ? 'Edit Tahun Akademik' : 'Tambah Tahun Akademik'}</DialogTitle>
                 </DialogHeader>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4">
-                            <FormTextInput
+                            {/* <FormTextInput
                                 id="academic_year"
                                 label="Tahun Akademik"
                                 placeholder="Masukan tahun akademik"
                                 type="text"
                                 {...register('academic_year')}
                                 error={errors.academic_year?.message}
+                            /> */}
+                            <DateInput
+                                label="Tahun Akademik"
+                                id="academic_year"
+                                placeholder="Enter Certificate Date"
+                                register={register('academic_year')}
+                                error={errors.academic_year}
                             />
                             <FormTextInput
                                 placeholder="Masukan nama akademik"
@@ -133,7 +141,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="description"
                                 label="Keterangan"
-                                placeholder="Masukan Deskripsi dari tahun akademik"
+                                placeholder="Masukan keterangan dari tahun akademik"
                                 type="textarea"
                                 {...register('description')}
                                 error={errors.description?.message}

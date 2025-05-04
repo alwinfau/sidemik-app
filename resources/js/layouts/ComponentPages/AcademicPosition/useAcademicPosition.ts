@@ -26,7 +26,7 @@ export const useAcademicPosition = () => {
         }
     };
 
-    const fetchAcademicPositionTypes= async () => {
+    const fetchAcademicPositionTypes = async () => {
         try {
             const res: any = await get('/academic-positions-types');
             setAcademicPositionType(res.data.data);
@@ -79,5 +79,18 @@ export const useAcademicPosition = () => {
         }
     };
 
-    return { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, totalPages, setPage, AcademicPositionType, fetchAcademicPositionTypes };
+    return {
+        data,
+        isLoading,
+        toast,
+        fetchData,
+        handleSubmit,
+        handleDelete,
+        setToast,
+        page,
+        totalPages,
+        setPage,
+        AcademicPositionType,
+        fetchAcademicPositionTypes,
+    };
 };

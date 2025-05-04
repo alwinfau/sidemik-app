@@ -141,4 +141,3 @@ const FinalProjectTypePage = () => {
 };
 
 export default FinalProjectTypePage;
-        

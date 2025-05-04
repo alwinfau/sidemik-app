@@ -158,7 +158,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 error={errors.accr_cert_number?.message}
                                 placeholder="Enter Certificate Number"
                             />
- 
+
                             <DateInput
                                 label="Certificate Date"
                                 id="accr_cert_date"

@@ -3,10 +3,9 @@ import { FormSelectInput, FormTextInput } from '@/components/ui/Components_1/For
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SelectItem } from '@/components/ui/select';
-import { useAxios } from '@/hooks/useAxios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoaderCircle } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useCourse } from './useCourse';
@@ -50,7 +49,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         resolver: zodResolver(schema),
     });
 
-    const {courseTypes, courseGroups ,fectRelasi} = useCourse();
+    const { courseTypes, courseGroups, fectRelasi } = useCourse();
 
     useEffect(() => {
         fectRelasi();

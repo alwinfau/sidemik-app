@@ -1,5 +1,4 @@
-import WaktuKuliahPages from "@/layouts/ComponentPages/WaktuKuliah/WaktuKuliah";
-
+import WaktuKuliahPages from '@/layouts/ComponentPages/WaktuKuliah/WaktuKuliah';
 
 type Props = {};
 const WaktuKuliah = (props: Props) => {

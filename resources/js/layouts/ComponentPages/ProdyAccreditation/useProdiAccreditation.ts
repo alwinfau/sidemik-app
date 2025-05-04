@@ -14,7 +14,7 @@ export const useProdiAccreditation = () => {
     const fetchData = async (currentPage = 1) => {
         try {
             setIsLoading(true);
-            const res: any = await get(`/study-program-accreditations?page=${currentPage}&limit=`);
+            const res: any = await get(`/study-program-accreditations?page=${currentPage}&limit=5`);
             setData(res.data.data);
 
             setPage(res.data.current_page);

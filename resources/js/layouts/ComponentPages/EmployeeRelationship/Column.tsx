@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { ColumnDef } from "@tanstack/react-table";
-import { Pencil, Trash2 } from "lucide-react";
+import { Button } from '@/components/ui/button';
+import { ColumnDef } from '@tanstack/react-table';
+import { Pencil, Trash2 } from 'lucide-react';
 
 export type EmployeeRelationshipTypes = {
     id?: number;
@@ -12,25 +12,25 @@ export type EmployeeRelationshipTypes = {
 
 export const columns = (onEdit: (row: EmployeeRelationshipTypes) => void, onDelete: (id: string) => void): ColumnDef<EmployeeRelationshipTypes>[] => [
     {
-        id: "rowNumber",
+        id: 'rowNumber',
         header: () => <div className="text-center">No</div>,
         cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
     },
-    { accessorKey: "code", header: "Code" },
-    { accessorKey: "name", header: "Name" },
+    { accessorKey: 'code', header: 'Code' },
+    { accessorKey: 'name', header: 'Name' },
     {
         accessorKey: 'employment_relationship_status',
         header: 'Status',
         cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Aktif' : 'Tidak Aktif'}</div>,
-    },
+    },
     {
         accessorKey: 'pns_status',
         header: 'Status',
         cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'PNS' : 'Tidak PNS'}</div>,
-    },
+    },
     {
-        id: "actions",
-        header: "Actions",
+        id: 'actions',
+        header: 'Actions',
         cell: ({ row }) => (
             <div className="flex gap-2">
                 <Button className="bg-blue-700 hover:bg-blue-600" size="sm" onClick={() => onEdit(row.original)}>

@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { FormSelectInput, FormTextInput } from '@/components/ui/Components_1/FormInput';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SelectItem } from '@/components/ui/select';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -19,7 +19,6 @@ const schema = z.object({
     academic_position_code: z.string().min(3),
     academic_position_name: z.string().min(5),
     academic_positions_types_id: z.string(),
-    
 });
 
 type FormInputs = z.infer<typeof schema>;
@@ -39,7 +38,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
 
     useEffect(() => {
         fetchAcademicPositionTypes();
-        
     }, []);
 
     useEffect(() => {
@@ -54,11 +52,9 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 academic_position_code: '',
                 academic_position_name: '',
                 academic_positions_types_id: '',
-
             });
         }
     }, [defaultValues, reset]);
-
 
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
         try {
@@ -68,7 +64,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                     reset({
                         academic_position_code: '',
                         academic_position_name: '',
-                        academic_positions_types_id: '',  
+                        academic_positions_types_id: '',
                     });
                 }
             }
@@ -103,28 +99,26 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="academic_position_code"
                                 label="code position academic"
-                                type='text'
+                                type="text"
                                 {...register('academic_position_code')}
                                 error={errors.academic_position_code?.message}
-                               
                             />
                             <FormTextInput
                                 id="academic_position_name"
                                 label="name position academic"
-                                type='text'
+                                type="text"
                                 {...register('academic_position_name')}
                                 error={errors.academic_position_name?.message}
-                               
                             />
 
                             <Controller
-                                name='academic_positions_types_id'
+                                name="academic_positions_types_id"
                                 control={control}
                                 rules={{ required: 'academic_positions_type_id is required' }}
                                 render={({ field }) => (
                                     <FormSelectInput
-                                        id='academic_positions_type_id'
-                                        label='type position academic'
+                                        id="academic_positions_type_id"
+                                        label="type position academic"
                                         value={String(field.value)}
                                         onValueChange={field.onChange}
                                         error={errors.academic_positions_types_id?.message}
@@ -133,12 +127,10 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                             <SelectItem key={AcademicPositionTypesPages.id} value={String(AcademicPositionTypesPages.id)}>
                                                 {AcademicPositionTypesPages.job_type_name}
                                             </SelectItem>
-                                            
                                         ))}
                                     </FormSelectInput>
                                 )}
                             />
-
 
                             {errors.root && <p className="text-red-600">{errors.root.message}</p>}
 
@@ -158,4 +150,3 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
 };
 
 export default ModalForm;
-

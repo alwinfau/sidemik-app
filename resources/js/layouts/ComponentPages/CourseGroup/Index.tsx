@@ -62,9 +62,9 @@ const CourseGroup = () => {
                     page={page}
                     totalPages={totalPages}
                     onPageChange={(newPage) => {
-                    setPage(newPage);
-                    fetchData(newPage);
-                }}
+                        setPage(newPage);
+                        fetchData(newPage);
+                    }}
                 />
                 <ModalForm
                     open={modalOpen}
@@ -77,16 +77,16 @@ const CourseGroup = () => {
                     defaultValues={editing}
                 />
                 <ConfirmDeleteDialog
-                open={deleteId !== null}
-                onCancel={() => setDeleteId(null)}
-                onConfirm={() => {
-                    if (!deleteId) return;
-                    handleDelete(deleteId, () => {
-                        setDeleteId(null);
-                    });
-                }}
-                isLoading={isLoading}
-            />
+                    open={deleteId !== null}
+                    onCancel={() => setDeleteId(null)}
+                    onConfirm={() => {
+                        if (!deleteId) return;
+                        handleDelete(deleteId, () => {
+                            setDeleteId(null);
+                        });
+                    }}
+                    isLoading={isLoading}
+                />
                 <ToastProvider>
                     {toast && (
                         <Toast variant={toast.type === 'error' ? 'destructive' : 'default'}>

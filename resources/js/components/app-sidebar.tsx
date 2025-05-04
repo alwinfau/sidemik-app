@@ -170,7 +170,7 @@ const data: AppData = {
                 },
                 {
                     title: 'Waktu Kuliah',
-                    url: '/waktu-kuliah'
+                    url: '/waktu-kuliah',
                 },
                 {
                     title: 'Univ Level Academic',
