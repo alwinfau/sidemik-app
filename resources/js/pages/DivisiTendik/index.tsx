@@ -11,7 +11,7 @@ const DevisiTendik= (props: Props) => {
     return (
         <>
             <AppLayout breadcrumbs={breadcrumbs}>
-                <Head title="DevisiTendikPage" />
+                <Head title="Divisi Tendik" />
                 <DevisiTendikPage />
             </AppLayout>
         </>

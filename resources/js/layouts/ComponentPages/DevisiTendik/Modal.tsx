@@ -93,7 +93,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                         <div className="mx-3 space-y-4">
                             <FormTextInput
                                 id="code"
-                                label="code"
+                                label="Kode"
                                 type="text"
                                 {...register('code')}
                                 error={errors.code?.message}
@@ -101,7 +101,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
 
                             <FormTextInput
                                 id="name"
-                                label="name"
+                                label="Nama"
                                 type="text"
                                 {...register('name')}
                                 error={errors.name?.message}
@@ -109,7 +109,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
 
                             <FormTextInput
                                 id="description"
-                                label="description"
+                                label="Keterangan"
                                 type="text"
                                 {...register('description')}
                                 error={errors.description?.message}

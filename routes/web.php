@@ -137,6 +137,22 @@ Route::get('/structural-position', function() {
     return Inertia::render(component:'JabStruk/index');
 })->name('index');
 
+// Route Jabatan Fungsional
+Route::get('/functional-position', function() {
+    return Inertia::render(component:'JabFung/index');
+})->name('index');
+
+// Route Status Tendik
+Route::get('/staff-status', function() {
+    return Inertia::render(component:'StatusTendik/index');
+})->name('index');
+
+// Route Status Dosen
+Route::get('/lecture-status', function() {
+    return Inertia::render(component:'StatusDosen/index');
+})->name('index');
+
+
 // Tambahan route file
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

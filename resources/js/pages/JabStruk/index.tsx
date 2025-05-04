@@ -11,7 +11,7 @@ const JabatanStruktural= (props: Props) => {
     return (
         <>
             <AppLayout breadcrumbs={breadcrumbs}>
-                <Head title="JabatanStrukturalPage" />
+                <Head title="Jabatan Struktural" />
                 <JabatanStrukturalPage />
             </AppLayout>
         </>

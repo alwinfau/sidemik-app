@@ -85,9 +85,9 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
                 <DialogHeader>
-                    <DialogTitle>{defaultValues ? 'Edit Jabatan Struktural' : 'Add Jabatan Struktural'}</DialogTitle>
+                    <DialogTitle>{defaultValues ? 'Edit Status Tendik' : 'Add Status Tendik'}</DialogTitle>
                 </DialogHeader>
-                <DialogDescription>Silakan isi data Jabatan Struktural.</DialogDescription>
+                <DialogDescription>Silakan isi data Status Tendik.</DialogDescription>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mx-3 space-y-4">

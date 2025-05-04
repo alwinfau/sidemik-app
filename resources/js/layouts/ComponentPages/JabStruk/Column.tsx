@@ -11,12 +11,12 @@ export type JabatanStruktural = {
 
 export const columns = (onEdit: (row: JabatanStruktural) => void, onDelete: (id: string) => void): ColumnDef<JabatanStruktural>[] => [
     { id: 'rowNumber', header: 'No', cell: ({ row }) => <div className="text-center">{row.index + 1}</div> },
-    { accessorKey: 'code', header: ' Code' },
-    { accessorKey: 'name', header: ' name' },
-    { accessorKey: 'description', header: ' description' },
+    { accessorKey: 'code', header: ' Kode' },
+    { accessorKey: 'name', header: ' Nama ' },
+    { accessorKey: 'description', header: ' Keterangan' },
     {
         id: 'actions',
-        header: 'Actions',
+        header: 'Aksi',
         cell: ({ row }) => (
             <div className="flex gap-2">
                 <Button className="bg-blue-700 hover:bg-blue-600" size="sm" onClick={() => onEdit(row.original)}>
