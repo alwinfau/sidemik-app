@@ -220,6 +220,7 @@ const data: AppData = {
                     title: 'Academic Position Types',
                     url: '/academic-position-types',
                 },
+
             ],
         },
         {

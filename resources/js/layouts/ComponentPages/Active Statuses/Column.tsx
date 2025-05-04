@@ -15,13 +15,13 @@ export const columns = (onEdit: (row: ActiveStatus) => void, onDelete: (id: stri
         header: () => <div className="text-center">No</div>,
         cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
     },
-    { accessorKey: 'active_status_code', header: 'Active Status Code' },
+    { accessorKey: 'active_status_code', header: ' Code' },
     { 
         accessorKey: 'active_status_name', 
-        header: 'Active Status Name',
+        header: ' Name',
         cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Active' : 'Inactive'}</div>,
     },
-    { accessorKey: 'active_status_description', header: 'Active Status Description' },
+    { accessorKey: 'active_status_description', header: ' Description' },
     {
         id: 'actions',
         header: 'Actions',
