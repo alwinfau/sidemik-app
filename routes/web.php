@@ -16,7 +16,9 @@ Route::get('dashboard', function () {
 })->name('dashboard');
 
 // Resource Study Program
-Route::resource('/study-program', StudyProgram::class);
+Route::get('/study-program', function () {
+    return Inertia::render('Prodi/Prodi');
+})->name('prodi');
 
 // Route Fakultas
 Route::get('/faculty', function () {

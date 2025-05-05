@@ -182,8 +182,8 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         error={errors.semester?.message}
                                     >
                                         <SelectItem value="#" disabled>Pilih Semester</SelectItem>
-                                        <SelectItem value="ganjil">Semester Ganjil</SelectItem>
-                                        <SelectItem value="genap">Semester Genap</SelectItem>
+                                        <SelectItem value="Ganjil">Semester Ganjil</SelectItem>
+                                        <SelectItem value="Genap">Semester Genap</SelectItem>
                                     </FormSelectInput>
                                 )}
                             />
