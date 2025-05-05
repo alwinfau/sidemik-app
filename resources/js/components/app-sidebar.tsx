@@ -224,6 +224,27 @@ const data: AppData = {
                     title: 'Academic Position Types',
                     url: '/academic-position-types',
                 },
+                {
+                    title: 'Divisi Tendik',
+                    url: '/staff-division',
+                },
+                {
+                    title: 'Jabatan Struktural',
+                    url: '/structural-position',
+                },
+                {
+                    title: 'Jabatan Fungsional',
+                    url: '/functional-position',
+                },
+                {
+                    title: 'Status Tendik',
+                    url: '/staff-status',
+                },
+                {
+                    title: 'Status Dosen',
+                    url: '/lecture-status',
+                }
+
             ],
         },
         {
