@@ -28,6 +28,13 @@ const FakultasPage = () => {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        if (toast) {
+            const timer = setTimeout(() => setToast(null), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [toast]);
+    
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Fakultas" />

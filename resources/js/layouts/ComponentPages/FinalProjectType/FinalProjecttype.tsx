@@ -9,6 +9,7 @@ import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { FinalProjectType, columns } from './Column';
 import ModalForm from './Modal';
+import { useFinalProject } from './useFinalProject';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -18,26 +19,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 const FinalProjectTypePage = () => {
-    const { get, post, put, del } = useAxios();
-    const [data, setData] = useState<FinalProjectType[]>([]);
+    const { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useFinalProject();
     const [modalOpen, setModalOpen] = useState(false);
     const [editing, setEditing] = useState<FinalProjectType | undefined>();
     const [deleteId, setDeleteId] = useState<number | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-
-    const fetchData = async () => {
-        try {
-            setIsLoading(true);
-            const res: any = await get('/final-project-type');
-            setData(res.data.data);
-            return res;
-        } catch (err) {
-            console.error('Error fetching:', err);
-        } finally {
-            setIsLoading(false);
-        }
-    };
 
     useEffect(() => {
         fetchData();
@@ -50,57 +35,12 @@ const FinalProjectTypePage = () => {
         }
     }, [toast]);
 
-    const handleSubmit = async (data: Omit<FinalProjectType, 'id'>, id?: number | undefined) => {
-        try {
-            setIsLoading(true);
-            if (id) {
-                const res: any = await put(`/final-project-type/${id}`, data);
-                setData((prev) => prev.map((p: any) => (p.id === id ? res.data : p)));
-                await fetchData();
-                setModalOpen(false);
-                setToast({ message: 'Final Project Type updated successfully', type: 'success' });
-                return res;
-            } else {
-                const res: any = await post('/final-project-type', data);
-                setData((prev) => [...prev, res.data]);
-                await fetchData();
-                setModalOpen(false);
-                setToast({ message: 'Final Project Type created successfully', type: 'success' });
-                return res;
-            }
-        } catch (error: any) {
-            if (error.response.status === 500) {
-                setToast({ message: 'Failed to submit Final Project Type', type: 'error' });
-            }
-            console.log('Error submitting data:', error);
-        } finally {
-            setIsLoading(false);
-            setModalOpen(false);
-        }
-    };
-
-    const handleDelete = async () => {
-        if (!deleteId) return;
-        setIsLoading(true);
-        try {
-            await del(`/final-project-type/${deleteId}`);
-            setData((prev) => prev.filter((item: any) => item.id !== deleteId));
-            setDeleteId(null);
-            setToast({ message: 'Final Project Type deleted successfully', type: 'success' });
-        } catch (err) {
-            console.error(err);
-            setToast({ message: 'Failed to delete Final Project Type', type: 'error' });
-        } finally {
-            setDeleteId(null);
-            setIsLoading(false);
-        }
-    };
-
+    
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <div className="m-6">
                 <div className="flex items-center justify-between">
-                    <h2 className="text-3xl font-bold">Final Project Type</h2>
+                    <h2 className="text-3xl font-bold">Jenis Tugas Akhir</h2>
                     <Button
                         onClick={() => {
                             setEditing(undefined);
@@ -108,7 +48,7 @@ const FinalProjectTypePage = () => {
                         }}
                         className="flex items-center rounded bg-green-600 p-3 font-bold text-white hover:bg-green-500"
                     >
-                        <CirclePlus className="h-6 w-6" /> Add Final Project Type
+                        <CirclePlus className="h-6 w-6" /> Add Jenis Tugas Akhir
                     </Button>
                 </div>
                 <DataTable
@@ -121,9 +61,35 @@ const FinalProjectTypePage = () => {
                     )}
                     data={data || []}
                     isLoading={isLoading}
+                    page={page}
+                    totalPages={totalPages}
+                    onPageChange={(newPage) => {
+                        setPage(newPage);
+                        fetchData(newPage);
+                    }}
                 />
-                <ModalForm open={modalOpen} onOpenChange={setModalOpen} submit={handleSubmit} defaultValues={editing} />
-                <ConfirmDeleteDialog open={deleteId !== null} onCancel={() => setDeleteId(null)} onConfirm={handleDelete} isLoading={isLoading} />
+
+                <ModalForm
+                    open={modalOpen}
+                    onOpenChange={setModalOpen}
+                    submit={(values, id) =>
+                        handleSubmit(values, id, () => {
+                            setModalOpen(false);
+                        })
+                    }
+                    defaultValues={editing}
+                />
+                <ConfirmDeleteDialog
+                    open={deleteId !== null}
+                    onCancel={() => setDeleteId(null)}
+                    onConfirm={() => {
+                        if (!deleteId) return;
+                        handleDelete(deleteId, () => {
+                            setDeleteId(null);
+                        });
+                    }}
+                    isLoading={isLoading}
+                />
                 <ToastProvider>
                     {toast && (
                         <Toast variant={toast.type === 'error' ? 'destructive' : 'default'}>

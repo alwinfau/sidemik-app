@@ -193,14 +193,19 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     </FormSelectInput>
                                 )}
                             />
-
-                            <div className="flex items-center space-x-4">
-                                <Label htmlFor="is_active">Active</Label>
+                            
+                            
+                            <div className="pt-2">
+                                <Label>Status</Label>
                                 <Controller
-                                    defaultValue={false}
                                     name="is_active"
                                     control={control}
-                                    render={({ field }) => <Switch checked={field.value} onCheckedChange={(checked) => field.onChange(checked)} />}
+                                    render={({ field }) => (
+                                        <div className="flex items-center gap-4">
+                                            <Switch checked={field.value} onCheckedChange={field.onChange} id="is_active" />
+                                            <Label htmlFor="is_active">{field.value ? 'Active' : 'Non Aktif'}</Label>
+                                        </div>
+                                    )}
                                 />
                             </div>
 

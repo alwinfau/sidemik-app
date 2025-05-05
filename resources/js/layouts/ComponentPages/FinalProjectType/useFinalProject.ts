@@ -53,12 +53,13 @@ export const useFinalProject = () => {
     };
 
     const handleDelete = async (id: number, onSuccess?: () => void) => {
-        setIsLoading(true);
         try {
+            setIsLoading(true);
             await del(`/final-project-type/${id}`);
             setData((prev) => prev.filter((item: any) => item.id !== id));
-            onSuccess?.();
+            await fetchData();
             setToast({ message: 'Final Project Type deleted successfully', type: 'success' });
+            window.location.reload();
         } catch (err) {
             console.error(err);
             setToast({ message: 'Failed to delete Final Project Type', type: 'error' });
@@ -66,5 +67,17 @@ export const useFinalProject = () => {
             onSuccess?.();
             setIsLoading(false);
         }
+    };
+    return {
+        data,
+        isLoading,
+        toast,
+        fetchData,
+        handleSubmit,
+        handleDelete,
+        setToast,
+        page,
+        totalPages,
+        setPage
     };
 };

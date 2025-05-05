@@ -75,7 +75,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
                 <DialogHeader>
-                    <DialogTitle>{defaultValues ? 'Edit Academic Years' : 'Add Academic Years'}</DialogTitle>
+                    <DialogTitle>{defaultValues ? 'Edit Jenis Tugas Akhir' : 'Add Jenis Tugas Akhir'}</DialogTitle>
                 </DialogHeader>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>

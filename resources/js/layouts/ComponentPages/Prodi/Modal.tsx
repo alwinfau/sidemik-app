@@ -1,13 +1,16 @@
 import { Button } from '@/components/ui/button';
 import { FormSelectInput, FormTextInput } from '@/components/ui/Components_1/FormInput';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SelectItem } from '@/components/ui/select';
+import { Switch } from '@/components/ui/swicth';
 import { useAxios } from '@/hooks/useAxios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useStudyProgram } from './useStudy-program';
 
 type ModalProps = {
     open: boolean;
@@ -19,28 +22,21 @@ const schema = z.object({
     sp_code: z.string().min(1),
     idn_sp_name: z.string().min(3),
     eng_sp_name: z.string().min(3),
-    eng_short_name: z.string().min(1),
-    idn_short_name: z.string().min(1),
-    min_credits_pass: z.coerce.number().min(1),
-    min_pass_gpa: z.coerce.number().min(0),
-    final_project_req: z.boolean(),
-    ukom_req: z.boolean(),
-    max_lecturer_advisors: z.coerce.number().min(1),
-    max_examiner_lecturers: z.coerce.number().min(1),
-    sp_address: z.string(),
-    sp_phone: z.string(),
-    sp_email_address: z.string().email(),
-    sp_web_address: z.string().url(),
-    sp_description: z.string(),
-    sp_vision: z.string(),
-    sp_mission: z.string(),
-    sp_competencies: z.string(),
-    program_learning_outcomes: z.string(),
+    sp_short_name: z.string().min(1),
+    sp_address: z.string().nullable(),
+    sp_phone: z.string().nullable(),
+    sp_email_address: z.string().nullable(),
+    sp_web_address: z.string().nullable(),
+    sp_description: z.string().nullable(),
+    sp_vision: z.string().nullable(),
+    sp_mission: z.string().nullable(),
+    sp_competencies: z.string().nullable(),
+    program_learning_outcomes: z.string().nullable(),
+    max_semester: z.number().positive(),
     faculty_id: z.string(),
     academic_periods_id: z.string(),
     final_project_types_id: z.string(),
-    study_program_accreditations_id: z.string(),
-    univ_education_levels_id: z.string(),
+    status: z.boolean()
 });
 
 type FormInputs = z.infer<typeof schema>;
@@ -63,14 +59,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 sp_code: defaultValues.sp_code || '',
                 idn_sp_name: defaultValues.idn_sp_name || '',
                 eng_sp_name: defaultValues.eng_sp_name || '',
-                idn_short_name: defaultValues.idn_short_name || '',
-                eng_short_name: defaultValues.eng_short_name || '',
-                min_credits_pass: defaultValues.min_credits_pass || 0,
-                min_pass_gpa: defaultValues.min_pass_gpa || 0,
-                final_project_req: Boolean(defaultValues.final_project_req) || false,
-                ukom_req: Boolean(defaultValues.ukom_req) || false,
-                max_lecturer_advisors: defaultValues.max_lecturer_advisors || 0,
-                max_examiner_lecturers: defaultValues.max_examiner_lecturers || 0,
+                sp_short_name: defaultValues.sp_short_name || '',
                 sp_address: defaultValues.sp_address || '',
                 sp_phone: defaultValues.sp_phone || '',
                 sp_email_address: defaultValues.sp_email_address || '',
@@ -80,25 +69,18 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 sp_mission: defaultValues.sp_mission || '',
                 sp_competencies: defaultValues.sp_competencies || '',
                 program_learning_outcomes: defaultValues.program_learning_outcomes || '',
+                max_semester: defaultValues.max_semester || 0,
                 faculty_id: String(defaultValues.faculty_id) || '',
                 academic_periods_id: String(defaultValues.academic_periods_id) || '',
                 final_project_types_id: String(defaultValues.final_project_types_id) || '',
-                study_program_accreditations_id: String(defaultValues.study_program_accreditations_id) || '',
-                univ_education_levels_id: String(defaultValues.univ_education_levels_id) || '',
+                status: Boolean(defaultValues.status)
             });
         } else {
             reset({
                 sp_code: '',
                 idn_sp_name: '',
                 eng_sp_name: '',
-                idn_short_name: '',
-                eng_short_name: '',
-                min_credits_pass: 0,
-                min_pass_gpa: 0,
-                final_project_req: false,
-                ukom_req: false,
-                max_lecturer_advisors: 0,
-                max_examiner_lecturers: 0,
+                sp_short_name: '',
                 sp_address: '',
                 sp_phone: '',
                 sp_email_address: '',
@@ -108,45 +90,19 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 sp_mission: '',
                 sp_competencies: '',
                 program_learning_outcomes: '',
+                max_semester: 0,
                 faculty_id: '',
                 academic_periods_id: '',
                 final_project_types_id: '',
-                study_program_accreditations_id: '',
-                univ_education_levels_id: '',
+                status: false
             });
         }
     }, [defaultValues, reset]);
 
-    const { get } = useAxios();
+    const {Facultas, AcademicPeriod,  fecthRelasi} = useStudyProgram();
 
-    const [Facultas, setFakultas] = useState<any>([]);
-    const [AcademicPeriod, setAcademicPeriod] = useState<any>([]);
-    const [FinalProject, setFinalProdject] = useState<any>([]);
-    const [AcreditationProdi, setAcreditationProdi] = useState<any>([]);
-    const [UnivEducation, setUnivEducation] = useState<any>([]);
-
-    const fecthData = async () => {
-        try {
-            const resFacultas: any = await get('/faculty');
-            setFakultas(resFacultas.data.data);
-
-            const resAcademicPeriod: any = await get('/academic-period');
-            setAcademicPeriod(resAcademicPeriod.data.data);
-
-            const resFinalProject: any = await get('/final-project-type');
-            setFinalProdject(resFinalProject.data.data);
-
-            const resAcreditationProdi: any = await get('/study-program-accreditations');
-            setAcreditationProdi(resAcreditationProdi.data.data);
-
-            const resUnivEducation: any = await get('/univ-education-level');
-            setUnivEducation(resUnivEducation.data.data);
-        } catch (err) {
-            console.error('Error fetching:', err);
-        }
-    };
     useEffect(() => {
-        fecthData();
+        fecthRelasi();
     }, []);
 
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
@@ -186,81 +142,13 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 error={errors.eng_sp_name?.message}
                             />
                             <FormTextInput
-                                id="idn_short_name"
-                                label="Short Name (IDN)"
-                                type="text"
-                                {...register('idn_short_name')}
-                                error={errors.idn_short_name?.message}
-                            />
-                            <FormTextInput
-                                id="eng_short_name"
+                                id="sp_short_name"
                                 label="Short Name (ENG)"
                                 type="text"
-                                {...register('eng_short_name')}
-                                error={errors.eng_short_name?.message}
+                                {...register('sp_short_name')}
+                                error={errors.sp_short_name?.message}
                             />
-                            <FormTextInput
-                                id="min_credits_pass"
-                                label="Min Credits"
-                                type="number"
-                                {...register('min_credits_pass')}
-                                error={errors.min_credits_pass?.message}
-                            />
-                            <FormTextInput
-                                id="min_pass_gpa"
-                                label="Min GPA"
-                                type="number"
-                                step="0.01"
-                                {...register('min_pass_gpa')}
-                                error={errors.min_pass_gpa?.message}
-                            />
-                            <Controller
-                                control={control}
-                                name="final_project_req"
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="final_project_req"
-                                        label="Final Project Required"
-                                        value={String(field.value)}
-                                        onValueChange={(val) => field.onChange(val === 'true')}
-                                        error={errors.final_project_req?.message || ''}
-                                    >
-                                        <SelectItem value="true">Yes</SelectItem>
-                                        <SelectItem value="false">No</SelectItem>
-                                    </FormSelectInput>
-                                )}
-                            />
-                            <Controller
-                                control={control}
-                                name="ukom_req"
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="ukom_req"
-                                        label="Ukom Required"
-                                        value={String(field.value)}
-                                        onValueChange={(val) => field.onChange(val === 'true')}
-                                        error={errors.ukom_req?.message || ''}
-                                    >
-                                        <SelectItem value="true">Yes</SelectItem>
-                                        <SelectItem value="false">No</SelectItem>
-                                    </FormSelectInput>
-                                )}
-                            />
-                            <FormTextInput
-                                id="max_lecturer_advisors"
-                                label="Max Advisors"
-                                type="number"
-                                {...register('max_lecturer_advisors')}
-                                error={errors.max_lecturer_advisors?.message}
-                            />
-                            <FormTextInput
-                                id="max_examiner_lecturers"
-                                label="Max Examiners"
-                                type="number"
-                                {...register('max_examiner_lecturers')}
-                                error={errors.max_examiner_lecturers?.message}
-                            />
-                            <FormTextInput
+                            {/* <FormTextInput
                                 id="sp_address"
                                 label="Address"
                                 type="text"
@@ -293,6 +181,13 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 label="Learning Outcomes"
                                 {...register('program_learning_outcomes')}
                                 error={errors.program_learning_outcomes?.message}
+                            /> */}
+                            <FormTextInput
+                                id="max_semester"
+                                label="Maximal Semeter"
+                                type="number"
+                                {...register('max_semester', { valueAsNumber: true })}
+                                error={errors.max_semester?.message}
                             />
                             <Controller
                                 name="faculty_id"
@@ -300,7 +195,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="faculty_id"
-                                        label="Faculty"
+                                        label="Fakultas"
                                         value={field.value}
                                         onValueChange={field.onChange}
                                         error={errors.faculty_id?.message}
@@ -319,7 +214,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="academic_periods_id"
-                                        label="Academic Periode"
+                                        label="Periode Akademik"
                                         value={field.value}
                                         onValueChange={field.onChange}
                                         error={errors.academic_periods_id?.message}
@@ -332,84 +227,40 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     </FormSelectInput>
                                 )}
                             />
-                            <Controller
-                                name="final_project_types_id"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="final_project_types_id"
-                                        label="Final Project Type"
-                                        value={field.value}
-                                        onValueChange={field.onChange}
-                                        error={errors.final_project_types_id?.message}
-                                    >
-                                        {FinalProject.map((Final: any) => (
-                                            <SelectItem key={Final.id} value={String(Final.id)}>
-                                                {Final.name}
-                                            </SelectItem>
-                                        ))}
-                                    </FormSelectInput>
-                                )}
-                            />
-                            <Controller
-                                name="study_program_accreditations_id"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="study_program_accreditations_id"
-                                        label="Prodi Accreditations"
-                                        value={field.value}
-                                        onValueChange={field.onChange}
-                                        error={errors.study_program_accreditations_id?.message}
-                                    >
-                                        {AcreditationProdi.map((Acreditation: any) => (
-                                            <SelectItem key={Acreditation.id} value={String(Acreditation.id)}>
-                                                {Acreditation.accreditation_score}
-                                            </SelectItem>
-                                        ))}
-                                    </FormSelectInput>
-                                )}
-                            />
-                            <Controller
-                                name="univ_education_levels_id"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="univ_education_levels_id"
-                                        label="Univ Education Level"
-                                        value={field.value}
-                                        onValueChange={field.onChange}
-                                        error={errors.univ_education_levels_id?.message}
-                                    >
-                                        {UnivEducation.map((Univ: any) => (
-                                            <SelectItem key={Univ.id} value={String(Univ.id)}>
-                                                {Univ.edu_study_period}
-                                            </SelectItem>
-                                        ))}
-                                    </FormSelectInput>
-                                )}
-                            />
-                            <FormTextInput
+                            {/* <FormTextInput
                                 id="sp_vision"
-                                label="Vision"
+                                label="Vissi"
                                 type="textarea"
                                 {...register('sp_vision')}
                                 error={errors.sp_vision?.message}
                             />
                             <FormTextInput
                                 id="sp_mission"
-                                label="Mission"
+                                label="Missi"
                                 type="textarea"
                                 {...register('sp_mission')}
                                 error={errors.sp_mission?.message}
                             />
                             <FormTextInput
                                 id="sp_description"
-                                label="Description"
+                                label="Keterangan"
                                 type="textarea"
                                 {...register('sp_description')}
                                 error={errors.sp_description?.message}
-                            />
+                            /> */}
+                            <div className="pt-2">
+                                <Label>Status</Label>
+                                <Controller
+                                    name="status"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <div className="flex items-center gap-4">
+                                            <Switch checked={field.value} onCheckedChange={field.onChange} id="status" />
+                                            <Label htmlFor="status">{field.value ? 'Active' : 'Non Aktif'}</Label>
+                                        </div>
+                                    )}
+                                />
+                            </div>
                         </div>
                         <div className="flex gap-3 pt-2">
                             <Button
