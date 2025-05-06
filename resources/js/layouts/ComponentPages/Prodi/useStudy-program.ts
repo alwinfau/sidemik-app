@@ -11,7 +11,6 @@ export const useStudyProgram = () => {
     const [totalPages, setTotalPages] = useState<number>(1);
     const [Facultas, setFakultas] = useState<any>([]);
     const [AcademicPeriod, setAcademicPeriod] = useState<any>([]);
-    const [FinalProject, setFinalProdject] = useState<any>([]);
 
     const fetchData = async (currentPage = 1) => {
         try {
@@ -93,7 +92,7 @@ export const useStudyProgram = () => {
         setPage,
         Facultas,
         AcademicPeriod,
-        FinalProject,
-        fecthRelasi,
+        
+        fecthRelasi
     };
 };
