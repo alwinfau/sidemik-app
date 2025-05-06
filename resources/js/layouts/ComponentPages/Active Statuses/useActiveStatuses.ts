@@ -10,7 +10,6 @@ export const useActiveStatus = () => {
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
 
-
     const fetchData = async (currentPage = 1) => {
         try {
             setIsLoading(true);

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { StatusDosen } from './Column';
 import { useAxios } from '../../../hooks/useAxios';
+import { StatusDosen } from './Column';
 
 export const useStatusDosen = () => {
     const { get, post, put, del } = useAxios();
@@ -9,7 +9,6 @@ export const useStatusDosen = () => {
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
-
 
     const fetchData = async (currentPage = 1) => {
         try {

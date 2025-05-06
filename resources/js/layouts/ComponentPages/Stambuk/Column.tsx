@@ -6,14 +6,14 @@ export type Stambuk = {
     id?: number;
     year: Date;
     name: string;
-    ukt: string;
-    description: string;
-    curriculum_years: {
-        curriculum_years_name: string;
+    ukt: number;
+    // description: string;
+    curriculums: {
+        curriculum_year: Date;
     };
-    // studi_program: {
-    //     idn_sp_name: string;
-    // }
+    study_programs: {
+        idn_sp_name: string;
+    };
 };
 
 export const columns = (onEdit: (row: Stambuk) => void, onDelete: (id: string) => void): ColumnDef<Stambuk>[] => [
@@ -25,12 +25,16 @@ export const columns = (onEdit: (row: Stambuk) => void, onDelete: (id: string) =
     { accessorKey: 'year', header: 'Tahun' },
     { accessorKey: 'name', header: 'Nama Stambuk' },
     { accessorKey: 'ukt', header: 'UKT' },
-    { accessorKey: 'description', header: 'Keterangan' },
-    { header: 'Tahun Kurikulum', accessorFn: (row) => row.curriculum_years?.curriculum_years_name ?? null, id: 'curriculum_years' },
-    // { header: 'Academic Period',
-    //     accessorFn: (row) => row.studi_program?.idn_sp_name ?? null,
-    //     id: 'studi_program',
-    // },
+    // { accessorKey: 'description', header: 'Keterangan' },
+    { 
+        header: 'Tahun Kurikulum', 
+        accessorFn: (row) => row.curriculums?.curriculum_year ?? null, 
+        id: 'curriculum' },
+    { 
+        header: 'Prodi', 
+        accessorFn: (row) => row.study_programs?.idn_sp_name ?? null, 
+        id: 'study_program' 
+    },
     {
         id: 'actions',
         header: 'Actions',

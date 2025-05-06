@@ -4,12 +4,12 @@ import ConfirmDeleteDialog from '@/components/ui/Components_1/DeleteModal';
 import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@/components/ui/toast';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/react';
 import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { AcademicYearType, columns } from './Column';
 import ModalForm from './Modal';
 import { useAcademicYear } from './useAcademicYears';
-import { Head } from '@inertiajs/react';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Academic Year',
@@ -36,7 +36,7 @@ const AcademicYearPage = () => {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title='Tahun Ajaran' />
+            <Head title="Tahun Ajaran" />
             <div className="m-6">
                 <div className="flex items-center justify-between">
                     <h2 className="text-3xl font-bold">Tahun Ajaran</h2>

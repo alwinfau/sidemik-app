@@ -5,7 +5,7 @@ import { Head } from '@inertiajs/react';
 
 type Props = {};
 
-const ActiveStatusType= (props: Props) => {
+const ActiveStatusType = (props: Props) => {
     const breadcrumbs: BreadcrumbItem[] = [{ title: ' ActiveStatusPage ', href: '/active-statuses' }];
 
     return (

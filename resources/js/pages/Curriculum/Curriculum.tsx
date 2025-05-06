@@ -1,4 +1,4 @@
-import Curiculumpage from "@/layouts/ComponentPages/Curriculum/Index";
+import Curiculumpage from '@/layouts/ComponentPages/Curriculum/Index';
 
 type Props = {};
 

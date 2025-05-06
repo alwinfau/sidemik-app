@@ -4,12 +4,12 @@ import ConfirmDeleteDialog from '@/components/ui/Components_1/DeleteModal';
 import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@/components/ui/toast';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/react';
 import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { columns, PeriodeAcademicType } from './Column';
 import ModalForm from './Modal';
 import { useAcademicPriod } from './useAcademicPeriod';
-import { Head } from '@inertiajs/react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -36,7 +36,7 @@ const PeriodeAcademic = () => {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title='Periode-Akademik' />
+            <Head title="Periode-Akademik" />
             <div className="m-6">
                 <div className="flex items-center justify-between">
                     <h2 className="text-3xl font-bold">Periode-Akademik</h2>

@@ -5,7 +5,7 @@ import { Head } from '@inertiajs/react';
 
 type Props = {};
 
-const JabatanFungsional= (props: Props) => {
+const JabatanFungsional = (props: Props) => {
     const breadcrumbs: BreadcrumbItem[] = [{ title: ' Jabatan Fungsional ', href: '/functional-position' }];
 
     return (

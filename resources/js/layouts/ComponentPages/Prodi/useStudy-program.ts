@@ -60,7 +60,7 @@ export const useStudyProgram = () => {
             if (error.response.status === 500) {
                 setToast({ message: 'Failed to submit study-program', type: 'error' });
             }
-            console.log(error)
+            console.log(error);
             throw error.response.data;
         } finally {
             setIsLoading(false);
@@ -94,6 +94,6 @@ export const useStudyProgram = () => {
         Facultas,
         AcademicPeriod,
         FinalProject,
-        fecthRelasi
+        fecthRelasi,
     };
-}
+};

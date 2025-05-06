@@ -28,7 +28,7 @@ export const useCurriculum = () => {
     const fecthRelasi = async () => {
         try {
             const resProdi: any = await get('/study-program');
-            setProdi(resProdi.data.data);            
+            setProdi(resProdi.data.data);
         } catch (err) {
             console.error('Error fetching:', err);
         }
@@ -55,7 +55,7 @@ export const useCurriculum = () => {
             if (error.response.status === 500) {
                 setToast({ message: 'Failed to submit curriculum', type: 'error' });
             }
-            console.log(error)
+            console.log(error);
             throw error.response.data;
         } finally {
             setIsLoading(false);
@@ -87,6 +87,6 @@ export const useCurriculum = () => {
         totalPages,
         setPage,
         Prodi,
-        fecthRelasi
+        fecthRelasi,
     };
-}
+};

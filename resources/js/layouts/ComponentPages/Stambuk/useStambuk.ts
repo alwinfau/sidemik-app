@@ -9,12 +9,12 @@ export const useStambuk = () => {
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
-    const [CuriculumYears, setCuriculumYears] = useState<any[]>([]);
+    const [Curriculum, setCurriculum] = useState<any[]>([]);
     const [Prodi, setProdi] = useState<any[]>([]);
     const fetchData = async (currentPage = 1) => {
         try {
             setIsLoading(true);
-            const res: any = await get(`batch?page=${currentPage}&limit=5`);
+            const res: any = await get(`/batch?page=${currentPage}&limit=5`);
             setData(res.data.data);
             setPage(res.data.current_page);
             setTotalPages(res.data.last_page);
@@ -27,8 +27,8 @@ export const useStambuk = () => {
 
     const fectRelasi = async () => {
         try {
-            const resAcademic: any = await get('/curriculum-year');
-            setCuriculumYears(resAcademic.data.data);
+            const resAcademic: any = await get('/curriculum');
+            setCurriculum(resAcademic.data.data);
 
             const resProdi: any = await get('/study-program');
             setProdi(resProdi.data.data);
@@ -79,5 +79,5 @@ export const useStambuk = () => {
             onSuccess?.();
         }
     };
-    return { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, totalPages, setPage, CuriculumYears, Prodi, fectRelasi };
+    return { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, totalPages, setPage, Curriculum, Prodi, fectRelasi };
 };

@@ -36,7 +36,8 @@ const StatusDosenPage = () => {
                     }}
                     className="flex items-center rounded bg-green-600 p-3 font-bold text-white hover:bg-green-500"
                 >
-                    <CirclePlus className="h-6 w-6" />Status Dosen
+                    <CirclePlus className="h-6 w-6" />
+                    Status Dosen
                 </Button>
             </div>
 

@@ -1,17 +1,14 @@
 import { Button } from '@/components/ui/button';
+import DateInput from '@/components/ui/Components_1/DateInput';
 import { FormSelectInput, FormTextInput } from '@/components/ui/Components_1/FormInput';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SelectItem } from '@/components/ui/select';
-import { Switch } from '@/components/ui/swicth';
-import { useAxios } from '@/hooks/useAxios';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useCurriculum } from './useCurriculum';
-import DateInput from '@/components/ui/Components_1/DateInput';
 
 type ModalProps = {
     open: boolean;
@@ -21,18 +18,17 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    code: z.string({message: 'Code Harus Diisi'}).min(1, 'Code Harus lebih dari 1 karakter'),
-    curriculum_year: z.string({message: 'Tahun Kurikulum Wajib Diisi'}),
-    sks_required: z.number({message: 'SKS wajib Diisi'}).positive('SKS harus diisi dengan bilangan positive'),
-    sks_elective: z.number({message: 'SKS wajib Diisi'}).positive('SKS harus diisi dengan bilangan positive'),
+    code: z.string({ message: 'Code Harus Diisi' }).min(1, 'Code Harus lebih dari 1 karakter'),
+    curriculum_year: z.string({ message: 'Tahun Kurikulum Wajib Diisi' }),
+    sks_required: z.number({ message: 'SKS wajib Diisi' }).positive('SKS harus diisi dengan bilangan positive'),
+    sks_elective: z.number({ message: 'SKS wajib Diisi' }).positive('SKS harus diisi dengan bilangan positive'),
     // description: z.string().nullable(),
-    study_programs_id: z.string({message: 'Prodi wajib diisi'})
-})
+    study_programs_id: z.string({ message: 'Prodi wajib diisi' }),
+});
 
 type FormInputs = z.infer<typeof schema>;
 
 const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) => {
-
     const {
         register,
         handleSubmit,
@@ -45,28 +41,28 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
     });
 
     useEffect(() => {
-        if(defaultValues){
+        if (defaultValues) {
             reset({
                 code: defaultValues.code || '',
                 curriculum_year: defaultValues.curriculum_year || '',
                 sks_required: defaultValues.sks_required || 0,
-                sks_elective:defaultValues.sks_elective || 0,
+                sks_elective: defaultValues.sks_elective || 0,
                 // description: defaultValues.description || '',
-                study_programs_id: String(defaultValues.study_programs_id) || ''
-            })
-        }else{
+                study_programs_id: String(defaultValues.study_programs_id) || '',
+            });
+        } else {
             reset({
                 code: '',
                 curriculum_year: '',
                 sks_required: 0,
                 sks_elective: 0,
                 // description: '',
-                study_programs_id: ''
-            })
+                study_programs_id: '',
+            });
         }
-    }, [defaultValues,reset])
+    }, [defaultValues, reset]);
 
-    const {Prodi,  fecthRelasi} = useCurriculum();
+    const { Prodi, fecthRelasi } = useCurriculum();
 
     useEffect(() => {
         fecthRelasi();
@@ -86,7 +82,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         }
     };
 
-    return(
+    return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
                 <DialogHeader>
@@ -97,12 +93,12 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                         <div className="space-y-4 px-2">
                             <FormTextInput
                                 id="code"
-                                placeholder='Masukan Kode Kurikulum'
+                                placeholder="Masukan Kode Kurikulum"
                                 label="code"
                                 {...register('code')}
                                 error={errors.code?.message}
                             />
-                                <DateInput
+                            <DateInput
                                 label="Tahun Kurikulum"
                                 id="curriculum_year"
                                 placeholder="Masukan Tahun Kurikulum"
@@ -150,7 +146,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 {...register('description')}
                                 error={errors.description?.message}
                             />  */}
-                            
                         </div>
                         <div className="flex gap-3 pt-2">
                             <Button
@@ -165,6 +160,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 </ScrollArea>
             </DialogContent>
         </Dialog>
-    )
-}
+    );
+};
 export default ModalForm;

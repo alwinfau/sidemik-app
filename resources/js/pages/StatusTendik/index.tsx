@@ -17,4 +17,4 @@ const StatusTendik = (props: Props) => {
         </>
     );
 };
-export default StatusTendik ;
+export default StatusTendik;

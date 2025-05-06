@@ -99,5 +99,5 @@ const Curiculumpage = () => {
             </div>
         </AppLayout>
     );
-}
+};
 export default Curiculumpage;

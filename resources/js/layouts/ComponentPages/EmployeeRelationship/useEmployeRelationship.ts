@@ -10,7 +10,6 @@ export const useEmployeeRelationshipTypes = () => {
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
 
-
     const fetchData = async (currentPage = 1) => {
         try {
             setIsLoading(true);
@@ -53,7 +52,6 @@ export const useEmployeeRelationshipTypes = () => {
         }
     };
 
-    
     const handleDelete = async (id: number, onSuccess?: () => void) => {
         try {
             setIsLoading(true);

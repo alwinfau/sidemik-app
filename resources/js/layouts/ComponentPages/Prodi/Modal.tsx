@@ -5,9 +5,8 @@ import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SelectItem } from '@/components/ui/select';
 import { Switch } from '@/components/ui/swicth';
-import { useAxios } from '@/hooks/useAxios';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useStudyProgram } from './useStudy-program';
@@ -36,7 +35,7 @@ const schema = z.object({
     faculty_id: z.string(),
     academic_periods_id: z.string(),
     final_project_types_id: z.string(),
-    status: z.boolean()
+    status: z.boolean(),
 });
 
 type FormInputs = z.infer<typeof schema>;
@@ -73,7 +72,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 faculty_id: String(defaultValues.faculty_id) || '',
                 academic_periods_id: String(defaultValues.academic_periods_id) || '',
                 final_project_types_id: String(defaultValues.final_project_types_id) || '',
-                status: Boolean(defaultValues.status)
+                status: Boolean(defaultValues.status),
             });
         } else {
             reset({
@@ -94,12 +93,12 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 faculty_id: '',
                 academic_periods_id: '',
                 final_project_types_id: '',
-                status: false
+                status: false,
             });
         }
     }, [defaultValues, reset]);
 
-    const {Facultas, AcademicPeriod,  fecthRelasi} = useStudyProgram();
+    const { Facultas, AcademicPeriod, fecthRelasi } = useStudyProgram();
 
     useEffect(() => {
         fecthRelasi();
@@ -131,19 +130,19 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput id="sp_code" label="code" {...register('sp_code')} error={errors.sp_code?.message} />
                             <FormTextInput
                                 id="idn_sp_name"
-                                label="Program Name (ID)"
+                                label="Nama Prodi (ID)"
                                 {...register('idn_sp_name')}
                                 error={errors.idn_sp_name?.message}
                             />
                             <FormTextInput
                                 id="eng_sp_name"
-                                label="Program Name (eng)"
+                                label="Nama Prodi (eng)"
                                 {...register('eng_sp_name')}
                                 error={errors.eng_sp_name?.message}
                             />
                             <FormTextInput
                                 id="sp_short_name"
-                                label="Short Name (ENG)"
+                                label="Singkatan"
                                 type="text"
                                 {...register('sp_short_name')}
                                 error={errors.sp_short_name?.message}

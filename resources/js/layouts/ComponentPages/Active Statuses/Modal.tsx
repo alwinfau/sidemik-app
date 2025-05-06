@@ -1,14 +1,14 @@
 import { Button } from '@/components/ui/button';
 import { FormTextInput } from '@/components/ui/Components_1/FormInput';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Switch } from '@/components/ui/swicth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoaderCircle } from 'lucide-react';
-import { Switch } from '@/components/ui/swicth';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Label } from '@/components/ui/label';
 
 type ModalProps = {
     open: boolean;
@@ -41,7 +41,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         if (defaultValues) {
             reset({
                 active_status_code: defaultValues.active_status_code || '',
-                active_status_name: Boolean (defaultValues.active_status_name) || false,
+                active_status_name: Boolean(defaultValues.active_status_name) || false,
                 active_status_description: defaultValues.active_status_description || '',
             });
         } else {
@@ -111,7 +111,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
 
                             <div className="flex items-center space-x-4">
-                                <Label htmlFor='active_status_name'>Status Active</Label>
+                                <Label htmlFor="active_status_name">Status Active</Label>
                                 <Controller
                                     defaultValue={false}
                                     name="active_status_name"

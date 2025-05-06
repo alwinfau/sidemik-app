@@ -78,6 +78,6 @@ export const useFinalProject = () => {
         setToast,
         page,
         totalPages,
-        setPage
+        setPage,
     };
 };

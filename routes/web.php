@@ -159,6 +159,10 @@ Route::get('/curriculum', function() {
     return Inertia::render(component:'Curriculum/Curriculum');
 })->name('Curriculum');
 
+// Route stambuk
+Route::get('/stambuk', function() {
+    return Inertia::render(component:'Stambuk/stambuk');
+})->name('Curriculum');
 
 // Tambahan route file
 require __DIR__.'/settings.php';

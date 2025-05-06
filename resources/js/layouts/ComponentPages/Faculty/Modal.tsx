@@ -193,8 +193,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     </FormSelectInput>
                                 )}
                             />
-                            
-                            
+
                             <div className="pt-2">
                                 <Label>Status</Label>
                                 <Controller

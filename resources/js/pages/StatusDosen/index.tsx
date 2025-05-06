@@ -17,4 +17,4 @@ const StatusDosen = (props: Props) => {
         </>
     );
 };
-export default StatusDosen ;
+export default StatusDosen;

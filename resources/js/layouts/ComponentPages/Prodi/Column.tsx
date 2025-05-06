@@ -64,10 +64,10 @@ export const columns = (onEdit: (row: Proditype) => void, onDelete: (id: string)
     //     accessorKey: 'program_learning_outcomes',
     //     header: 'Learning Outcomes',
     // },
-    { accessorKey: 'max_semester', header: 'Max Semester'},
+    { accessorKey: 'max_semester', header: 'Max Semester' },
     { header: 'Fakultas', accessorFn: (row) => row.faculty?.name ?? null, id: 'faculty' },
     { header: 'Academic Period', accessorFn: (row) => row.academic_period?.name ?? null, id: 'academic_period' },
-    
+
     {
         accessorKey: 'status',
         header: 'Status',

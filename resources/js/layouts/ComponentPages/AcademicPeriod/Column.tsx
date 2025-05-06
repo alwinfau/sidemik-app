@@ -46,7 +46,7 @@ export const columns = (onEdit: (row: PeriodeAcademicType) => void, onDelete: (i
     { accessorKey: 'end_final_exam', header: 'Tanggal Selesai UAS' },
     { accessorKey: 'number_of_meetings', header: 'Jumlah Pertemuan' },
     { accessorKey: 'min_presence', header: 'Jumlah Min Presensi' },
-    {   
+    {
         accessorKey: 'is_active',
         header: 'Status',
         cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Aktif' : 'Tidak Aktif'}</div>,

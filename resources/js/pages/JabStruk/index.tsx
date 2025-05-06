@@ -5,7 +5,7 @@ import { Head } from '@inertiajs/react';
 
 type Props = {};
 
-const JabatanStruktural= (props: Props) => {
+const JabatanStruktural = (props: Props) => {
     const breadcrumbs: BreadcrumbItem[] = [{ title: ' Jabatan Struktural ', href: '/structural-position' }];
 
     return (

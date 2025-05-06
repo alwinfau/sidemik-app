@@ -16,8 +16,8 @@ export const columns = (onEdit: (row: ActiveStatus) => void, onDelete: (id: stri
         cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
     },
     { accessorKey: 'active_status_code', header: ' Code' },
-    { 
-        accessorKey: 'active_status_name', 
+    {
+        accessorKey: 'active_status_name',
         header: ' Name',
         cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Active' : 'Inactive'}</div>,
     },

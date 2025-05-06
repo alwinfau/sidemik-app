@@ -5,13 +5,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
+import { SelectItem } from '@/components/ui/select';
 import { Switch } from '@/components/ui/swicth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useAcademicPriod } from './useAcademicPeriod';
-import { SelectItem } from '@/components/ui/select';
 
 type ModalProps = {
     open: boolean;
@@ -181,7 +181,9 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         onValueChange={field.onChange}
                                         error={errors.semester?.message}
                                     >
-                                        <SelectItem value="#" disabled>Pilih Semester</SelectItem>
+                                        <SelectItem value="#" disabled>
+                                            Pilih Semester
+                                        </SelectItem>
                                         <SelectItem value="Ganjil">Semester Ganjil</SelectItem>
                                         <SelectItem value="Genap">Semester Genap</SelectItem>
                                     </FormSelectInput>

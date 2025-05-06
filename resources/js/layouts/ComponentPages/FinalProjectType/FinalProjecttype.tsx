@@ -2,15 +2,14 @@ import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/Components_1/DataTable';
 import ConfirmDeleteDialog from '@/components/ui/Components_1/DeleteModal';
 import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@/components/ui/toast';
-import { useAxios } from '@/hooks/useAxios';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/react';
 import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { FinalProjectType, columns } from './Column';
 import ModalForm from './Modal';
 import { useFinalProject } from './useFinalProject';
-import { Head } from '@inertiajs/react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -36,10 +35,9 @@ const FinalProjectTypePage = () => {
         }
     }, [toast]);
 
-    
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title='Jenis Tugas Akhir' />
+            <Head title="Jenis Tugas Akhir" />
             <div className="m-6">
                 <div className="flex items-center justify-between">
                     <h2 className="text-3xl font-bold">Jenis Tugas Akhir</h2>

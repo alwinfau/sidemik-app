@@ -34,7 +34,7 @@ const FakultasPage = () => {
             return () => clearTimeout(timer);
         }
     }, [toast]);
-    
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Fakultas" />

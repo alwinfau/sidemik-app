@@ -19,8 +19,6 @@ const Prodipage = () => {
     const [editing, setEditing] = useState<Proditype | undefined>();
     const [deleteId, setDeleteId] = useState<number | null>(null);
 
-
-    
     useEffect(() => {
         if (toast) {
             const timer = setTimeout(() => setToast(null), 3000);

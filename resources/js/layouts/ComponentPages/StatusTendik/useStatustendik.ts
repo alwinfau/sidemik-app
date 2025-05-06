@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { StatusTendik } from './Column';
 import { useAxios } from '../../../hooks/useAxios';
+import { StatusTendik } from './Column';
 
 export const useStatusTendik = () => {
     const { get, post, put, del } = useAxios();
@@ -9,7 +9,6 @@ export const useStatusTendik = () => {
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
-
 
     const fetchData = async (currentPage = 1) => {
         try {

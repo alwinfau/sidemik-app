@@ -180,6 +180,10 @@ const data: AppData = {
                     title: 'Kurikulum',
                     url: '/curriculum',
                 },
+                {
+                    title: 'Stambuk',
+                    url: '/stambuk',
+                },
             ],
         },
 
@@ -239,8 +243,7 @@ const data: AppData = {
                 {
                     title: 'Status Dosen',
                     url: '/lecture-status',
-                }
-
+                },
             ],
         },
         {

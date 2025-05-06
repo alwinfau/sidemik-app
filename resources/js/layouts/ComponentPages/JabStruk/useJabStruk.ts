@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { JabatanStruktural } from './Column';
 import { useAxios } from '../../../hooks/useAxios';
+import { JabatanStruktural } from './Column';
 
 export const useJabatanStruktural = () => {
     const { get, post, put, del } = useAxios();
@@ -9,7 +9,6 @@ export const useJabatanStruktural = () => {
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
-
 
     const fetchData = async (currentPage = 1) => {
         try {
