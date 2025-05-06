@@ -27,10 +27,10 @@ export type EmployeesType = {
     study_programs: {
         name: string;
     };
-    nidn: string;
-    nuptk: string;
-    nitk: string;
-    nidk: string;
+    nidn: null;
+    nuptk: null;
+    nitk: null;
+    nidk: null;
     functional_positons: {
         name: string;
     }

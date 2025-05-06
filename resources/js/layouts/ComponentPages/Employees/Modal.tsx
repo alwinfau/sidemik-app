@@ -177,6 +177,13 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 error={errors.name?.message}
                             />
                             <FormTextInput
+                                id="foto"
+                                type="file"
+                                label="Foto"
+                                {...register('foto')}
+                                error={errors.foto?.message}
+                            />
+                            <FormTextInput
                                 id="front_title"
                                 type="text"
                                 label="Nama Depan"
@@ -223,7 +230,71 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 register={register('birth_date')}
                                 error={errors.birth_date}
                             />
-                            
+                            <FormTextInput
+                                id="email_pt"
+                                type="text"
+                                label="Email PT"
+                                placeholder="Enter Email PT"
+                                {...register('email_pt')}
+                                error={errors.email_pt?.message}    
+                            />
+                            <FormTextInput
+                                id="phone"
+                                type="text"
+                                label="Nomor Telepon"
+                                placeholder="Enter Nomor Telepon"
+                                {...register('phone')}
+                                error={errors.phone?.message}
+                            />
+                            <FormTextInput
+                                id="emergency_phone_1"
+                                type="text"
+                                label="Nomor Telepon Darurat"
+                                placeholder="Enter Nomor Telepon Darurat"
+                                {...register('emergency_phone')}
+                                error={errors.emergency_phone?.message}
+                            />
+                            <FormTextInput
+                                id="relationship_1"
+                                type="text"
+                                label="Hubungan"
+                                placeholder='Enter Hubungan Darurat'
+                                {...register('relationship_1')}
+                                error={errors.relationship_1?.message}
+                            />
+                            <FormTextInput
+                                id="emergency_phone_2"
+                                type="text"
+                                label="Nomor Telepon Darurat 2"         
+                                placeholder="Enter Nomor Telepon Darurat 2"
+                                {...register('emergency_phone_2')}
+                                error={errors.emergency_phone_2?.message}
+                            />
+                            <FormTextInput
+                                id="relationship_2"
+                                type="text"
+                                label="Hubungan 2"
+                                placeholder='Enter Hubungan 2'
+                                {...register('relationship_2')}
+                                error={errors.relationship_2?.message}
+                            />
+                            <FormTextInput
+                                id="status"
+                                type="text"
+                                label="Status"
+                                placeholder="Enter Status"
+                                {...register('status')}
+                                error={errors.status?.message}
+                            />
+                            <FormTextInput
+                                id="type"
+                                type="text"
+                                label="Tipe"
+                                placeholder="Enter Tipe"
+                                {...register('type')}
+                                error={errors.type?.message}
+                            />
+
                             <FormTextInput
                                 id="nidn"
                                 type="text"
