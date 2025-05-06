@@ -4,42 +4,46 @@ import { Pencil, Trash2 } from 'lucide-react';
 
 export type EmployeesType = {
     id?: number;
-    emp_nip: string;
-    emp_full_name: string;
-    emp_front_title: string;
-    emp_back_title: string;
-    emp_gender: string;
-    emp_religion: string;
-    emp_birth_place: string;
-    emp_birth_date: string;
-    emp_married_status: string;
-    study_programs_id: {
-        idn_sp_name: string;
-    };
-    active_statuses_id: {
-        activity_status_name: string;
-    };
-    employments_relationships_id: {
+    nip: string;
+    name: string;
+    foto:null;
+    front_title: number;
+    back_title: string;
+    gender: boolean;
+    religion: string;
+    birth_place: string;
+    birth_date: Date;
+    email_pt: string;
+    phone: string;
+    emergency_phone: string;
+    relationship_1: string;
+    emergency_phone_2: null;
+    relationship_2: string;
+    status: boolean;
+    type: string;
+    staff_status: {
+        name: string;
+    }
+    study_programs: {
         name: string;
     };
-    academic_positions_id: {
-        academic_position_name: string;
-    };
-    emp_institution_origin: string;
-    emp_areas_expertise: string;
-    emp_collage_email: string;
-    finger_account_number: string;
-    sinta_id: string;
-    orchid_id: string;
-    scopus_id: string;
     nidn: string;
     nuptk: string;
     nitk: string;
     nidk: string;
-    nupn: string;
-    nbm: string;
-    lecturer_certification_date: string;
-    lecturer_certification_number: string;
+    functional_positons: {
+        name: string;
+    }
+    pns_rank: string;
+    struktural_positions: {
+        name: string;
+    }
+    staff_division: {
+        name: string;
+    }
+    lecture_status: {
+        name: string;
+    }
 };
 
 export const columns = (onEdit: (row: EmployeesType) => void, onDelete: (id: string) => void): ColumnDef<EmployeesType>[] => [
@@ -48,37 +52,61 @@ export const columns = (onEdit: (row: EmployeesType) => void, onDelete: (id: str
         header: () => <div className="text-center">No</div>,
         cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
     },
-    { accessorKey: 'emp_nip', header: 'NIP' },
-    { accessorKey: 'emp_full_name', header: 'Full Name' },
-    { accessorKey: 'emp_front_title', header: 'Front Title' },
-    { accessorKey: 'emp_back_title', header: 'Back Title' },
-    { accessorKey: 'emp_gender', header: 'Gender' },
-    { accessorKey: 'emp_religion', header: 'Religion' },
-    { accessorKey: 'emp_birth_place', header: 'Birth Place' },
-    { accessorKey: 'emp_birth_date', header: 'Birth Date' },
-    { accessorKey: 'emp_married_status', header: 'Married Status' },
-    { accessorKey: 'study_programs_id', header: 'Study Program' },
-    { accessorKey: 'active_statuses_id', header: 'Active Status' },
-    { accessorKey: 'employments_relationships_id', header: 'Employment Relationship' },
-    { accessorKey: 'academic_positions_id', header: 'Academic Position' },
-    { accessorKey: 'emp_institution_origin', header: 'Institution Origin' },
-    { accessorKey: 'emp_areas_expertise', header: 'Areas of Expertise' },
-    { accessorKey: 'emp_collage_email', header: 'Collage Email' },
-    { accessorKey: 'finger_account_number', header: 'Finger Account Number' },
-    { accessorKey: 'sinta_id', header: 'Sinta ID' },
-    { accessorKey: 'orchid_id', header: 'Orchid ID' },
-    { accessorKey: 'scopus_id', header: 'Scopus ID' },
+    { accessorKey: 'nip', header: 'NIP' },
+    { accessorKey: 'name', header: 'Nama' },
+    { accessorKey: 'foto', header: 'Foto' },
+    { accessorKey: 'front_title', header: 'Nama Depan' },
+    { accessorKey: 'back_title', header: 'Nama Belakang' },
+    { accessorKey: 'gender', header: 'Jenis Kelamin' },
+    { accessorKey: 'religion', header: 'Agama' },
+    { accessorKey: 'birth_place', header: 'Tempat Lahir' },
+    { accessorKey: 'birth_date', header: 'Tanggal Lahir' },
+    { accessorKey: 'email_pt', header: 'Email PT' },
+    { accessorKey: 'phone', header: 'Handphone' },
+    { accessorKey: 'emergency_phone', header: 'Handphone Darurat' },
+    { accessorKey: 'relationship_1', header: 'Hubungan 1' },
+    { accessorKey: 'emergency_phone_2', header: 'Handphone Darurat 2' },
+    { accessorKey: 'relationship_2', header: 'Hubungan 2' },
+    { accessorKey: 'status', header: 'Status' },
+    { accessorKey: 'type', header: 'Jenis' },
+    { accessorKey: 'pns_rank', header: 'PNS Rank' },
     { accessorKey: 'nidn', header: 'NIDN' },
     { accessorKey: 'nuptk', header: 'NUPTK' },
     { accessorKey: 'nitk', header: 'NITK' },
     { accessorKey: 'nidk', header: 'NIDK' },
-    { accessorKey: 'nupn', header: 'NUPN' },
-    { accessorKey: 'nbm', header: 'NBM' },
-    { accessorKey: 'lecturer_certification_date', header: 'Lecturer Certification Date' },
-    { accessorKey: 'lecturer_certification_number', header: 'Lecturer Certification Number' },
+    {
+        header: 'Status Dosen',
+        accessorFn: (row) => row.lecture_status?.name ?? null,
+        id: 'lecture_status',
+    },
+    {
+        header: 'Status Tendik',
+        accessorFn: (row) => row.staff_status?.name ?? null,
+        id: 'staff_status',
+    },
+    {
+        header: 'Divisi Tendik',
+        accessorFn: (row) => row.staff_division?.name ?? null,
+        id: 'staff_division',
+    },
+    {
+        header: 'Jabatan Struktural ',
+        accessorFn: (row) => row.struktural_positions?.name ?? null,
+        id: 'struktural_positions',
+    },
+    {
+        header: 'Jabatan Functional',
+        accessorFn: (row) => row.functional_positons?.name ?? null,
+        id: 'functional_positons',
+    },  
+    { 
+        header: 'Program Studi',
+        accessorFn: (row) => row.study_programs?.name ?? null,
+        id: 'study_programs',
+    },
     {
         id: 'actions',
-        header: 'Actions',
+        header: 'Aksi',
         cell: ({ row }) => (
             <div className="flex gap-2">
                 <Button className="bg-blue-700 hover:bg-blue-600" size="sm" onClick={() => onEdit(row.original)}>
