@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { FinalProjectType, columns } from './Column';
 import ModalForm from './Modal';
 import { useFinalProject } from './useFinalProject';
+import { Head } from '@inertiajs/react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -38,6 +39,7 @@ const FinalProjectTypePage = () => {
     
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title='Jenis Tugas Akhir' />
             <div className="m-6">
                 <div className="flex items-center justify-between">
                     <h2 className="text-3xl font-bold">Jenis Tugas Akhir</h2>

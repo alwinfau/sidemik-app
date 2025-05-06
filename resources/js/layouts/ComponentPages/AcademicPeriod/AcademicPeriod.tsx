@@ -36,10 +36,10 @@ const PeriodeAcademic = () => {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title='Akademik Periode' />
+            <Head title='Periode-Akademik' />
             <div className="m-6">
                 <div className="flex items-center justify-between">
-                    <h2 className="text-3xl font-bold">Academic Period</h2>
+                    <h2 className="text-3xl font-bold">Periode-Akademik</h2>
                     <Button
                         onClick={() => {
                             setEditing(undefined);
@@ -47,7 +47,7 @@ const PeriodeAcademic = () => {
                         }}
                         className="flex items-center rounded bg-green-600 p-3 font-bold text-white hover:bg-green-500"
                     >
-                        <CirclePlus className="h-6 w-6" /> Add Academic Period
+                        <CirclePlus className="h-6 w-6" /> Add Periode-Akademik
                     </Button>
                 </div>
                 <DataTable

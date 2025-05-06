@@ -13,7 +13,7 @@ import { useStudyProgram } from './useStudy-program';
 
 const breadcrumbs: BreadcrumbItem[] = [{ title: 'Study Program', href: '/study-program' }];
 
-const ProductPage = () => {
+const Prodipage = () => {
     const { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useStudyProgram();
     const [modalOpen, setModalOpen] = useState(false);
     const [editing, setEditing] = useState<Proditype | undefined>();
@@ -34,10 +34,10 @@ const ProductPage = () => {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Study-Program" />
+            <Head title="Program-Studi" />
             <div className="m-6">
                 <div className="mb-4 flex justify-between">
-                    <h2 className="text-2xl font-bold">Study-Program</h2>
+                    <h2 className="text-2xl font-bold">Program-Studi</h2>
                     <Button
                         onClick={() => {
                             setEditing(undefined);
@@ -45,7 +45,7 @@ const ProductPage = () => {
                         }}
                         className="flex items-center rounded bg-green-500 p-3 font-bold text-white hover:bg-green-600"
                     >
-                        <CirclePlus className="h-6 w-6" /> Add Study-program
+                        <CirclePlus className="h-6 w-6" /> Add Program-Studi
                     </Button>
                 </div>
 
@@ -104,4 +104,4 @@ const ProductPage = () => {
     );
 };
 
-export default ProductPage;
+export default Prodipage;

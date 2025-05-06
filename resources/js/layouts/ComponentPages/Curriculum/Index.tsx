@@ -4,29 +4,20 @@ import ConfirmDeleteDialog from '@/components/ui/Components_1/DeleteModal';
 import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@/components/ui/toast';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/react';
 import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { AcademicYearType, columns } from './Column';
+import { columns, CurriculumType } from './Column';
 import ModalForm from './Modal';
-import { useAcademicYear } from './useAcademicYears';
-import { Head } from '@inertiajs/react';
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Academic Year',
-        href: '/academic-year',
-    },
-];
+import { useCurriculum } from './useCurriculum';
 
-const AcademicYearPage = () => {
-    const { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useAcademicYear();
+const breadcrumbs: BreadcrumbItem[] = [{ title: 'Curriculum', href: '/curriculum' }];
+
+const Curiculumpage = () => {
+    const { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useCurriculum();
     const [modalOpen, setModalOpen] = useState(false);
-    const [editing, setEditing] = useState<AcademicYearType | undefined>();
+    const [editing, setEditing] = useState<CurriculumType | undefined>();
     const [deleteId, setDeleteId] = useState<number | null>(null);
-
-    useEffect(() => {
-        fetchData();
-    }, []);
-
     useEffect(() => {
         if (toast) {
             const timer = setTimeout(() => setToast(null), 3000);
@@ -34,22 +25,27 @@ const AcademicYearPage = () => {
         }
     }, [toast]);
 
+    useEffect(() => {
+        fetchData();
+    }, []);
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title='Tahun Ajaran' />
+            <Head title="Kurikulum" />
             <div className="m-6">
-                <div className="flex items-center justify-between">
-                    <h2 className="text-3xl font-bold">Tahun Ajaran</h2>
+                <div className="mb-4 flex justify-between">
+                    <h2 className="text-2xl font-bold">Kurikulum</h2>
                     <Button
                         onClick={() => {
                             setEditing(undefined);
                             setModalOpen(true);
                         }}
-                        className="flex items-center rounded bg-green-600 p-3 font-bold text-white hover:bg-green-500"
+                        className="flex items-center rounded bg-green-500 p-3 font-bold text-white hover:bg-green-600"
                     >
-                        <CirclePlus className="h-6 w-6" /> Add Tahun Ajaran
+                        <CirclePlus className="h-6 w-6" /> Add Kurikulum
                     </Button>
                 </div>
+
                 <DataTable
                     columns={columns(
                         (row) => {
@@ -103,6 +99,5 @@ const AcademicYearPage = () => {
             </div>
         </AppLayout>
     );
-};
-
-export default AcademicYearPage;
+}
+export default Curiculumpage;

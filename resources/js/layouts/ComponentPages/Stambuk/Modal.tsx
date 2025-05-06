@@ -19,7 +19,7 @@ const schema = z.object({
     ukt: z.string(),
     description: z.string().nullable(),
     curriculum_years_id: z.string(),
-    // studi_program_id: z.string()
+    studi_programs_id: z.string()
 });
 
 type FormInputs = z.infer<typeof schema>;
@@ -44,7 +44,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 ukt: defaultValues.ukt || '',
                 description: defaultValues.description || '',
                 curriculum_years_id: String(defaultValues.curriculum_years_id) || '0',
-                // studi_program_id: String(defaultValues.studi_program_id) || '0',
+                studi_programs_id: String(defaultValues.studi_programs_id) || '0',
             });
         } else {
             reset({
@@ -53,7 +53,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 ukt: '',
                 description: '',
                 curriculum_years_id: '',
-                // studi_program_id: ''
+                studi_programs_id: ''
             });
         }
     }, [defaultValues, reset]);

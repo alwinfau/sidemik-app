@@ -154,6 +154,11 @@ Route::get('/lecture-status', function() {
     return Inertia::render(component:'StatusDosen/index');
 })->name('index');
 
+// Route Kurrikulum
+Route::get('/curriculum', function() {
+    return Inertia::render(component:'Curriculum/Curriculum');
+})->name('Curriculum');
+
 
 // Tambahan route file
 require __DIR__.'/settings.php';

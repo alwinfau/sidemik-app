@@ -177,12 +177,8 @@ const data: AppData = {
                     url: '/univ-level-education',
                 },
                 {
-                    title: 'Curiculum Year',
-                    url: '/curiculum-year',
-                },
-                {
-                    title: 'Curiculum Prodi',
-                    url: '/study-program-curriculums',
+                    title: 'Kurikulum',
+                    url: '/curriculum',
                 },
             ],
         },
