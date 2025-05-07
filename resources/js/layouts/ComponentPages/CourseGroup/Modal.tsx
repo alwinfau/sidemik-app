@@ -75,20 +75,32 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
                 <DialogHeader title="Course Type">
-                    <DialogTitle>{defaultValues ? 'Edit Course Group' : 'Add Course Group'}</DialogTitle>
+                    <DialogTitle>{defaultValues ? 'Edit Kelompok Mata Kuliah' : 'Add Kelompok Mata Kuliah'}</DialogTitle>
                 </DialogHeader>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4">
-                            <FormTextInput id="code" label="Code" type="text" {...register('code')} error={errors.code?.message} />
-                            <FormTextInput id="name" label="name" type="text" {...register('name')} error={errors.name?.message} />
-                            <FormTextInput
+                            <FormTextInput 
+                                id="code" 
+                                placeholder='Masukan Kode Kelompok Mata Kuliah'
+                                label="Code" 
+                                type="text" {...register('code')} 
+                                error={errors.code?.message} 
+                            />
+                            <FormTextInput 
+                                id="name" 
+                                label=" Kelompok Mata kuliah" 
+                                placeholder='Masukan Nama Kelompok Mata Kuliah'
+                                type="text" {...register('name')} 
+                                error={errors.name?.message} 
+                            />
+                            {/* <FormTextInput
                                 id="description"
                                 label="description"
                                 type="textarea"
                                 {...register('description')}
                                 error={errors.description?.message}
-                            />
+                            /> */}
 
                             {errors.root && <p className="text-red-600">{errors.root.message}</p>}
 

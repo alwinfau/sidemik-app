@@ -16,7 +16,6 @@ export const useEmployees = () => {
     const [strukturalposition, setStructuralPosition] = useState<any>([]);
     const [staffdivision, setStaffDivision] = useState<any>([]);
 
-
     const fetchData = async (currentPage = 1) => {
         try {
             setIsLoading(true);
@@ -32,7 +31,7 @@ export const useEmployees = () => {
     };
 
     const fecthRelasi = async () => {
-        try{
+        try {
             const resLectureStatus: any = await get('/lecture-status');
             setLectureStatus(resLectureStatus.data.data);
 
@@ -53,7 +52,6 @@ export const useEmployees = () => {
         } catch (err) {
             console.error('Error fetching:', err);
         }
-
     };
     const handleSubmit = async (data: Omit<EmployeesType, 'id'>, id?: number, onSuccess?: () => void) => {
         try {
@@ -97,5 +95,23 @@ export const useEmployees = () => {
             setIsLoading(false);
         }
     };
-    return { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, totalPages, setPage, lecturestatus, staffstatus, studyprogram, functionalposition, strukturalposition, staffdivision, fecthRelasi };
+    return {
+        data,
+        isLoading,
+        toast,
+        fetchData,
+        handleSubmit,
+        handleDelete,
+        setToast,
+        page,
+        totalPages,
+        setPage,
+        lecturestatus,
+        staffstatus,
+        studyprogram,
+        functionalposition,
+        strukturalposition,
+        staffdivision,
+        fecthRelasi,
+    };
 };

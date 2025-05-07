@@ -42,7 +42,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
     } = useForm<FormInputs>({
         resolver: zodResolver(schema),
     });
-    
 
     const { agencies, fetchAgency } = useProdiAccreditation();
 

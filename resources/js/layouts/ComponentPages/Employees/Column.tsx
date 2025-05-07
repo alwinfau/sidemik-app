@@ -6,7 +6,7 @@ export type EmployeesType = {
     id?: number;
     nip: string;
     name: string;
-    foto:null;
+    foto: null;
     front_title: number;
     back_title: string;
     gender: boolean;
@@ -23,7 +23,7 @@ export type EmployeesType = {
     type: string;
     staff_status: {
         name: string;
-    }
+    };
     study_programs: {
         name: string;
     };
@@ -33,17 +33,17 @@ export type EmployeesType = {
     nidk: string;
     functional_positons: {
         name: string;
-    }
+    };
     pns_rank: string;
     struktural_positions: {
         name: string;
-    }
+    };
     staff_division: {
         name: string;
-    }
+    };
     lecture_status: {
         name: string;
-    }
+    };
 };
 
 export const columns = (onEdit: (row: EmployeesType) => void, onDelete: (id: string) => void): ColumnDef<EmployeesType>[] => [
@@ -98,8 +98,8 @@ export const columns = (onEdit: (row: EmployeesType) => void, onDelete: (id: str
         header: 'Jabatan Functional',
         accessorFn: (row) => row.functional_positons?.name ?? null,
         id: 'functional_positons',
-    },  
-    { 
+    },
+    {
         header: 'Program Studi',
         accessorFn: (row) => row.study_programs?.name ?? null,
         id: 'study_programs',

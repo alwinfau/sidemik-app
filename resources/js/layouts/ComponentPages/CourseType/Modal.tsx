@@ -17,8 +17,8 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    code: z.string().min(3, 'Code harus lebih dari 3 Krakter'),
-    name: z.string().min(5, 'Nama harus lebih dari 5 Krakter'),
+    code: z.string({message: 'Kode Harus diisi'}).min(1, 'Code harus lebih dari 1 Krakter'),
+    name: z.string({message: 'Jenis Mata Kuliah Harus diisi'}).min(5, 'Jenis Mata Kuliah harus lebih dari 5 Krakter'),
     description: z.string().nullable(),
 });
 
@@ -74,21 +74,33 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
-                <DialogHeader title="Course Type">
-                    <DialogTitle>{defaultValues ? 'Edit Course Type' : 'Add Course Type'}</DialogTitle>
+                <DialogHeader title="Jenis Mata Kuliah">
+                    <DialogTitle>{defaultValues ? 'Edit Jenis Mata Kuliah' : 'Add Jenis Mata Kuliah'}</DialogTitle>
                 </DialogHeader>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4">
-                            <FormTextInput id="code" label="Code" type="text" {...register('code')} error={errors.code?.message} />
-                            <FormTextInput id="name" label="name" type="text" {...register('name')} error={errors.name?.message} />
-                            <FormTextInput
+                            <FormTextInput 
+                                id="code" 
+                                placeholder='Masukan Kode Jenis Mata Kuliah'
+                                label="Code" 
+                                type="text" {...register('code')} 
+                                error={errors.code?.message} 
+                            />
+                            <FormTextInput 
+                                id="name" 
+                                placeholder='Masukan Jenis Mata Kuliah'
+                                label="Jenis Mata Kuliah" 
+                                type="text" {...register('name')} 
+                                error={errors.name?.message} 
+                            />
+                            {/* <FormTextInput
                                 id="description"
                                 label="description"
                                 type="textarea"
                                 {...register('description')}
                                 error={errors.description?.message}
-                            />
+                            /> */}
 
                             {errors.root && <p className="text-red-600">{errors.root.message}</p>}
 

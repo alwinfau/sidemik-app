@@ -113,15 +113,15 @@ const data: AppData = {
                     url: '/students',
                 },
                 {
-                    title: 'Course',
+                    title: 'Mata Kuliah',
                     url: '/course',
                 },
                 {
-                    title: 'Course Type',
+                    title: 'Jenis Mata Kuliah',
                     url: '/course-type',
                 },
                 {
-                    title: 'Course Group',
+                    title: 'Kelompok Mata Kuliah',
                     url: '/course-group',
                 },
                 {

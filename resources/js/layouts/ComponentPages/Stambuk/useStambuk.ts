@@ -59,6 +59,7 @@ export const useStambuk = () => {
             if (error.response.status === 500) {
                 setToast({ message: 'Failed to submit Stambuk', type: 'error' });
             }
+            console.log(error);
             throw error.response.data;
         } finally {
             setIsLoading(false);

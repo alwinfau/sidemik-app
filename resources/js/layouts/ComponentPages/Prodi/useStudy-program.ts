@@ -92,7 +92,7 @@ export const useStudyProgram = () => {
         setPage,
         Facultas,
         AcademicPeriod,
-        
-        fecthRelasi
+
+        fecthRelasi,
     };
 };

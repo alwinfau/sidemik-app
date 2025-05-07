@@ -24,10 +24,10 @@ export const columns = (onEdit: (row: CurriculumType) => void, onDelete: (id: st
     { accessorKey: 'sks_required', header: 'SKS Wajib' },
     { accessorKey: 'sks_elective', header: 'SKS Pilihan' },
     // { accessorKey:'description', header: 'Keterangan'},
-    { 
-        header: 'Prodi', 
-        accessorFn: (row) => row.study_program?.idn_sp_name ?? null, 
-        id: 'study_program' 
+    {
+        header: 'Prodi',
+        accessorFn: (row) => row.study_program?.idn_sp_name ?? null,
+        id: 'study_program',
     },
     {
         id: 'actions',

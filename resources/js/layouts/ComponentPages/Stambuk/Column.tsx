@@ -4,12 +4,12 @@ import { Pencil, Trash2 } from 'lucide-react';
 
 export type Stambuk = {
     id?: number;
-    year: Date;
+    year: string;
     name: string;
     ukt: number;
     // description: string;
     curriculums: {
-        curriculum_year: Date;
+        code: Date;
     };
     study_programs: {
         idn_sp_name: string;
@@ -26,14 +26,15 @@ export const columns = (onEdit: (row: Stambuk) => void, onDelete: (id: string) =
     { accessorKey: 'name', header: 'Nama Stambuk' },
     { accessorKey: 'ukt', header: 'UKT' },
     // { accessorKey: 'description', header: 'Keterangan' },
-    { 
-        header: 'Tahun Kurikulum', 
-        accessorFn: (row) => row.curriculums?.curriculum_year ?? null, 
-        id: 'curriculum' },
-    { 
-        header: 'Prodi', 
-        accessorFn: (row) => row.study_programs?.idn_sp_name ?? null, 
-        id: 'study_program' 
+    {
+        header: 'Tahun Kurikulum',
+        accessorFn: (row) => row.curriculums?.code ?? null,
+        id: 'curriculum',
+    },
+    {
+        header: 'Prodi',
+        accessorFn: (row) => row.study_programs?.idn_sp_name ?? null,
+        id: 'study_program',
     },
     {
         id: 'actions',

@@ -9,10 +9,11 @@ import { useEffect, useState } from 'react';
 import { CourseType, columns } from './Column';
 import ModalForm from './Modal';
 import { useCourseType } from './useCourseType';
+import { Head } from '@inertiajs/react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Course Type',
+        title: 'Jenis Mata Kuliah',
         href: '/course-type',
     },
 ];
@@ -36,9 +37,10 @@ const CourseTypes = () => {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title='Jenis Mata Kuliah' />
             <div className="m-6">
                 <div className="flex items-center justify-between">
-                    <h2 className="text-3xl font-bold">Type Course</h2>
+                    <h2 className="text-3xl font-bold">Jenis Mata Kuliah</h2>
                     <Button
                         onClick={() => {
                             setEditing(undefined);
@@ -46,7 +48,7 @@ const CourseTypes = () => {
                         }}
                         className="flex items-center rounded bg-green-600 p-3 font-bold text-white hover:bg-green-500"
                     >
-                        <CirclePlus className="h-6 w-6" /> Add Type Course
+                        <CirclePlus className="h-6 w-6" /> Add Jenis Mata Kuliah
                     </Button>
                 </div>
                 <DataTable

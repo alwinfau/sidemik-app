@@ -17,4 +17,4 @@ const EmployeesPage = (props: Props) => {
         </>
     );
 };
-export default EmployeesPage ;
+export default EmployeesPage;
