@@ -1,14 +1,14 @@
 import { Button } from '@/components/ui/button';
-import DateInput from '@/components/ui/Components_1/DateInput';
 import { FormSelectInput, FormTextInput } from '@/components/ui/Components_1/FormInput';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SelectItem } from '@/components/ui/select';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useEmployees } from './useEmploye';
+import DateInput from '@/components/ui/Components_1/DateInput';
 
 type ModalProps = {
     open: boolean;
@@ -26,7 +26,7 @@ const schema = z.object({
     religion: z.string(),
     birth_place: z.string(),
     birth_date: z.string(),
-    email_pt: z.string().email('Email tidak valid'),
+    email_pt: z.string().email('Email tidak valid'),    
     phone: z.string(),
     emergency_phone: z.string().nullable(),
     relationship_1: z.string().nullable(),
@@ -45,6 +45,7 @@ const schema = z.object({
     nuptk: z.number().nullable(),
     nitk: z.number().nullable(),
     nidk: z.number().nullable(),
+
 });
 
 type FormInputs = z.infer<typeof schema>;
@@ -81,17 +82,18 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 relationship_2: defaultValues.relationship_2 || '',
                 status: defaultValues.status || false,
                 type: defaultValues.type || '',
-                lecture_status_id: String(defaultValues.lecture_status_id) || '0',
-                staff_status_id: String(defaultValues.staff_status_id) || '0',
-                funtional_position_id: String(defaultValues.funtional_position_id) || '0',
-                pns_rank: String(defaultValues.pns_rank) || '0',
-                struktural_position_id: String(defaultValues.struktural_position_id) || '0',
-                staff_division_id: String(defaultValues.staff_division_id) || '0',
-                study_programs_id: String(defaultValues.study_programs_id) || '0',
+                lecture_status_id: String( defaultValues.lecture_status_id )|| '0',
+                staff_status_id: String( defaultValues.staff_status_id )|| '0',
+                funtional_position_id: String( defaultValues.funtional_position_id )|| '0',
+                pns_rank: String( defaultValues.pns_rank )|| '0',
+                struktural_position_id: String( defaultValues.struktural_position_id )|| '0',
+                staff_division_id: String( defaultValues.staff_division_id )|| '0',
+                study_programs_id: String( defaultValues.study_programs_id )|| '0',
                 nidn: defaultValues.nidn || null,
                 nuptk: defaultValues.nuptk || '',
                 nitk: defaultValues.nitk || '',
                 nidk: defaultValues.nidk || '',
+                
             });
         } else {
             reset({
@@ -123,14 +125,15 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 nuptk: null,
                 nitk: null,
                 nidk: null,
+               
             });
         }
     }, [defaultValues, reset]);
 
-    const { lecturestatus, staffstatus, studyprogram, functionalposition, strukturalposition, staffdivision, fecthRelasi } = useEmployees();
+    const { lecturestatus, staffstatus, studyprogram, functionalposition, strukturalposition, staffdivision, fecthRelasi} = useEmployees();
 
     useEffect(() => {
-        fecthRelasi();
+        fecthRelasi();  
     }, []);
 
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
@@ -172,6 +175,13 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 placeholder="Enter Name"
                                 {...register('name')}
                                 error={errors.name?.message}
+                            />
+                            <FormTextInput
+                                id="foto"
+                                type="file"
+                                label="Foto"
+                                {...register('foto')}
+                                error={errors.foto?.message}
                             />
                             <FormTextInput
                                 id="front_title"
@@ -219,6 +229,70 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 placeholder="Enter Tanggal Lahir"
                                 register={register('birth_date')}
                                 error={errors.birth_date}
+                            />
+                            <FormTextInput
+                                id="email_pt"
+                                type="text"
+                                label="Email PT"
+                                placeholder="Enter Email PT"
+                                {...register('email_pt')}
+                                error={errors.email_pt?.message}    
+                            />
+                            <FormTextInput
+                                id="phone"
+                                type="text"
+                                label="Nomor Telepon"
+                                placeholder="Enter Nomor Telepon"
+                                {...register('phone')}
+                                error={errors.phone?.message}
+                            />
+                            <FormTextInput
+                                id="emergency_phone_1"
+                                type="text"
+                                label="Nomor Telepon Darurat"
+                                placeholder="Enter Nomor Telepon Darurat"
+                                {...register('emergency_phone')}
+                                error={errors.emergency_phone?.message}
+                            />
+                            <FormTextInput
+                                id="relationship_1"
+                                type="text"
+                                label="Hubungan"
+                                placeholder='Enter Hubungan Darurat'
+                                {...register('relationship_1')}
+                                error={errors.relationship_1?.message}
+                            />
+                            <FormTextInput
+                                id="emergency_phone_2"
+                                type="text"
+                                label="Nomor Telepon Darurat 2"         
+                                placeholder="Enter Nomor Telepon Darurat 2"
+                                {...register('emergency_phone_2')}
+                                error={errors.emergency_phone_2?.message}
+                            />
+                            <FormTextInput
+                                id="relationship_2"
+                                type="text"
+                                label="Hubungan 2"
+                                placeholder='Enter Hubungan 2'
+                                {...register('relationship_2')}
+                                error={errors.relationship_2?.message}
+                            />
+                            <FormTextInput
+                                id="status"
+                                type="text"
+                                label="Status"
+                                placeholder="Enter Status"
+                                {...register('status')}
+                                error={errors.status?.message}
+                            />
+                            <FormTextInput
+                                id="type"
+                                type="text"
+                                label="Tipe"
+                                placeholder="Enter Tipe"
+                                {...register('type')}
+                                error={errors.type?.message}
                             />
 
                             <FormTextInput
@@ -375,6 +449,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 )}
                             />
 
+
                             <Button
                                 type="submit"
                                 className={`mb-5 rounded px-4 py-2 font-bold text-white ${defaultValues ? 'bg-blue-600 hover:bg-blue-500' : 'bg-green-700 hover:bg-green-600'}`}
@@ -390,3 +465,4 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
 };
 
 export default ModalForm;
+
