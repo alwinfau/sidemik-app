@@ -164,6 +164,12 @@ Route::get('/stambuk', function() {
     return Inertia::render(component:'Stambuk/stambuk');
 })->name('Curriculum');
 
+// Route Matkulpilihan
+Route::get('/elective-course-groups', function() {
+    return Inertia::render(component:'MatkulPil/MatkulPil');
+})->name('MatkulPil');
+
+
 // Tambahan route file
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

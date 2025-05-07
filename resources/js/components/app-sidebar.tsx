@@ -117,6 +117,10 @@ const data: AppData = {
                     url: '/course',
                 },
                 {
+                    title: 'Mata Kuliah Pilihan',
+                    url: '/elective-course-groups'
+                },
+                {
                     title: 'Jenis Mata Kuliah',
                     url: '/course-type',
                 },
