@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
+use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -24,6 +25,16 @@ return Application::configure(basePath: dirname(__DIR__))
             // \App\Http\Middleware\CheckToken::class,
         ]);
     })
+
+    //aditional middleware
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->alias([
+//            'auth' => \App\Http\Middleware\Authenticate::class,
+            'auth' => Authenticate::class,
+            'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+        ]);
+    })
+
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
