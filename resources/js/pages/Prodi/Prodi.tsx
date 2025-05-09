@@ -1,10 +1,9 @@
-import Prodi from '@/layouts/ComponentPages/Prodi';
-type Props = {};
 
-const ProdiPage = (props: Props) => {
+
+const ProdiPage = () => {
     return (
         <>
-            <Prodi />
+            <ProdiPage/>
         </>
     );
 };

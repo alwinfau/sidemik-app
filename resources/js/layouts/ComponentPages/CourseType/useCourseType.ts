@@ -13,7 +13,7 @@ export const useCourseType = () => {
     const fetchData = async (currentPage = 1) => {
         try {
             setIsLoading(true);
-            const res: any = await get(`/course-type?page=${currentPage}&limit=2`);
+            const res: any = await get(`course-type?page=${currentPage}&limit=10`);
             setData(res.data.data);
             setPage(res.data.current_page);
             setTotalPages(res.data.last_page);
@@ -32,19 +32,19 @@ export const useCourseType = () => {
                 setData((prev) => prev.map((p: any) => (p.id === id ? res.data : p)));
                 await fetchData();
                 onSuccess?.();
-                setToast({ message: 'Type Course updated successfully', type: 'success' });
+                setToast({ message: 'Jenis Mata Kuliah updated successfully', type: 'success' });
                 return res;
             } else {
                 const res: any = await post('/course-type', data);
                 setData((prev) => [...prev, res.data]);
                 await fetchData();
                 onSuccess?.();
-                setToast({ message: 'Type Course created successfully', type: 'success' });
+                setToast({ message: 'Jenis Mata Kuliah created successfully', type: 'success' });
                 return res;
             }
         } catch (error: any) {
             if (error.response.status === 500) {
-                setToast({ message: 'Failed to submit Type Course', type: 'error' });
+                setToast({ message: 'Failed to submit Jenis Mata Kuliah', type: 'error' });
             }
             throw error.response.status.data;
         } finally {
@@ -56,12 +56,13 @@ export const useCourseType = () => {
         try {
             setIsLoading(true);
             await del(`/course-type/${id}`);
-            setData((prev) => prev.filter((item: any) => item.id !== id));
+            setData((prev) => prev.filter((item) => item.id !== id));
+            window.location.reload();
             await fetchData();
             onSuccess?.();
-            setToast({ message: 'Type Course deleted successfully', type: 'success' });
+            setToast({ message: 'Jenis Mata Kuliah deleted successfully', type: 'success' });
         } catch (err) {
-            setToast({ message: 'Failed to delete Type Course', type: 'error' });
+            setToast({ message: 'Failed to delete Jenis Mata Kuliah', type: 'error' });
         } finally {
             setIsLoading(false);
             onSuccess?.();

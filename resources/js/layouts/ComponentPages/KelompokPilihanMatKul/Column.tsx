@@ -2,23 +2,34 @@ import { Button } from '@/components/ui/button';
 import { ColumnDef } from '@tanstack/react-table';
 import { Pencil, Trash2 } from 'lucide-react';
 
-export type CourseType = {
-    id?: number;
+export type MatkulPilihan = {
+    id? : number;
     code: string;
     name: string;
-    description: string;
-};
+    is_active: boolean;
+    // description: string
+    study_program :{
+        idn_sp_name: string;
+    }
+}
 
-export const columns = (onEdit: (row: CourseType) => void, onDelete: (id: string) => void): ColumnDef<CourseType>[] => [
+export const columns = (onEdit: (row: MatkulPilihan) => void, onDelete: (id: string) => void): ColumnDef<MatkulPilihan>[] => [
     {
         id: 'rowNumber',
         header: () => <div className="text-center">No</div>,
         cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
     },
-    { accessorKey: 'code', header: 'kode' },
-    { accessorKey: 'name', header: 'Jenis Mata Kuliah' },
-    // { accessorKey: 'description', header: 'Keterangan' },
-
+    { accessorKey: 'code', header: 'Kode'},
+    { accessorKey: 'name', header: 'Mata Kuliah Pilihan'},
+    {
+        accessorKey: 'is_active',
+        header: 'Status',
+        cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Aktif' : 'Tidak Aktif'}</div>,
+    },
+    { 
+        header: 'Prodi',
+        accessorFn: (row) => row.study_program?.idn_sp_name ?? null, id: 'study_program'
+    },
     {
         id: 'actions',
         header: 'Actions',
@@ -33,4 +44,4 @@ export const columns = (onEdit: (row: CourseType) => void, onDelete: (id: string
             </div>
         ),
     },
-];
+]

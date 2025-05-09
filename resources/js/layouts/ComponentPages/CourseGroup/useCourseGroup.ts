@@ -14,7 +14,7 @@ export const useCourseGroup = () => {
     const fetchData = async (currentPage = 1) => {
         try {
             setIsLoading(true);
-            const res: any = await get(`/course-group?page=${currentPage}&limit=5`);
+            const res: any = await get(`/course-group?page=${currentPage}&limit=10  `);
             setData(res.data.data);
             setPage(res.data.current_page);
             setTotalPages(res.data.last_page);
