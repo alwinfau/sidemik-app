@@ -17,7 +17,7 @@ type ModalProps = {
     defaultValues?: any;
 };
 const schema = z.object({
-    year: z.string().regex(/^\d{4}$/, { message: 'Tahun Stambuk harus berupa 4 digit tahun (misal: 2025)' }),
+    year: z.string(),
     name: z.string({ message: 'Nama Wajib diisi' }).min(3, 'Nama wajib lebih dari 3 kata'),
     ukt: z.number({ message: 'Masukan jumlah UKT' }),
     description: z.string().nullable(),
@@ -89,20 +89,14 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mx-3 space-y-4">
-                            {/* <DateInput
+                            <DateInput
                                 label="Tahun Stambuk"
                                 id="year"
                                 placeholder="Masukan Tahun Stambuk"
                                 register={register('year')}
                                 error={errors.year}
-                            /> */}
-                            <FormTextInput
-                                id="year"
-                                label="Tahun Stambuk"
-                                placeholder="Masukan Tahun Stambuk"
-                                {...register('year')}
-                                error={errors.year?.message}
                             />
+                            
                             <FormTextInput
                                 id="name"
                                 label="Nama Stambuk"

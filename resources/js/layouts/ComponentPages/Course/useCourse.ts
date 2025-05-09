@@ -12,6 +12,8 @@ export const useCourse = () => {
 
     const [courseTypes, setCourseTypes] = useState<any>([]);
     const [courseGroups, setCourseGroups] = useState<any>([]);
+    const [curriculum, setCurriculum] = useState<any>([]);
+    const [MatkulPil, setMatkulPil] = useState<any>([]);
 
     const fetchData = async (currentPage = 1) => {
         try {
@@ -34,6 +36,13 @@ export const useCourse = () => {
 
             const resGroups: any = await get('/course-group');
             setCourseGroups(resGroups.data.data);
+            
+            const resCuriculum: any = await get('/curriculum');
+            setCurriculum(resCuriculum.data.data);
+            
+            const resMatkulPil: any = await get('/elective-course-groups');
+            setMatkulPil(resMatkulPil.data.data);
+            
         } catch (err) {
             console.error('Error fetching:', err);
         }
@@ -61,6 +70,7 @@ export const useCourse = () => {
             if (error?.response?.status === 500) {
                 setToast({ message: 'Failed to submit course', type: 'error' });
             }
+            console.log(error)
             throw error.response.data;
         } finally {
             setIsLoading(false);
@@ -95,6 +105,8 @@ export const useCourse = () => {
         setPage,
         courseTypes,
         courseGroups,
+        curriculum,
+        MatkulPil,
         fectRelasi,
     };
 };
