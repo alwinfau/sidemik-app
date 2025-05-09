@@ -36,13 +36,12 @@ export const useCourse = () => {
 
             const resGroups: any = await get('/course-group');
             setCourseGroups(resGroups.data.data);
-            
+
             const resCuriculum: any = await get('/curriculum');
             setCurriculum(resCuriculum.data.data);
-            
+
             const resMatkulPil: any = await get('/elective-course-groups');
             setMatkulPil(resMatkulPil.data.data);
-            
         } catch (err) {
             console.error('Error fetching:', err);
         }
@@ -70,7 +69,7 @@ export const useCourse = () => {
             if (error?.response?.status === 500) {
                 setToast({ message: 'Failed to submit course', type: 'error' });
             }
-            console.log(error)
+            console.log(error);
             throw error.response.data;
         } finally {
             setIsLoading(false);

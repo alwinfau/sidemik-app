@@ -22,10 +22,10 @@ export const columns = (onEdit: (row: Stambuk) => void, onDelete: (id: string) =
         header: 'No',
         cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
     },
-    { 
-        accessorKey: 'year', 
-        header: 'Tahun' ,
-        cell: ({row}) => row.original.year.slice(0, 4)
+    {
+        accessorKey: 'year',
+        header: 'Tahun',
+        cell: ({ row }) => row.original.year.slice(0, 4),
     },
     { accessorKey: 'name', header: 'Nama Stambuk' },
     { accessorKey: 'ukt', header: 'UKT' },

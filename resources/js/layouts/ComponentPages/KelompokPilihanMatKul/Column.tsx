@@ -3,15 +3,15 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Pencil, Trash2 } from 'lucide-react';
 
 export type MatkulPilihan = {
-    id? : number;
+    id?: number;
     code: string;
     name: string;
     is_active: boolean;
     // description: string
-    study_program :{
+    study_program: {
         idn_sp_name: string;
-    }
-}
+    };
+};
 
 export const columns = (onEdit: (row: MatkulPilihan) => void, onDelete: (id: string) => void): ColumnDef<MatkulPilihan>[] => [
     {
@@ -19,16 +19,17 @@ export const columns = (onEdit: (row: MatkulPilihan) => void, onDelete: (id: str
         header: () => <div className="text-center">No</div>,
         cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
     },
-    { accessorKey: 'code', header: 'Kode'},
-    { accessorKey: 'name', header: 'Mata Kuliah Pilihan'},
+    { accessorKey: 'code', header: 'Kode' },
+    { accessorKey: 'name', header: 'Mata Kuliah Pilihan' },
     {
         accessorKey: 'is_active',
         header: 'Status',
         cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Aktif' : 'Tidak Aktif'}</div>,
     },
-    { 
+    {
         header: 'Prodi',
-        accessorFn: (row) => row.study_program?.idn_sp_name ?? null, id: 'study_program'
+        accessorFn: (row) => row.study_program?.idn_sp_name ?? null,
+        id: 'study_program',
     },
     {
         id: 'actions',
@@ -44,4 +45,4 @@ export const columns = (onEdit: (row: MatkulPilihan) => void, onDelete: (id: str
             </div>
         ),
     },
-]
+];

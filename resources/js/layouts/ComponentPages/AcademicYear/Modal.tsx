@@ -101,13 +101,13 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4">
                             {/* <FormTextInput
-                                id="academic_year"
-                                label="Tahun Akademik"
-                                placeholder="Masukan tahun akademik"
-                                type="text"
-                                {...register('academic_year')}
-                                error={errors.academic_year?.message}
-                            /> */}
+                                    id="academic_year"
+                                    label="Tahun Akademik"
+                                    placeholder="Masukan tahun akademik"
+                                    type="text"
+                                    {...register('academic_year')}
+                                    error={errors.academic_year?.message}
+                                /> */}
                             <DateInput
                                 label="Tahun Akademik"
                                 id="academic_year"

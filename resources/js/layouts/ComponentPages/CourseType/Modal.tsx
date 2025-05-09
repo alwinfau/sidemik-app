@@ -17,8 +17,8 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    code: z.string({message: 'Kode Harus diisi'}).min(1, 'Code harus lebih dari 1 Krakter'),
-    name: z.string({message: 'Jenis Mata Kuliah Harus diisi'}).min(5, 'Jenis Mata Kuliah harus lebih dari 5 Krakter'),
+    code: z.string({ message: 'Kode Harus diisi' }).min(1, 'Code harus lebih dari 1 Krakter'),
+    name: z.string({ message: 'Jenis Mata Kuliah Harus diisi' }).min(5, 'Jenis Mata Kuliah harus lebih dari 5 Krakter'),
     description: z.string().nullable(),
 });
 
@@ -80,19 +80,21 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4">
-                            <FormTextInput 
-                                id="code" 
-                                placeholder='Masukan Kode Jenis Mata Kuliah'
-                                label="Code" 
-                                type="text" {...register('code')} 
-                                error={errors.code?.message} 
+                            <FormTextInput
+                                id="code"
+                                placeholder="Masukan Kode Jenis Mata Kuliah"
+                                label="Code"
+                                type="text"
+                                {...register('code')}
+                                error={errors.code?.message}
                             />
-                            <FormTextInput 
-                                id="name" 
-                                placeholder='Masukan Jenis Mata Kuliah'
-                                label="Jenis Mata Kuliah" 
-                                type="text" {...register('name')} 
-                                error={errors.name?.message} 
+                            <FormTextInput
+                                id="name"
+                                placeholder="Masukan Jenis Mata Kuliah"
+                                label="Jenis Mata Kuliah"
+                                type="text"
+                                {...register('name')}
+                                error={errors.name?.message}
                             />
                             {/* <FormTextInput
                                 id="description"

@@ -18,20 +18,20 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    code: z.string({message: 'Kode harus diisi'}).min(2, 'Code harus lebih dari 2 karakter'),
-    semester: z.coerce.number({message:'Semester Wajib diisi'}).min(1, 'Semester wajib diisi lebih dari 0').max(14, 'Maximal Semester hanya 14'),
-    name_idn: z.string({message: 'Mata Kuliah Wajib Diisi'}).min(5, 'Nama harus lebih dari 5 karakter'),
-    name_eng: z.string({message: 'Course Wajib Diisi'}).min(5, 'Name harus lebih dari 5 karakter'),
-    theory_sks: z.coerce.number({message: 'Teori Wajib diisi'}).positive('Nilai harus melebebihi angka 1'),
-    practical_sks: z.coerce.number({message: 'Praktek Wajib diisi'}),
+    code: z.string({ message: 'Kode harus diisi' }).min(2, 'Code harus lebih dari 2 karakter'),
+    semester: z.coerce.number({ message: 'Semester Wajib diisi' }).min(1, 'Semester wajib diisi lebih dari 0').max(14, 'Maximal Semester hanya 14'),
+    name_idn: z.string({ message: 'Mata Kuliah Wajib Diisi' }).min(5, 'Nama harus lebih dari 5 karakter'),
+    name_eng: z.string({ message: 'Course Wajib Diisi' }).min(5, 'Name harus lebih dari 5 karakter'),
+    theory_sks: z.coerce.number({ message: 'Teori Wajib diisi' }).positive('Nilai harus melebebihi angka 1'),
+    practical_sks: z.coerce.number({ message: 'Praktek Wajib diisi' }),
     fieldwork_sks: z.coerce.number(),
     course_desc: z.string().nullable(),
     is_scheduled: z.boolean(),
     prereq_courses_1: z.number().nullable(),
     prereq_courses_2: z.number().nullable(),
-    course_types_id: z.string({message: 'Jenis Mata Kuliah Wajib diisi'}),
-    course_groups_id: z.string({message: 'Kelompok Mata Kuliah Wajib diisi'}),
-    curriculums_id: z.string({message: 'Kurikulum Wajib diisi'}),
+    course_types_id: z.string({ message: 'Jenis Mata Kuliah Wajib diisi' }),
+    course_groups_id: z.string({ message: 'Kelompok Mata Kuliah Wajib diisi' }),
+    curriculums_id: z.string({ message: 'Kurikulum Wajib diisi' }),
     elective_course_groups_id: z.string().nullable(),
 });
 
@@ -98,13 +98,13 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
     const [showElectiveCourse, setShowElectiveCourse] = useState(false);
 
     const handleCourseTypeChange = (value: string) => {
-        // Temukan ID dari tipe mata kuliah "Peminatan" 
-        const peminatanType = courseTypes.find((type: any) => type.name === "Peminatan");
-    
+        // Temukan ID dari tipe mata kuliah "Peminatan"
+        const peminatanType = courseTypes.find((type: any) => type.name === 'Peminatan');
+
         // Cek apakah value dari jenis mata kuliah sesuai dengan ID peminatan
         setShowElectiveCourse(value === String(peminatanType?.id));
     };
-    
+
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
         try {
             const result = await submit(data, defaultValues?.id);
@@ -129,34 +129,30 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mx-3 space-y-4">
-                            <FormTextInput 
-                                id="code" 
-                                label="Kode" 
-                                placeholder='Isi Kode Mata Kuliah'
-                                type="text" {...register('code')} 
-                                error={errors.code?.message} 
+                            <FormTextInput
+                                id="code"
+                                label="Kode"
+                                placeholder="Isi Kode Mata Kuliah"
+                                type="text"
+                                {...register('code')}
+                                error={errors.code?.message}
+                            />
+                            <FormTextInput id="semester" label="Semester" type="number" {...register('semester')} error={errors.semester?.message} />
+                            <FormTextInput
+                                id="name_idn"
+                                label="Mata Kuliah"
+                                placeholder="Masukan Nama Mata Kuliah"
+                                type="text"
+                                {...register('name_idn')}
+                                error={errors.name_idn?.message}
                             />
                             <FormTextInput
-                                id="semester"
-                                label="Semester"
-                                type="number"
-                                {...register('semester')}
-                                error={errors.semester?.message}
-                            />
-                            <FormTextInput 
-                                id="name_idn" 
-                                label="Mata Kuliah" 
-                                placeholder='Masukan Nama Mata Kuliah'
-                                type="text" 
-                                {...register('name_idn')} 
-                                error={errors.name_idn?.message} 
-                            />
-                            <FormTextInput 
-                                id="name_eng" 
-                                label="Course" 
-                                placeholder='Masukan Nama Matkul Dalam B.Ing'
-                                type="text" {...register('name_eng')} 
-                                error={errors.name_eng?.message} 
+                                id="name_eng"
+                                label="Course"
+                                placeholder="Masukan Nama Matkul Dalam B.Ing"
+                                type="text"
+                                {...register('name_eng')}
+                                error={errors.name_eng?.message}
                             />
                             <FormTextInput
                                 id="theory_sks"
@@ -205,7 +201,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         value={field.value}
                                         onValueChange={(val) => {
                                             field.onChange(val);
-                                            handleCourseTypeChange(val); 
+                                            handleCourseTypeChange(val);
                                         }}
                                         error={errors.course_types_id?.message}
                                     >
@@ -217,7 +213,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     </FormSelectInput>
                                 )}
                             />
-
 
                             <Controller
                                 name="course_groups_id"
@@ -280,7 +275,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     )}
                                 />
                             )}
-
 
                             {/* <FormTextInput
                                 id="course_desc"

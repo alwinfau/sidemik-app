@@ -1,17 +1,16 @@
 import { Button } from '@/components/ui/button';
+import DateInput from '@/components/ui/Components_1/DateInput';
 import { FormSelectInput, FormTextInput } from '@/components/ui/Components_1/FormInput';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SelectItem } from '@/components/ui/select';
 import { Switch } from '@/components/ui/swicth';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useEmployees } from './useEmploye';
-import DateInput from '@/components/ui/Components_1/DateInput';
-import { Label } from "@/components/ui/label"
-import * as RadioGroup from '@headlessui/react';
 
 type ModalProps = {
     open: boolean;
@@ -29,7 +28,7 @@ const schema = z.object({
     religion: z.string(),
     birth_place: z.string(),
     birth_date: z.string(),
-    email_pt: z.string().email('Email tidak valid'),    
+    email_pt: z.string().email('Email tidak valid'),
     phone: z.string(),
     emergency_phone: z.string().nullable(),
     relationship_1: z.string().nullable(),
@@ -48,7 +47,6 @@ const schema = z.object({
     nuptk: z.number().nullable(),
     nitk: z.number().nullable(),
     nidk: z.number().nullable(),
-
 });
 
 type FormInputs = z.infer<typeof schema>;
@@ -61,7 +59,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         setError,
         control,
         formState: { errors, isSubmitting },
-        watch
+        watch,
     } = useForm<FormInputs>({
         resolver: zodResolver(schema),
     });
@@ -84,20 +82,19 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 relationship_1: defaultValues.relationship_1 || '',
                 emergency_phone_2: defaultValues.emergency_phone_2 || '',
                 relationship_2: defaultValues.relationship_2 || '',
-                status: Boolean( defaultValues.status) || false,
+                status: Boolean(defaultValues.status) || false,
                 type: defaultValues.type || '',
-                lecture_status_id: String( defaultValues.lecture_status_id )|| '0',
-                staff_status_id: String( defaultValues.staff_status_id )|| '0',
-                funtional_position_id: String( defaultValues.funtional_position_id )|| '0',
-                pns_rank: String( defaultValues.pns_rank )|| '0',
-                struktural_position_id: String( defaultValues.struktural_position_id )|| '0',
-                staff_division_id: String( defaultValues.staff_division_id )|| '0',
-                study_programs_id: String( defaultValues.study_programs_id )|| '0',
+                lecture_status_id: String(defaultValues.lecture_status_id) || '0',
+                staff_status_id: String(defaultValues.staff_status_id) || '0',
+                funtional_position_id: String(defaultValues.funtional_position_id) || '0',
+                pns_rank: String(defaultValues.pns_rank) || '0',
+                struktural_position_id: String(defaultValues.struktural_position_id) || '0',
+                staff_division_id: String(defaultValues.staff_division_id) || '0',
+                study_programs_id: String(defaultValues.study_programs_id) || '0',
                 nidn: defaultValues.nidn || null,
                 nuptk: defaultValues.nuptk || null,
                 nitk: defaultValues.nitk || null,
                 nidk: defaultValues.nidk || null,
-                
             });
         } else {
             reset({
@@ -106,7 +103,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 foto: null,
                 front_title: null,
                 back_title: '',
-                gender: false,  
+                gender: false,
                 religion: '',
                 birth_place: '',
                 birth_date: '',
@@ -129,17 +126,16 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 nuptk: null,
                 nitk: null,
                 nidk: null,
-               
             });
         }
     }, [defaultValues, reset]);
 
     const typeValue = watch('type');
 
-    const { lecturestatus, staffstatus, studyprogram, functionalposition, strukturalposition, staffdivision, fecthRelasi} = useEmployees();
+    const { lecturestatus, staffstatus, studyprogram, functionalposition, strukturalposition, staffdivision, fecthRelasi } = useEmployees();
 
     useEffect(() => {
-        fecthRelasi();  
+        fecthRelasi();
     }, []);
 
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
@@ -219,7 +215,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     >
                                         <SelectItem value="true">Laki-Laki</SelectItem>
                                         <SelectItem value="false">Perempuan</SelectItem>
-                                        
                                     </FormSelectInput>
                                 )}
                             />
@@ -264,7 +259,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 label="Email PT"
                                 placeholder="Enter Email PT"
                                 {...register('email_pt')}
-                                error={errors.email_pt?.message}    
+                                error={errors.email_pt?.message}
                             />
                             <FormTextInput
                                 id="phone"
@@ -286,14 +281,14 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 id="relationship_1"
                                 type="text"
                                 label="Hubungan"
-                                placeholder='Enter Hubungan Darurat'
+                                placeholder="Enter Hubungan Darurat"
                                 {...register('relationship_1')}
                                 error={errors.relationship_1?.message}
                             />
                             <FormTextInput
                                 id="emergency_phone_2"
                                 type="text"
-                                label="Nomor Telepon Darurat 2"         
+                                label="Nomor Telepon Darurat 2"
                                 placeholder="Enter Nomor Telepon Darurat 2"
                                 {...register('emergency_phone_2')}
                                 error={errors.emergency_phone_2?.message}
@@ -302,7 +297,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 id="relationship_2"
                                 type="text"
                                 label="Hubungan 2"
-                                placeholder='Enter Hubungan 2'
+                                placeholder="Enter Hubungan 2"
                                 {...register('relationship_2')}
                                 error={errors.relationship_2?.message}
                             />
@@ -320,29 +315,25 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 />
                             </div>
 
-                                <Controller
-                                        name="type"
-                                        control={control}
-                                        rules={{ required: 'Tipe wajib diisi' }}
-                                        render={({ field }) => (
-                                            <FormSelectInput
-                                                id="type"
-                                                label="Tipe"
-                                                value={String(field.value)}
-                                                onValueChange={field.onChange}
-                                                error={errors.type?.message}
-                                            >
-                                                    <SelectItem  value={"lecture"}>
-                                                        Dosen
-                                                    </SelectItem>
-                                                    <SelectItem  value={"staff"}>
-                                                        Staff
-                                                    </SelectItem>
-                                            </FormSelectInput>
-                                        )}
-                                    />
+                            <Controller
+                                name="type"
+                                control={control}
+                                rules={{ required: 'Tipe wajib diisi' }}
+                                render={({ field }) => (
+                                    <FormSelectInput
+                                        id="type"
+                                        label="Tipe"
+                                        value={String(field.value)}
+                                        onValueChange={field.onChange}
+                                        error={errors.type?.message}
+                                    >
+                                        <SelectItem value={'lecture'}>Dosen</SelectItem>
+                                        <SelectItem value={'staff'}>Staff</SelectItem>
+                                    </FormSelectInput>
+                                )}
+                            />
 
-                            {typeValue === "lecture" ? (
+                            {typeValue === 'lecture' ? (
                                 // kondisi dosen
                                 <>
                                     <FormTextInput
@@ -449,26 +440,23 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                             </FormSelectInput>
                                         )}
                                     />
-
-                                            
                                 </>
                             ) : (
                                 // kondisi tendik
                                 <>
-
-                                <FormTextInput
-                                    id="nitk"
-                                    type="number"
-                                    label="NITK"
-                                    placeholder="Enter NITK"
-                                    {...register('nitk', { valueAsNumber: true })}
-                                    error={errors.nitk?.message}
-                                />
+                                    <FormTextInput
+                                        id="nitk"
+                                        type="number"
+                                        label="NITK"
+                                        placeholder="Enter NITK"
+                                        {...register('nitk', { valueAsNumber: true })}
+                                        error={errors.nitk?.message}
+                                    />
                                     <Controller
-                                    name="staff_division_id"
-                                    control={control}
-                                    rules={{ required: 'Tendik Divisi is required' }}
-                                    render={({ field }) => (
+                                        name="staff_division_id"
+                                        control={control}
+                                        rules={{ required: 'Tendik Divisi is required' }}
+                                        render={({ field }) => (
                                             <FormSelectInput
                                                 id="staff_division_id"
                                                 label="Tendik Divisi"
@@ -504,7 +492,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                             </FormSelectInput>
                                         )}
                                     />
-
                                 </>
                             )}
 
@@ -530,4 +517,3 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
 };
 
 export default ModalForm;
-

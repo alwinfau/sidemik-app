@@ -96,7 +96,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 register={register('year')}
                                 error={errors.year}
                             />
-                            
+
                             <FormTextInput
                                 id="name"
                                 label="Nama Stambuk"

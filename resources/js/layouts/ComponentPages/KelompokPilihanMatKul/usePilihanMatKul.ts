@@ -2,8 +2,6 @@ import { useAxios } from '@/hooks/useAxios';
 import { useState } from 'react';
 import { MatkulPilihan } from './Column';
 
-
-
 export const useMatkulPilihan = () => {
     const { get, post, put, del } = useAxios();
     const [data, setData] = useState<MatkulPilihan[]>([]);
