@@ -3,12 +3,15 @@ import { FormSelectInput, FormTextInput } from '@/components/ui/Components_1/For
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SelectItem } from '@/components/ui/select';
+import { Switch } from '@/components/ui/swicth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useEmployees } from './useEmploye';
 import DateInput from '@/components/ui/Components_1/DateInput';
+import { Label } from "@/components/ui/label"
+import * as RadioGroup from '@headlessui/react';
 
 type ModalProps = {
     open: boolean;
@@ -20,9 +23,9 @@ const schema = z.object({
     nip: z.string().min(1, 'NIP Harus Lebih Dari 1 Karakter'),
     name: z.string().min(1, 'Nama Harus Lebih Dari 1 Karakter'),
     foto: z.string().nullable(),
-    front_title: z.string().min(1, 'Nama Harus Lebih Dari 1 Karakter').nullable(),
+    front_title: z.string().nullable(),
     back_title: z.string().min(1, 'Nama Harus Lebih Dari 1 Karakter'),
-    gender: z.string(),
+    gender: z.boolean(),
     religion: z.string(),
     birth_place: z.string(),
     birth_date: z.string(),
@@ -58,6 +61,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         setError,
         control,
         formState: { errors, isSubmitting },
+        watch
     } = useForm<FormInputs>({
         resolver: zodResolver(schema),
     });
@@ -70,7 +74,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 foto: defaultValues.foto || '',
                 front_title: defaultValues.front_title || '',
                 back_title: defaultValues.back_title || '',
-                gender: defaultValues.gender || '',
+                gender: Boolean(defaultValues.gender) || false,
                 religion: defaultValues.religion || '',
                 birth_place: defaultValues.birth_place || '',
                 birth_date: defaultValues.birth_date || '',
@@ -80,7 +84,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 relationship_1: defaultValues.relationship_1 || '',
                 emergency_phone_2: defaultValues.emergency_phone_2 || '',
                 relationship_2: defaultValues.relationship_2 || '',
-                status: defaultValues.status || false,
+                status: Boolean( defaultValues.status) || false,
                 type: defaultValues.type || '',
                 lecture_status_id: String( defaultValues.lecture_status_id )|| '0',
                 staff_status_id: String( defaultValues.staff_status_id )|| '0',
@@ -90,9 +94,9 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 staff_division_id: String( defaultValues.staff_division_id )|| '0',
                 study_programs_id: String( defaultValues.study_programs_id )|| '0',
                 nidn: defaultValues.nidn || null,
-                nuptk: defaultValues.nuptk || '',
-                nitk: defaultValues.nitk || '',
-                nidk: defaultValues.nidk || '',
+                nuptk: defaultValues.nuptk || null,
+                nitk: defaultValues.nitk || null,
+                nidk: defaultValues.nidk || null,
                 
             });
         } else {
@@ -102,7 +106,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 foto: null,
                 front_title: null,
                 back_title: '',
-                gender: '',
+                gender: false,  
                 religion: '',
                 birth_place: '',
                 birth_date: '',
@@ -113,7 +117,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 emergency_phone_2: '',
                 relationship_2: '',
                 status: false,
-                type: '',
+                type: 'lecture',
                 lecture_status_id: '',
                 staff_status_id: '',
                 funtional_position_id: '',
@@ -129,6 +133,8 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             });
         }
     }, [defaultValues, reset]);
+
+    const typeValue = watch('type');
 
     const { lecturestatus, staffstatus, studyprogram, functionalposition, strukturalposition, staffdivision, fecthRelasi} = useEmployees();
 
@@ -178,8 +184,9 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
                             <FormTextInput
                                 id="foto"
-                                type="file"
+                                type="text"
                                 label="Foto"
+                                placeholder="Enter Foto"
                                 {...register('foto')}
                                 error={errors.foto?.message}
                             />
@@ -199,21 +206,42 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 {...register('back_title')}
                                 error={errors.back_title?.message}
                             />
-                            <FormTextInput
-                                id="gender"
-                                type="text"
-                                label="Jenis Kelamin"
-                                placeholder="Enter Jenis Kelamin"
-                                {...register('gender')}
-                                error={errors.gender?.message}
+                            <Controller
+                                control={control}
+                                name="gender"
+                                render={({ field }) => (
+                                    <FormSelectInput
+                                        id="gender"
+                                        label="Jenis Kelamin"
+                                        value={field.value ? 'true' : 'false'}
+                                        onValueChange={field.onChange}
+                                        error={errors.gender?.message}
+                                    >
+                                        <SelectItem value="true">Laki-Laki</SelectItem>
+                                        <SelectItem value="false">Perempuan</SelectItem>
+                                        
+                                    </FormSelectInput>
+                                )}
                             />
-                            <FormTextInput
-                                id="religion"
-                                type="text"
-                                label="Agama"
-                                placeholder="Enter Agama"
-                                {...register('religion')}
-                                error={errors.religion?.message}
+                            <Controller
+                                control={control}
+                                name="religion"
+                                render={({ field }) => (
+                                    <FormSelectInput
+                                        id="religion"
+                                        label="Agama"
+                                        value={field.value}
+                                        onValueChange={field.onChange}
+                                        error={errors.religion?.message}
+                                    >
+                                        <SelectItem value="islam">Islam</SelectItem>
+                                        <SelectItem value="kristen">Kristen Protestan</SelectItem>
+                                        <SelectItem value="katholik">Katholik</SelectItem>
+                                        <SelectItem value="hindu">Hindu</SelectItem>
+                                        <SelectItem value="buddha">Buddha</SelectItem>
+                                        <SelectItem value="konghucu">Konghucu</SelectItem>
+                                    </FormSelectInput>
+                                )}
                             />
                             <FormTextInput
                                 id="birth_place"
@@ -278,183 +306,220 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 {...register('relationship_2')}
                                 error={errors.relationship_2?.message}
                             />
-                            <FormTextInput
-                                id="status"
-                                type="text"
-                                label="Status"
-                                placeholder="Enter Status"
-                                {...register('status')}
-                                error={errors.status?.message}
-                            />
-                            <FormTextInput
-                                id="type"
-                                type="text"
-                                label="Tipe"
-                                placeholder="Enter Tipe"
-                                {...register('type')}
-                                error={errors.type?.message}
-                            />
+                            <div className="pt-2">
+                                <Label>Status</Label>
+                                <Controller
+                                    name="status"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <div className="flex items-center gap-4">
+                                            <Switch checked={field.value} onCheckedChange={field.onChange} id="status" />
+                                            <Label htmlFor="status">{field.value ? 'Aktif' : 'Tidak Aktif'}</Label>
+                                        </div>
+                                    )}
+                                />
+                            </div>
 
-                            <FormTextInput
-                                id="nidn"
-                                type="text"
-                                label="NIDN"
-                                placeholder="Enter NIDN"
-                                {...register('nidn')}
-                                error={errors.nidn?.message}
-                            />
-                            <FormTextInput
-                                id="nuptk"
-                                type="text"
-                                label="NUPTK"
-                                placeholder="Enter NUPTK"
-                                {...register('nuptk')}
-                                error={errors.nuptk?.message}
-                            />
-                            <FormTextInput
-                                id="nitk"
-                                type="text"
-                                label="NITK"
-                                placeholder="Enter NITK"
-                                {...register('nitk')}
-                                error={errors.nitk?.message}
-                            />
-                            <FormTextInput
-                                id="nidk"
-                                type="text"
-                                label="NIDK"
-                                placeholder="Enter NIDK"
-                                {...register('nidk')}
-                                error={errors.nidk?.message}
-                            />
+                                <Controller
+                                        name="type"
+                                        control={control}
+                                        rules={{ required: 'Tipe wajib diisi' }}
+                                        render={({ field }) => (
+                                            <FormSelectInput
+                                                id="type"
+                                                label="Tipe"
+                                                value={String(field.value)}
+                                                onValueChange={field.onChange}
+                                                error={errors.type?.message}
+                                            >
+                                                    <SelectItem  value={"lecture"}>
+                                                        Dosen
+                                                    </SelectItem>
+                                                    <SelectItem  value={"staff"}>
+                                                        Staff
+                                                    </SelectItem>
+                                            </FormSelectInput>
+                                        )}
+                                    />
 
-                            <Controller
-                                name="study_programs_id"
-                                control={control}
-                                rules={{ required: 'Study Program is required' }}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="study_programs_id"
-                                        label="Program Studi"
-                                        value={String(field.value)}
-                                        onValueChange={field.onChange}
-                                        error={errors.study_programs_id?.message}
-                                    >
-                                        {studyprogram.map((studyProgram: any) => (
-                                            <SelectItem key={studyProgram.id} value={String(studyProgram.id)}>
-                                                {studyProgram.idn_sp_name}
-                                            </SelectItem>
-                                        ))}
-                                    </FormSelectInput>
-                                )}
-                            />
-                            <Controller
-                                name="lecture_status_id"
-                                control={control}
-                                rules={{ required: 'Status Tendik is required' }}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="lecture_status_id"
-                                        label="Status Tendik"
-                                        value={String(field.value)}
-                                        onValueChange={field.onChange}
-                                        error={errors.lecture_status_id?.message}
-                                    >
-                                        {lecturestatus.map((lecturestatus: any) => (
-                                            <SelectItem key={lecturestatus.id} value={String(lecturestatus.id)}>
-                                                {lecturestatus.name}
-                                            </SelectItem>
-                                        ))}
-                                    </FormSelectInput>
-                                )}
-                            />
-                            <Controller
-                                name="staff_status_id"
-                                control={control}
-                                rules={{ required: 'Staff Status is required' }}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="staff_status_id"
-                                        label="Status Tendik"
-                                        value={String(field.value)}
-                                        onValueChange={field.onChange}
-                                        error={errors.staff_status_id?.message}
-                                    >
-                                        {staffstatus.map((staffStatus: any) => (
-                                            <SelectItem key={staffStatus.id} value={String(staffStatus.id)}>
-                                                {staffStatus.name}
-                                            </SelectItem>
-                                        ))}
-                                    </FormSelectInput>
-                                )}
-                            />
-                            <Controller
-                                name="struktural_position_id"
-                                control={control}
-                                rules={{ required: 'Jabatan Structural is required' }}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="struktural_position_id"
-                                        label="Jabatan Struktural"
-                                        value={String(field.value)}
-                                        onValueChange={field.onChange}
-                                        error={errors.struktural_position_id?.message}
-                                    >
-                                        {strukturalposition.map((strukturalposition: any) => (
-                                            <SelectItem key={strukturalposition.id} value={String(strukturalposition.id)}>
-                                                {strukturalposition.name}
-                                            </SelectItem>
-                                        ))}
-                                    </FormSelectInput>
-                                )}
-                            />
-                            <Controller
-                                name="funtional_position_id"
-                                control={control}
-                                rules={{ required: 'Funtional Position is required' }}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="funtional_position_id"
-                                        label="Jabatan Fungsional"
-                                        value={String(field.value)}
-                                        onValueChange={field.onChange}
-                                        error={errors.funtional_position_id?.message}
-                                    >
-                                        {functionalposition.map((functionalposition: any) => (
-                                            <SelectItem key={functionalposition.id} value={String(functionalposition.id)}>
-                                                {functionalposition.name}
-                                            </SelectItem>
-                                        ))}
-                                    </FormSelectInput>
-                                )}
-                            />
-                            <Controller
-                                name="staff_division_id"
-                                control={control}
-                                rules={{ required: 'Tendik Divisi is required' }}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="staff_division_id"
-                                        label="Tendik Divisi"
-                                        value={String(field.value)}
-                                        onValueChange={field.onChange}
-                                        error={errors.staff_division_id?.message}
-                                    >
-                                        {staffdivision.map((staffdivision: any) => (
-                                            <SelectItem key={staffdivision.id} value={String(staffdivision.id)}>
-                                                {staffdivision.name}
-                                            </SelectItem>
-                                        ))}
-                                    </FormSelectInput>
-                                )}
-                            />
+                            {typeValue === "lecture" ? (
+                                // kondisi dosen
+                                <>
+                                    <FormTextInput
+                                        id="nidn"
+                                        type="number"
+                                        label="NIDN"
+                                        placeholder="Enter NIDN"
+                                        {...register('nidn', { valueAsNumber: true })}
+                                        error={errors.nidn?.message}
+                                    />
+                                    <FormTextInput
+                                        id="nidk"
+                                        type="number"
+                                        label="NIDK"
+                                        placeholder="Enter NIDK"
+                                        {...register('nidk', { valueAsNumber: true })}
+                                        error={errors.nidk?.message}
+                                    />
+                                    <FormTextInput
+                                        id="pns_rank"
+                                        type="text"
+                                        label="Golongan"
+                                        placeholder="Enter Golongan"
+                                        {...register('pns_rank')}
+                                        error={errors.pns_rank?.message}
+                                    />
+                                    <Controller
+                                        name="lecture_status_id"
+                                        control={control}
+                                        rules={{ required: 'Status Dosen is required' }}
+                                        render={({ field }) => (
+                                            <FormSelectInput
+                                                id="lecture_status_id"
+                                                label="Status Dosen"
+                                                value={String(field.value)}
+                                                onValueChange={field.onChange}
+                                                error={errors.lecture_status_id?.message}
+                                            >
+                                                {lecturestatus.map((lecturestatus: any) => (
+                                                    <SelectItem key={lecturestatus.id} value={String(lecturestatus.id)}>
+                                                        {lecturestatus.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </FormSelectInput>
+                                        )}
+                                    />
+                                    <Controller
+                                        name="study_programs_id"
+                                        control={control}
+                                        rules={{ required: 'Study Program is required' }}
+                                        render={({ field }) => (
+                                            <FormSelectInput
+                                                id="study_programs_id"
+                                                label="Program Studi"
+                                                value={String(field.value)}
+                                                onValueChange={field.onChange}
+                                                error={errors.study_programs_id?.message}
+                                            >
+                                                {studyprogram.map((studyProgram: any) => (
+                                                    <SelectItem key={studyProgram.id} value={String(studyProgram.id)}>
+                                                        {studyProgram.idn_sp_name}
+                                                    </SelectItem>
+                                                ))}
+                                            </FormSelectInput>
+                                        )}
+                                    />
+                                    <Controller
+                                        name="struktural_position_id"
+                                        control={control}
+                                        rules={{ required: 'Jabatan Structural is required' }}
+                                        render={({ field }) => (
+                                            <FormSelectInput
+                                                id="struktural_position_id"
+                                                label="Jabatan Struktural"
+                                                value={String(field.value)}
+                                                onValueChange={field.onChange}
+                                                error={errors.struktural_position_id?.message}
+                                            >
+                                                {strukturalposition.map((strukturalposition: any) => (
+                                                    <SelectItem key={strukturalposition.id} value={String(strukturalposition.id)}>
+                                                        {strukturalposition.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </FormSelectInput>
+                                        )}
+                                    />
+                                    <Controller
+                                        name="funtional_position_id"
+                                        control={control}
+                                        rules={{ required: 'Funtional Position is required' }}
+                                        render={({ field }) => (
+                                            <FormSelectInput
+                                                id="funtional_position_id"
+                                                label="Jabatan Fungsional"
+                                                value={String(field.value)}
+                                                onValueChange={field.onChange}
+                                                error={errors.funtional_position_id?.message}
+                                            >
+                                                {functionalposition.map((functionalposition: any) => (
+                                                    <SelectItem key={functionalposition.id} value={String(functionalposition.id)}>
+                                                        {functionalposition.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </FormSelectInput>
+                                        )}
+                                    />
 
+                                            
+                                </>
+                            ) : (
+                                // kondisi tendik
+                                <>
+
+                                <FormTextInput
+                                    id="nitk"
+                                    type="number"
+                                    label="NITK"
+                                    placeholder="Enter NITK"
+                                    {...register('nitk', { valueAsNumber: true })}
+                                    error={errors.nitk?.message}
+                                />
+                                    <Controller
+                                    name="staff_division_id"
+                                    control={control}
+                                    rules={{ required: 'Tendik Divisi is required' }}
+                                    render={({ field }) => (
+                                            <FormSelectInput
+                                                id="staff_division_id"
+                                                label="Tendik Divisi"
+                                                value={String(field.value)}
+                                                onValueChange={field.onChange}
+                                                error={errors.staff_division_id?.message}
+                                            >
+                                                {staffdivision.map((staffdivision: any) => (
+                                                    <SelectItem key={staffdivision.id} value={String(staffdivision.id)}>
+                                                        {staffdivision.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </FormSelectInput>
+                                        )}
+                                    />
+                                    <Controller
+                                        name="staff_status_id"
+                                        control={control}
+                                        rules={{ required: 'Staff Status is required' }}
+                                        render={({ field }) => (
+                                            <FormSelectInput
+                                                id="staff_status_id"
+                                                label="Status Tendik"
+                                                value={String(field.value)}
+                                                onValueChange={field.onChange}
+                                                error={errors.staff_status_id?.message}
+                                            >
+                                                {staffstatus.map((staffStatus: any) => (
+                                                    <SelectItem key={staffStatus.id} value={String(staffStatus.id)}>
+                                                        {staffStatus.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </FormSelectInput>
+                                        )}
+                                    />
+
+                                </>
+                            )}
+
+                            {/* kondisi selain  dosen dan tendik */}
+
+                            {errors.root && <p className="text-red-600">{errors.root.message}</p>}
 
                             <Button
                                 type="submit"
-                                className={`mb-5 rounded px-4 py-2 font-bold text-white ${defaultValues ? 'bg-blue-600 hover:bg-blue-500' : 'bg-green-700 hover:bg-green-600'}`}
+                                className={`mt-4 rounded px-4 py-2 font-bold text-white ${
+                                    defaultValues ? 'bg-blue-600 hover:bg-blue-500' : 'bg-green-500 hover:bg-green-600'
+                                }`}
+                                disabled={isSubmitting}
                             >
-                                {defaultValues ? 'Update' : 'Create'}
+                                {isSubmitting ? 'Loading...' : defaultValues ? 'Update' : 'Create'}
                             </Button>
                         </div>
                     </form>

@@ -77,6 +77,7 @@ export const useEmployees = () => {
             if (error.response.status === 500) {
                 setToast({ message: 'Failed to submit Employees', type: 'error' });
             }
+            console.error(error);
             throw error.response.data;
         } finally {
             setIsLoading(false);

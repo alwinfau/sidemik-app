@@ -6,7 +6,7 @@ export type EmployeesType = {
     id?: number;
     nip: string;
     name: string;
-    foto:null;
+    foto:string;
     front_title: number;
     back_title: string;
     gender: boolean;
@@ -17,7 +17,7 @@ export type EmployeesType = {
     phone: string;
     emergency_phone: string;
     relationship_1: string;
-    emergency_phone_2: null;
+    emergency_phone_2: string;
     relationship_2: string;
     status: boolean;
     type: string;
@@ -27,10 +27,10 @@ export type EmployeesType = {
     study_programs: {
         name: string;
     };
-    nidn: null;
-    nuptk: null;
-    nitk: null;
-    nidk: null;
+    nidn: string;
+    nuptk: string;
+    nitk: string;
+    nidk: string;
     functional_positons: {
         name: string;
     }
@@ -57,7 +57,10 @@ export const columns = (onEdit: (row: EmployeesType) => void, onDelete: (id: str
     { accessorKey: 'foto', header: 'Foto' },
     { accessorKey: 'front_title', header: 'Nama Depan' },
     { accessorKey: 'back_title', header: 'Nama Belakang' },
-    { accessorKey: 'gender', header: 'Jenis Kelamin' },
+    { 
+        accessorKey: 'gender', 
+        header: 'Jenis Kelamin',
+        cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Laki-laki' : 'Perempuan'}</div>,},
     { accessorKey: 'religion', header: 'Agama' },
     { accessorKey: 'birth_place', header: 'Tempat Lahir' },
     { accessorKey: 'birth_date', header: 'Tanggal Lahir' },
@@ -67,7 +70,11 @@ export const columns = (onEdit: (row: EmployeesType) => void, onDelete: (id: str
     { accessorKey: 'relationship_1', header: 'Hubungan 1' },
     { accessorKey: 'emergency_phone_2', header: 'Handphone Darurat 2' },
     { accessorKey: 'relationship_2', header: 'Hubungan 2' },
-    { accessorKey: 'status', header: 'Status' },
+    { 
+        accessorKey: 'status', 
+        header: 'Status',
+        cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Aktif' : 'Tidak Aktif'}</div>,
+    },
     { accessorKey: 'type', header: 'Jenis' },
     { accessorKey: 'pns_rank', header: 'PNS Rank' },
     { accessorKey: 'nidn', header: 'NIDN' },
