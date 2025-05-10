@@ -1,39 +1,63 @@
-import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
-import { Label } from '../../label';
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
-interface YearInputProps {
-    label: string;
-    id: string;
-    placeholder?: string;
-    register: UseFormRegisterReturn;
-    error?: FieldError;
-}
-
-const YearInput = ({ label, id, placeholder, register, error }: YearInputProps) => {
-    // Mendapatkan tahun sekarang
-    const currentYear = new Date().getFullYear();
-    // Daftar tahun dari 20 tahun sebelumnya hingga 5 tahun ke depan
-    const yearRange = Array.from({ length: 15 }, (_, i) => currentYear - 10 + i);
-
-    return (
-        <div>
-        <Label htmlFor={id}>{label}</Label>
-        <div className="rounded border">
-            <select
-            id={id}
-            {...register}
-            aria-label={id}
-            className="w-full p-3"
-            >
-            <option value="" disabled>Pilih Tahun</option>
-            {yearRange.map((year) => (
-                <option key={year} value={year}>{year}</option>
-            ))}
-            </select>
-        </div>
-        {error && <p className="text-red-500 text-sm mt-1">{error.message}</p>}
-        </div>
-    );
+type YearPickerProps = {
+  startYear?: number;
+  endYear?: number;
+  value?: number;
+  onSelect?: (year: number) => void;
 };
 
-export default YearInput;
+const getYears = (start: number, end: number) => {
+  const years = [];
+  for (let year = start; year <= end; year++) {
+    years.push(year);
+  }
+  return years;
+};
+
+const YearPicker = ({ startYear = 2000, endYear = new Date().getFullYear(), value, onSelect }: YearPickerProps) => {
+  // Pastikan state memiliki nilai default yang valid
+  const [selectedYear, setSelectedYear] = useState<number>(value ?? new Date().getFullYear());
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    // Validasi: Hanya set jika value berupa angka dan dalam rentang yang benar
+    if (typeof value === "number" && value >= startYear && value <= endYear) {
+      setSelectedYear(value);
+    }
+  }, [value, startYear, endYear]);
+
+  const handleYearSelect = (year: number) => {
+    setSelectedYear(year);
+    setIsOpen(false);
+    if (onSelect) onSelect(year);
+  };
+
+  return (
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
+        <Button variant="outline" className="w-32 justify-between">
+          {selectedYear} <span className="ml-2">📅</span>
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="p-4 max-w-xs">
+        <div className="grid grid-cols-4 gap-2">
+          {getYears(startYear, endYear).map((year) => (
+            <Button
+              key={year}
+              variant={year === selectedYear ? "default" : "ghost"}
+              className="w-16 h-10 text-sm"
+              onClick={() => handleYearSelect(year)}
+            >
+              {year}
+            </Button>
+          ))}
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+};
+
+export default YearPicker;

@@ -9,6 +9,8 @@ import { z } from 'zod';
 
 import DateInput from '@/components/ui/Components_1/DateInput';
 import { AcademicYearType } from './Column';
+import { Label } from '@/components/ui/label';
+import YearPicker from '@/components/ui/Components_1/YearsInput';
 
 type ModalProps = {
     open: boolean;
@@ -31,6 +33,7 @@ type FormInputs = z.infer<typeof schema>;
 const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) => {
     const {
         register,
+        setValue,
         handleSubmit,
         reset,
         setError,
@@ -42,10 +45,10 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
     useEffect(() => {
         if (defaultValues) {
             reset({
-                academic_year: defaultValues.academic_year || '',
+                academic_year: defaultValues.academic_year,
                 name: defaultValues.name || '',
-                start_date: defaultValues.start_date || '',
-                end_date: defaultValues.end_date || '',
+                start_date: defaultValues.start_date,
+                end_date: defaultValues.end_date,
                 description: defaultValues.description || '',
             });
         } else {
@@ -60,6 +63,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
     }, [defaultValues, reset]);
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
         try {
+            
             const result = await submit(data, defaultValues?.id);
             if (result != null) {
                 if (!isSubmitting && !defaultValues) {
@@ -90,7 +94,9 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             });
         }
     };
-
+    const handleYearChange = (year: number) => {
+        setValue('academic_year', year.toString());
+    };
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
@@ -108,13 +114,22 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     {...register('academic_year')}
                                     error={errors.academic_year?.message}
                                 /> */}
-                            <DateInput
+                            {/* <DateInput
                                 label="Tahun Akademik"
                                 id="academic_year"
-                                placeholder="Enter Certificate Date"
+                                placeholder="Masukan Tahun Ajaran"
                                 register={register('academic_year')}
                                 error={errors.academic_year}
+                            /> */}
+                            <Label>Tahun Ajaran</Label>
+                            <YearPicker
+                                startYear={2015}
+                                endYear={2030}
+                                value={defaultValues?.academic_year ? parseInt(defaultValues.academic_year) : undefined}
+                                onSelect={handleYearChange}
                             />
+
+
                             <FormTextInput
                                 placeholder="Masukan nama akademik"
                                 id="name"
@@ -132,7 +147,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 error={errors.start_date}
                             />
                             <DateInput
-                                label="Sampai"
+                                label="Berakhir"
                                 id="end_date"
                                 placeholder="Enter Valid From"
                                 register={register('end_date')}

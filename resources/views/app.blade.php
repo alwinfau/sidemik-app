@@ -18,6 +18,11 @@
                 }
             })();
         </script>
+        {{-- Icon Stb --}}
+
+        <link rel="icon" type="image/png" href="{{asset('public/logoStbhinneka.png')}}">
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+
 
         {{-- Inline style to set the HTML background color based on our theme in app.css --}}
         <style>
@@ -30,7 +35,7 @@
             }
         </style>
 
-        <title inertia>{{ config('app.name', 'Laravel') }}</title>
+        <title inertia>{{ config('app.name') }}</title>
 
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />

@@ -21,11 +21,10 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    code: z.string().min(3, 'Code harus lebih dari 3 karakter'),
-    academic_year_id: z.string().min(1, 'Academic Year wajib diisi'),
-    semester: z.string(),
-    name: z.string().min(5, 'Name harus lebih dari 5 karakter'),
-    short_name: z.string().min(3, 'Short Name harus lebih dari 3 karakter'),
+    academic_year_id: z.string().min(1, 'Tahun Ajaran wajib diisi'),
+    semester: z.string({message: 'Semester wajib diisi'}),
+    name: z.string({message: 'Nama wajib diisi'}).min(1, 'Name harus lebih dari 1 karakter'),
+    short_name: z.string({message: 'Singkatan wajib diisi'}),
     start_date: z.string().nullable(),
     end_date: z.string().nullable(),
     start_midterm_exam: z.string().nullable(),
@@ -58,7 +57,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
     useEffect(() => {
         if (defaultValues) {
             reset({
-                code: defaultValues.code || '',
+                
                 academic_year_id: String(defaultValues.academic_year_id) || '0',
                 semester: defaultValues.semester,
                 name: defaultValues.name || '',
@@ -71,12 +70,12 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 end_final_exam: defaultValues.end_final_exam,
                 number_of_meetings: defaultValues.number_of_meetings || 0,
                 min_presence: defaultValues.min_presence || 0,
-                is_active: Boolean(defaultValues.is_active) || false,
+                is_active: Boolean(defaultValues.is_active) || true,
                 description: defaultValues.description || '',
             });
         } else {
             reset({
-                code: '',
+                
                 academic_year_id: '',
                 semester: '',
                 name: '',
@@ -89,7 +88,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 end_final_exam: '',
                 number_of_meetings: 0,
                 min_presence: 0,
-                is_active: false,
+                is_active: true,
                 description: '',
             });
         }
@@ -97,25 +96,10 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
 
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
         try {
-            const payload = {
-                ...data,
-                is_active: data.is_active ? 1 : 0,
-                semester: data.semester || null,
-                start_date: data.start_date || null,
-                end_date: data.end_date || null,
-                start_midterm_exam: data.start_midterm_exam || null,
-                end_midterm_exam: data.end_midterm_exam || null,
-                start_final_exam: data.start_final_exam || null,
-                end_final_exam: data.end_final_exam || null,
-                description: data.description || null,
-            };
-
-            console.log('Kirim ke server:', payload);
-
-            const result = await submit(payload, defaultValues?.id);
+            const result = await submit(data, defaultValues?.id);
             if (result != null && !isSubmitting && !defaultValues) {
                 reset({
-                    code: '',
+                
                     academic_year_id: '',
                     semester: '',
                     name: '',
@@ -128,7 +112,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                     end_final_exam: '',
                     number_of_meetings: 0,
                     min_presence: 0,
-                    is_active: false,
+                    is_active: true,
                     description: '',
                 });
             }
@@ -161,15 +145,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4">
-                            <FormTextInput
-                                id="code"
-                                placeholder="Masukan code akademik periode"
-                                label="Kode"
-                                type="text"
-                                {...register('code')}
-                                error={errors.code?.message}
-                            />
-
                             <Controller
                                 name="semester"
                                 control={control}
@@ -189,7 +164,26 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     </FormSelectInput>
                                 )}
                             />
-
+                            <Controller
+                                name="academic_year_id"
+                                control={control}
+                                rules={{ required: 'Academic is required' }}
+                                render={({ field }) => (
+                                    <FormSelectInput
+                                        id="academic_year_id"
+                                        label="Tahun Akademik"
+                                        value={String(field.value)}
+                                        onValueChange={field.onChange}
+                                        error={errors.academic_year_id?.message}
+                                    >
+                                        {AcademicYears.map((Academic: any) => (
+                                            <SelectItem key={Academic.id} value={String(Academic.id)}>
+                                                {Academic.name}
+                                            </SelectItem>
+                                        ))}
+                                    </FormSelectInput>
+                                )}
+                            />
                             <FormTextInput
                                 id="name"
                                 label="Nama"
@@ -206,7 +200,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 {...register('short_name')}
                                 error={errors.short_name?.message}
                             />
-
                             <DateInput
                                 label="Dimulai sejak"
                                 id="start_date"
@@ -278,27 +271,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     )}
                                 />
                             </div>
-
-                            <Controller
-                                name="academic_year_id"
-                                control={control}
-                                rules={{ required: 'Academic is required' }}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="academic_year_id"
-                                        label="Tahun Akademik"
-                                        value={String(field.value)}
-                                        onValueChange={field.onChange}
-                                        error={errors.academic_year_id?.message}
-                                    >
-                                        {AcademicYears.map((Academic: any) => (
-                                            <SelectItem key={Academic.id} value={String(Academic.id)}>
-                                                {Academic.name}
-                                            </SelectItem>
-                                        ))}
-                                    </FormSelectInput>
-                                )}
-                            />
                             <FormTextInput
                                 id="description"
                                 placeholder="Masukan deskripsi akademik periode"
