@@ -169,6 +169,11 @@ Route::get('/elective-course-groups', function() {
     return Inertia::render(component:'MatkulPil/MatkulPil');
 })->name('MatkulPil');
 
+// Route Mata Kuliah
+Route::get('/course', function() {
+    return Inertia::render(component:'Course/CoursePages');
+})->name('course');
+
 // Route Jam Kuliah
 Route::get('/jam-kuliah', function() {
     return Inertia::render(component:'JamKuliah/JamKuliah');

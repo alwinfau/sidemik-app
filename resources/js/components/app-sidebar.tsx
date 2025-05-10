@@ -204,34 +204,34 @@ const data: AppData = {
                     title: 'Lecture',
                     url: '/employee',
                 },
-                {
-                    title: 'Administrative Staff',
-                    url: '#',
-                },
-                {
-                    title: 'Employee Document',
-                    url: '/employee-document',
-                },
-                {
-                    title: 'Document Type',
-                    url: '/document-type',
-                },
-                {
-                    title: 'Active Statuses',
-                    url: '/active-status',
-                },
-                {
-                    title: 'Employee Relationship',
-                    url: '/employee-relationship',
-                },
-                {
-                    title: 'Academic Position',
-                    url: '/academic-position',
-                },
-                {
-                    title: 'Academic Position Types',
-                    url: '/academic-position-types',
-                },
+                // {
+                //     title: 'Administrative Staff',
+                //     url: '#',
+                // },
+                // {
+                //     title: 'Employee Document',
+                //     url: '/employee-document',
+                // },
+                // {
+                //     title: 'Document Type',
+                //     url: '/document-type',
+                // },
+                // {
+                //     title: 'Active Statuses',
+                //     url: '/active-status',
+                // },
+                // {
+                //     title: 'Employee Relationship',
+                //     url: '/employee-relationship',
+                // },
+                // {
+                //     title: 'Academic Position',
+                //     url: '/academic-position',
+                // },
+                // {
+                //     title: 'Academic Position Types',
+                //     url: '/academic-position-types',
+                // },
                 {
                     title: 'Divisi Tendik',
                     url: '/staff-division',

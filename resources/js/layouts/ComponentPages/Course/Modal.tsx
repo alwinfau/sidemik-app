@@ -5,7 +5,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { SelectItem } from '@/components/ui/select';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoaderCircle } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useCourse } from './useCourse';
@@ -18,21 +18,21 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    code: z.string().min(3, 'Code harus lebih dari 3 karakter'),
-    name_idn: z.string().min(5, 'Nama harus lebih dari 5 karakter'),
-    name_eng: z.string().min(5, 'Name harus lebih dari 5 karakter'),
-    course_desc: z.string().min(5, 'Course Desc harus lebih dari 5 karakter'),
-    theory_sks: z.coerce.number().positive('Nilai harus melebebihi angka 1'),
-    practice_sks: z.coerce.number().positive('Nilai harus melebebihi angka 1'),
-    simulation_sks: z.coerce.number().positive('Nilai harus melebebihi angka 1'),
-    sks_total: z.coerce.number().min(0),
-    general_courses: z.boolean(),
-    sap_ada: z.boolean(),
-    syllabus_ada: z.boolean(),
-    course_materials_ada: z.boolean(),
-    diktat_ada: z.boolean(),
-    course_types_id: z.string(),
-    course_groups_id: z.string(),
+    code: z.string({ message: 'Kode harus diisi' }).min(2, 'Code harus lebih dari 2 karakter'),
+    semester: z.coerce.number({ message: 'Semester Wajib diisi' }).min(1, 'Semester wajib diisi lebih dari 0').max(14, 'Maximal Semester hanya 14'),
+    name_idn: z.string({ message: 'Mata Kuliah Wajib Diisi' }).min(5, 'Nama harus lebih dari 5 karakter'),
+    name_eng: z.string({ message: 'Course Wajib Diisi' }).min(5, 'Name harus lebih dari 5 karakter'),
+    theory_sks: z.coerce.number({ message: 'Teori Wajib diisi' }).positive('Nilai harus melebebihi angka 1'),
+    practical_sks: z.coerce.number({ message: 'Praktek Wajib diisi' }),
+    fieldwork_sks: z.coerce.number(),
+    course_desc: z.string().nullable(),
+    is_scheduled: z.boolean(),
+    prereq_courses_1: z.number().nullable(),
+    prereq_courses_2: z.number().nullable(),
+    course_types_id: z.string({ message: 'Jenis Mata Kuliah Wajib diisi' }),
+    course_groups_id: z.string({ message: 'Kelompok Mata Kuliah Wajib diisi' }),
+    curriculums_id: z.string({ message: 'Kurikulum Wajib diisi' }),
+    elective_course_groups_id: z.string().nullable(),
 });
 
 type FormInputs = z.infer<typeof schema>;
@@ -49,7 +49,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         resolver: zodResolver(schema),
     });
 
-    const { courseTypes, courseGroups, fectRelasi } = useCourse();
+    const { courseTypes, courseGroups, curriculum, MatkulPil, fectRelasi } = useCourse();
 
     useEffect(() => {
         fectRelasi();
@@ -59,41 +59,51 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         if (defaultValues) {
             reset({
                 code: defaultValues.code || '',
+                semester: defaultValues.semester || 0,
                 name_idn: defaultValues.name_idn || '',
                 name_eng: defaultValues.name_eng || '',
                 course_desc: defaultValues.course_desc || '',
                 theory_sks: defaultValues.theory_sks || 0,
-                practice_sks: defaultValues.practice_sks || 0,
-                simulation_sks: defaultValues.simulation_sks || 0,
-                sks_total: defaultValues.sks_total || 0,
-                general_courses: Boolean(defaultValues.general_courses),
-                sap_ada: Boolean(defaultValues.sap_ada),
-                syllabus_ada: Boolean(defaultValues.syllabus_ada),
-                course_materials_ada: Boolean(defaultValues.course_materials_ada),
-                diktat_ada: Boolean(defaultValues.diktat_ada),
+                practical_sks: defaultValues.practical_sks || 0,
+                fieldwork_sks: defaultValues.fieldwork_sks || '',
+                is_scheduled: Boolean(defaultValues.is_scheduled) || true,
+                prereq_courses_1: defaultValues.prereq_courses_1 || null,
+                prereq_courses_2: defaultValues.prereq_courses_2 || null,
                 course_types_id: String(defaultValues.course_types_id) || '',
                 course_groups_id: String(defaultValues.course_groups_id) || '',
+                curriculums_id: String(defaultValues.curriculums_id) || '',
+                elective_course_groups_id: String(defaultValues.elective_course_groups_id) ?? null,
             });
         } else {
             reset({
                 code: '',
+                semester: 0,
                 name_idn: '',
                 name_eng: '',
                 course_desc: '',
                 theory_sks: 0,
-                practice_sks: 0,
-                simulation_sks: 0,
-                sks_total: 0,
-                general_courses: false,
-                sap_ada: false,
-                syllabus_ada: false,
-                course_materials_ada: false,
-                diktat_ada: false,
+                practical_sks: 0,
+                fieldwork_sks: 0,
+                is_scheduled: true,
+                prereq_courses_1: null,
+                prereq_courses_2: null,
                 course_types_id: '',
                 course_groups_id: '',
+                curriculums_id: '',
+                elective_course_groups_id: '',
             });
         }
     }, [defaultValues, reset]);
+
+    const [showElectiveCourse, setShowElectiveCourse] = useState(false);
+
+    const handleCourseTypeChange = (value: string) => {
+        // Temukan ID dari tipe mata kuliah "Peminatan"
+        const peminatanType = courseTypes.find((type: any) => type.name === 'Pilihan');
+
+        // Cek apakah value dari jenis mata kuliah sesuai dengan ID peminatan
+        setShowElectiveCourse(value === String (peminatanType?.id));
+    };
 
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
         try {
@@ -119,132 +129,80 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mx-3 space-y-4">
-                            <FormTextInput id="code" label="Code" type="text" {...register('code')} error={errors.code?.message} />
-                            <FormTextInput id="name_idn" label="Nama (IDN)" type="text" {...register('name_idn')} error={errors.name_idn?.message} />
-                            <FormTextInput id="name_eng" label="Name (ENG)" type="text" {...register('name_eng')} error={errors.name_eng?.message} />
+                            <FormTextInput
+                                id="code"
+                                label="Kode"
+                                placeholder="Isi Kode Mata Kuliah"
+                                type="text"
+                                {...register('code')}
+                                error={errors.code?.message}
+                            />
+                            <FormTextInput id="semester" label="Semester" type="number" {...register('semester')} error={errors.semester?.message} />
+                            <FormTextInput
+                                id="name_idn"
+                                label="Mata Kuliah"
+                                placeholder="Masukan Nama Mata Kuliah"
+                                type="text"
+                                {...register('name_idn')}
+                                error={errors.name_idn?.message}
+                            />
+                            <FormTextInput
+                                id="name_eng"
+                                label="Course"
+                                placeholder="Masukan Nama Matkul Dalam B.Ing"
+                                type="text"
+                                {...register('name_eng')}
+                                error={errors.name_eng?.message}
+                            />
                             <FormTextInput
                                 id="theory_sks"
-                                label="Theory SKS"
+                                label="SKS Teori"
                                 type="number"
                                 {...register('theory_sks')}
                                 error={errors.theory_sks?.message}
                             />
                             <FormTextInput
-                                id="practice_sks"
-                                label="Practice SKS"
+                                id="practical_sks"
+                                label="SKS Praktek"
                                 type="number"
-                                {...register('practice_sks')}
-                                error={errors.practice_sks?.message}
+                                {...register('practical_sks')}
+                                error={errors.practical_sks?.message}
                             />
                             <FormTextInput
-                                id="simulation_sks"
-                                label="Simulation SKS"
+                                id="fieldwork_sks"
+                                label="SKS Lapangan"
                                 type="number"
-                                {...register('simulation_sks')}
-                                error={errors.simulation_sks?.message}
+                                {...register('fieldwork_sks')}
+                                error={errors.fieldwork_sks?.message}
                             />
-                            <FormTextInput
-                                id="sks_total"
-                                label="Total SKS"
-                                type="number"
-                                {...register('sks_total')}
-                                error={errors.sks_total?.message}
-                            />
-
                             <Controller
-                                name="general_courses"
+                                name="is_scheduled"
                                 control={control}
                                 render={({ field }) => (
                                     <FormSelectInput
-                                        id="general_courses"
-                                        label="General Courses"
+                                        id="is_scheduled"
+                                        label="Terjadwal"
                                         value={field.value ? 'true' : 'false'}
                                         onValueChange={(val) => field.onChange(val === 'true')}
-                                        error={errors.general_courses?.message}
+                                        error={errors.is_scheduled?.message}
                                     >
-                                        <SelectItem value="true">Ya</SelectItem>
-                                        <SelectItem value="false">Tidak</SelectItem>
+                                        <SelectItem value="true">Terjadwal</SelectItem>
+                                        <SelectItem value="false">Tidak Terjadwal</SelectItem>
                                     </FormSelectInput>
                                 )}
                             />
-
-                            <Controller
-                                name="sap_ada"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="sap_ada"
-                                        label="SAP "
-                                        value={field.value ? 'true' : 'false'}
-                                        onValueChange={(val) => field.onChange(val === 'true')}
-                                        error={errors.sap_ada?.message}
-                                    >
-                                        <SelectItem value="true">Ya</SelectItem>
-                                        <SelectItem value="false">Tidak</SelectItem>
-                                    </FormSelectInput>
-                                )}
-                            />
-
-                            <Controller
-                                name="syllabus_ada"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="syllabus_ada"
-                                        label="Syllabus "
-                                        value={field.value ? 'true' : 'false'}
-                                        onValueChange={(val) => field.onChange(val === 'true')}
-                                        error={errors.syllabus_ada?.message}
-                                    >
-                                        <SelectItem value="true">Ya</SelectItem>
-                                        <SelectItem value="false">Tidak</SelectItem>
-                                    </FormSelectInput>
-                                )}
-                            />
-
-                            <Controller
-                                name="course_materials_ada"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="course_materials_ada"
-                                        label="Course Materials "
-                                        value={field.value ? 'true' : 'false'}
-                                        onValueChange={(val) => field.onChange(val === 'true')}
-                                        error={errors.course_materials_ada?.message}
-                                    >
-                                        <SelectItem value="true">Ya</SelectItem>
-                                        <SelectItem value="false">Tidak</SelectItem>
-                                    </FormSelectInput>
-                                )}
-                            />
-
-                            <Controller
-                                name="diktat_ada"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="diktat_ada"
-                                        label="Diktat "
-                                        value={field.value ? 'true' : 'false'}
-                                        onValueChange={(val) => field.onChange(val === 'true')}
-                                        error={errors.diktat_ada?.message}
-                                    >
-                                        <SelectItem value="true">Ya</SelectItem>
-                                        <SelectItem value="false">Tidak</SelectItem>
-                                    </FormSelectInput>
-                                )}
-                            />
-
                             <Controller
                                 name="course_types_id"
                                 control={control}
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="course_types_id"
-                                        label="Course Type"
+                                        label="Jenis Mata Kuliah"
                                         value={field.value}
-                                        onValueChange={field.onChange}
+                                        onValueChange={(val) => {
+                                            field.onChange(val);
+                                            handleCourseTypeChange(val);
+                                        }}
                                         error={errors.course_types_id?.message}
                                     >
                                         {courseTypes.map((type: any) => (
@@ -262,7 +220,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="course_groups_id"
-                                        label="Course Group"
+                                        label="Kelompok Mata Kuliah"
                                         value={field.value}
                                         onValueChange={field.onChange}
                                         error={errors.course_groups_id?.message}
@@ -276,13 +234,56 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 )}
                             />
 
-                            <FormTextInput
+                            <Controller
+                                name="curriculums_id"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormSelectInput
+                                        id="curriculums_id"
+                                        label="Kurirkulum"
+                                        value={field.value}
+                                        onValueChange={field.onChange}
+                                        error={errors.curriculums_id?.message}
+                                    >
+                                        {curriculum.map((Curr: any) => (
+                                            <SelectItem key={Curr.id} value={String(Curr.id)}>
+                                                {Curr.curriculum_year}
+                                            </SelectItem>
+                                        ))}
+                                    </FormSelectInput>
+                                )}
+                            />
+
+                            {showElectiveCourse && (
+                                <Controller
+                                    name="elective_course_groups_id"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <FormSelectInput
+                                            id="elective_course_groups_id"
+                                            label="Mata Kuliah Pilihan"
+                                            value={field.value ?? ''}
+                                            onValueChange={field.onChange}
+                                            error={errors.elective_course_groups_id?.message}
+                                        >
+                                            {MatkulPil.map((Matkul: any) => (
+                                                <SelectItem key={Matkul.id} value={String(Matkul.id)}>
+                                                    {Matkul.name}
+                                                </SelectItem>
+                                            ))}
+                                        </FormSelectInput>
+                                    )}
+                                />
+                            )}
+
+                            {/* <FormTextInput
                                 id="course_desc"
                                 label="Course Description"
                                 type="textarea"
                                 {...register('course_desc')}
                                 error={errors.course_desc?.message}
-                            />
+                            /> */}
+
                             {errors.root && <p className="text-red-600">{errors.root.message}</p>}
 
                             <Button

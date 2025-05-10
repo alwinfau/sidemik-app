@@ -32,19 +32,19 @@ export const useStatusTendik = () => {
                 setData((prev) => prev.map((p) => (p.id === id ? res.data : p)));
                 await fetchData();
                 onSuccess?.();
-                setToast({ message: 'Staff Status updated successfully', type: 'success' });
+                setToast({ message: 'Status Tendik updated successfully', type: 'success' });
                 return res;
             } else {
                 const res: any = await post('/staff-status', data);
                 setData((prev) => [...prev, res.data]);
                 await fetchData();
                 onSuccess?.();
-                setToast({ message: 'Staff Status created successfully', type: 'success' });
+                setToast({ message: ' Status Tendik created successfully', type: 'success' });
                 return res;
             }
         } catch (error: any) {
             if (error?.response?.status === 500) {
-                setToast({ message: 'Failed to submit Staff Status', type: 'error' });
+                setToast({ message: 'Gagal Mengirim Status Tendik', type: 'error' });
             }
             throw error.response.data;
         } finally {

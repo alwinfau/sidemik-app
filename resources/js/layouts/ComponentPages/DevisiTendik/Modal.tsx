@@ -18,7 +18,7 @@ type ModalProps = {
 const schema = z.object({
     code: z.string(),
     name: z.string(),
-    description: z.string(),
+    description: z.string(). nullable(),
 });
 
 type FormInputs = z.infer<typeof schema>;
@@ -87,13 +87,13 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <DialogHeader>
                     <DialogTitle>{defaultValues ? 'Edit Divisi Tendik' : 'Add Divisi Tendik'}</DialogTitle>
                 </DialogHeader>
-                <DialogDescription>Silakan isi data Deviv Tendik.</DialogDescription>
+                <DialogDescription>Silakan isi data Divisi Tendik.</DialogDescription>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mx-3 space-y-4">
                             <FormTextInput id="code" label="Kode" type="text" {...register('code')} error={errors.code?.message} required />
 
-                            <FormTextInput id="name" label="Nama" type="text" {...register('name')} error={errors.name?.message} />
+                            <FormTextInput id="name" label="Nama" type="text" {...register('name')} error={errors.name?.message} required />
 
                             <FormTextInput
                                 id="description"

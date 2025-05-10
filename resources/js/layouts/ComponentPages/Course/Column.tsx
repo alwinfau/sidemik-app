@@ -5,69 +5,66 @@ import { Pencil, Trash2 } from 'lucide-react';
 export type CourseType = {
     id?: number;
     code: string;
+    semester: string;
     name_idn: string;
     name_eng: string;
-    course_desc: string;
     theory_sks: number;
-    practice_sks: number;
-    simulation_sks: number;
-    sks_total: number;
-    general_courses: boolean;
-    sap_ada: boolean;
-    syllabus_ada: boolean;
-    course_materials_ada: boolean;
-    diktat_ada: boolean;
+    practical_sks: number;
+    fieldwork_sks: number;
+    is_scheduled: boolean;
+    course_desc: string;
+    prereq_courses_1: string;
+    prereq_courses_2: string;
     course_type: {
         name: string;
     };
     course_group: {
         name: string;
     };
+    curriculumns: {
+        curriculum_year: string;
+    };
+    elective_course_group: {
+        name: string;
+    };
 };
 export const columns = (onEdit: (row: CourseType) => void, onDelete: (id: string) => void): ColumnDef<CourseType>[] => [
     { id: 'rowNumber', header: 'No', cell: ({ row }) => <div className="text-center">{row.index + 1}</div> },
-    { accessorKey: 'code', header: 'Code' },
-    { accessorKey: 'name_idn', header: 'Name (ID)' },
-    { accessorKey: 'name_eng', header: 'Name (ENG)' },
-    { accessorKey: 'course_desc', header: 'Course Desc' },
-    { accessorKey: 'practice_sks', header: 'SKS Pracetice' },
-    { accessorKey: 'simulation_sks', header: 'SKS Simaulation' },
-    { accessorKey: 'sks_total', header: 'SKS Total' },
+    { accessorKey: 'code', header: 'Kode' },
+    { accessorKey: 'semester', header: 'Semester' },
+    { accessorKey: 'name_idn', header: 'Nama Matakuliah' },
+    { accessorKey: 'name_eng', header: 'Course' },
+    { accessorKey: 'theory_sks', header: 'Teori SKS' },
+    { accessorKey: 'practical_sks', header: 'SKS Praktek' },
+    { accessorKey: 'fieldwork_sks', header: 'SKS Lapangan' },
     {
-        id: 'general_courses',
-        header: 'General Course',
-        cell: ({ row }) => <div>{row.original.general_courses ? 'Iya' : 'Tidak'}</div>,
+        accessorKey: 'is_scheduled',
+        header: 'Terjadwal',
+        cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Terjadwal' : 'Tidak Terjadwal'}</div>,
     },
-    {
-        id: 'sap_ada',
-        header: 'Sap',
-        cell: ({ row }) => <div>{row.original.sap_ada ? 'Iya' : 'Tidak'}</div>,
-    },
-    {
-        id: 'syllabus_ada',
-        header: 'Syllabus',
-        cell: ({ row }) => <div>{row.original.syllabus_ada ? 'Iya' : 'Tidak'}</div>,
-    },
-    {
-        id: 'course_materials_ada',
-        header: 'Course Material',
-        cell: ({ row }) => <div>{row.original.course_materials_ada ? 'Iya' : 'Tidak'}</div>,
-    },
-    {
-        id: 'diktat_ada',
-        header: 'Diktat',
-        cell: ({ row }) => <div>{row.original.diktat_ada ? 'Iya' : 'Tidak'}</div>,
-    },
+    // { accessorKey: 'course_desc', header: 'Course Desc' },
+    // { accessorKey: 'prereq_courses_1', header: 'SKS Total' },
+    // { accessorKey: 'prereq_courses_2', header: 'SKS Total' },
 
     {
-        header: 'Type Course',
+        header: 'Jenis Mata Kuliah',
         accessorFn: (row) => row.course_type?.name ?? null,
         id: 'course_types',
     },
     {
-        header: 'Course Group',
+        header: 'Kelompok Mata Kuliah',
         accessorFn: (row) => row.course_group?.name ?? null,
         id: 'course_group',
+    },
+    {
+        header: 'Kurikulum',
+        accessorFn: (row) => row.curriculumns?.curriculum_year?.slice(0, 4) ?? null,
+        id: 'curriculum',
+    },
+    {
+        header: 'Mata Kuliah Pilihan',
+        accessorFn: (row) => row.elective_course_group?.name ?? null,
+        id: 'elective_course_group',
     },
     {
         id: 'actions',

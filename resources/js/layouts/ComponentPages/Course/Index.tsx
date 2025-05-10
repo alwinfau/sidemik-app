@@ -12,7 +12,7 @@ import { useCourse } from './useCourse';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: ' Course',
+        title: ' Mata Kuliah',
         href: '/course',
     },
 ];
@@ -35,10 +35,10 @@ const CoursePages = () => {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Course" />
+            <Head title="Mata Kuliah" />
             <div className="m-6">
                 <div className="mb-4 flex justify-between">
-                    <h2 className="text-2xl font-bold">Course</h2>
+                    <h2 className="text-2xl font-bold">Mata Kuliah</h2>
                     <Button
                         onClick={() => {
                             setEditing(undefined);
@@ -46,7 +46,7 @@ const CoursePages = () => {
                         }}
                         className="flex items-center rounded bg-green-600 p-3 font-bold text-white hover:bg-green-500"
                     >
-                        <CirclePlus className="h-6 w-6" /> Add Course
+                        <CirclePlus className="h-6 w-6" /> Add Mata Kuliah
                     </Button>
                 </div>
 

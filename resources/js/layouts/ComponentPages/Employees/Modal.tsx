@@ -19,12 +19,12 @@ type ModalProps = {
     defaultValues?: any;
 };
 const schema = z.object({
-    nip: z.string().min(1, 'NIP Harus Lebih Dari 1 Karakter'),
-    name: z.string().min(1, 'Nama Harus Lebih Dari 1 Karakter'),
+    nip: z.string(),
+    name: z.string(),
     foto: z.string().nullable(),
     front_title: z.string().nullable(),
-    back_title: z.string().min(1, 'Nama Harus Lebih Dari 1 Karakter'),
-    gender: z.boolean(),
+    back_title: z.string(),
+    gender: z.string(),
     religion: z.string(),
     birth_place: z.string(),
     birth_date: z.string(),
@@ -46,7 +46,7 @@ const schema = z.object({
     nidn: z.number().nullable(),
     nuptk: z.number().nullable(),
     nitk: z.number().nullable(),
-    nidk: z.string().nullable(),
+    nidk: z.number().nullable(),
 });
 
 type FormInputs = z.infer<typeof schema>;
@@ -72,7 +72,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 foto: defaultValues.foto || '',
                 front_title: defaultValues.front_title || '',
                 back_title: defaultValues.back_title || '',
-                gender: Boolean(defaultValues.gender) || false,
+                gender: (defaultValues.gender) || '',
                 religion: defaultValues.religion || '',
                 birth_place: defaultValues.birth_place || '',
                 birth_date: defaultValues.birth_date || '',
@@ -103,7 +103,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 foto: null,
                 front_title: null,
                 back_title: '',
-                gender: false,
+                gender: '',
                 religion: '',
                 birth_place: '',
                 birth_date: '',
@@ -180,7 +180,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
                             <FormTextInput
                                 id="foto"
-                                type="text"
+                                type="file"
                                 label="Foto"
                                 placeholder="Enter Foto"
                                 {...register('foto')}
@@ -189,7 +189,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="front_title"
                                 type="text"
-                                label="Nama Depan"
+                                label="Gelar Depan"
                                 placeholder="Enter Nama Depan"
                                 {...register('front_title')}
                                 error={errors.front_title?.message}
@@ -197,7 +197,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="back_title"
                                 type="text"
-                                label="Nama Belakang"
+                                label="Gelar Belakang"
                                 placeholder="Enter Nama Belakang"
                                 {...register('back_title')}
                                 error={errors.back_title?.message}
@@ -213,8 +213,8 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         onValueChange={field.onChange}
                                         error={errors.gender?.message}
                                     >
-                                        <SelectItem value="true">Laki-Laki</SelectItem>
-                                        <SelectItem value="false">Perempuan</SelectItem>
+                                        <SelectItem value="Pria">Pria</SelectItem>
+                                        <SelectItem value="Wanita">Wanita</SelectItem>
                                     </FormSelectInput>
                                 )}
                             />
@@ -352,13 +352,13 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         {...register('nidk', { valueAsNumber: true })}
                                         error={errors.nidk?.message}
                                     />
-                                    <FormTextInput
-                                        id="pns_rank"
-                                        type="text"
-                                        label="Golongan"
-                                        placeholder="Enter Golongan"
-                                        {...register('pns_rank')}
-                                        error={errors.pns_rank?.message}
+                                    < FormTextInput
+                                        id="nuptk"
+                                        type="number"
+                                        label="NUPTK"
+                                        placeholder="Enter NUPTK"
+                                        {...register('nuptk', { valueAsNumber: true })}
+                                        error={errors.nuptk?.message}
                                     />
                                     <Controller
                                         name="lecture_status_id"
@@ -401,26 +401,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         )}
                                     />
                                     <Controller
-                                        name="struktural_position_id"
-                                        control={control}
-                                        rules={{ required: 'Jabatan Structural is required' }}
-                                        render={({ field }) => (
-                                            <FormSelectInput
-                                                id="struktural_position_id"
-                                                label="Jabatan Struktural"
-                                                value={String(field.value)}
-                                                onValueChange={field.onChange}
-                                                error={errors.struktural_position_id?.message}
-                                            >
-                                                {strukturalposition.map((strukturalposition: any) => (
-                                                    <SelectItem key={strukturalposition.id} value={String(strukturalposition.id)}>
-                                                        {strukturalposition.name}
-                                                    </SelectItem>
-                                                ))}
-                                            </FormSelectInput>
-                                        )}
-                                    />
-                                    <Controller
                                         name="funtional_position_id"
                                         control={control}
                                         rules={{ required: 'Funtional Position is required' }}
@@ -440,6 +420,37 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                             </FormSelectInput>
                                         )}
                                     />
+                                    <FormTextInput
+                                        id="pns_rank"
+                                        type="text"
+                                        label="Golongan"
+                                        placeholder="Enter Golongan"
+                                        {...register('pns_rank')}
+                                        error={errors.pns_rank?.message}
+                                    />
+                                    
+                                    
+                                    <Controller
+                                        name="struktural_position_id"
+                                        control={control}
+                                        rules={{ required: 'Jabatan Structural di perlukan' }}
+                                        render={({ field }) => (
+                                            <FormSelectInput
+                                                id="struktural_position_id"
+                                                label="Jabatan Struktural"
+                                                value={String(field.value)}
+                                                onValueChange={field.onChange}
+                                                error={errors.struktural_position_id?.message}
+                                            >
+                                                {strukturalposition.map((strukturalposition: any) => (
+                                                    <SelectItem key={strukturalposition.id} value={String(strukturalposition.id)}>
+                                                        {strukturalposition.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </FormSelectInput>
+                                        )}
+                                    />
+                                    
                                 </>
                             ) : (
                                 // kondisi tendik
@@ -451,6 +462,14 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         placeholder="Enter NITK"
                                         {...register('nitk', { valueAsNumber: true })}
                                         error={errors.nitk?.message}
+                                    />
+                                    < FormTextInput
+                                        id="nuptk"
+                                        type="number"
+                                        label="NUPTK"
+                                        placeholder="Enter NUPTK"
+                                        {...register('nuptk', { valueAsNumber: true })}
+                                        error={errors.nuptk?.message}
                                     />
                                     <Controller
                                         name="staff_division_id"
@@ -498,6 +517,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             {/* kondisi selain  dosen dan tendik */}
 
                             {errors.root && <p className="text-red-600">{errors.root.message}</p>}
+                            
 
                             <Button
                                 type="submit"
