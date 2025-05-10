@@ -80,19 +80,21 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4">
-                            <FormTextInput 
-                                id="code" 
-                                placeholder='Masukan Kode Kelompok Mata Kuliah'
-                                label="Code" 
-                                type="text" {...register('code')} 
-                                error={errors.code?.message} 
+                            <FormTextInput
+                                id="code"
+                                placeholder="Masukan Kode Kelompok Mata Kuliah"
+                                label="Code"
+                                type="text"
+                                {...register('code')}
+                                error={errors.code?.message}
                             />
-                            <FormTextInput 
-                                id="name" 
-                                label=" Kelompok Mata kuliah" 
-                                placeholder='Masukan Nama Kelompok Mata Kuliah'
-                                type="text" {...register('name')} 
-                                error={errors.name?.message} 
+                            <FormTextInput
+                                id="name"
+                                label=" Kelompok Mata kuliah"
+                                placeholder="Masukan Nama Kelompok Mata Kuliah"
+                                type="text"
+                                {...register('name')}
+                                error={errors.name?.message}
                             />
                             {/* <FormTextInput
                                 id="description"

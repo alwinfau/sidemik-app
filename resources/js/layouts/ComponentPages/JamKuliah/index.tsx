@@ -2,27 +2,17 @@ import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/Components_1/DataTable';
 import ConfirmDeleteDialog from '@/components/ui/Components_1/DeleteModal';
 import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@/components/ui/toast';
-import AppLayout from '@/layouts/app-layout';
-import { BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
 import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { CourseGroupType, columns } from './Column';
+import { JamKuliah, columns } from './Column';
 import ModalForm from './Modal';
-import { useCourseGroup } from './useCourseGroup';
+import { useJamKuliah } from './useJamKuliah';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Kelompok Mata Kuliah',
-        href: '/course-group',
-    },
-];
-
-const CourseGroup = () => {
+const WaktuKuliahPages = () => {
+    const { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useJamKuliah();
     const [modalOpen, setModalOpen] = useState(false);
-    const [editing, setEditing] = useState<CourseGroupType | undefined>();
+    const [editing, setEditing] = useState<JamKuliah | undefined>();
     const [deleteId, setDeleteId] = useState<number | null>(null);
-    const { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useCourseGroup();
 
     useEffect(() => {
         fetchData();
@@ -36,11 +26,9 @@ const CourseGroup = () => {
     }, [toast]);
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Kelompok Mata Kuliah" />
             <div className="m-6">
-                <div className="flex items-center justify-between">
-                    <h2 className="text-3xl font-bold">Kelompok Mata Kuliah</h2>
+                <div className="mb-4 flex justify-between">
+                    <h2 className="text-2xl font-bold">Jam Kuliah</h2>
                     <Button
                         onClick={() => {
                             setEditing(undefined);
@@ -48,9 +36,10 @@ const CourseGroup = () => {
                         }}
                         className="flex items-center rounded bg-green-600 p-3 font-bold text-white hover:bg-green-500"
                     >
-                        <CirclePlus className="h-6 w-6" /> Add Kelompok Mata Kuliah
+                        <CirclePlus className="h-6 w-6" /> Add Jam Kuliah
                     </Button>
                 </div>
+
                 <DataTable
                     columns={columns(
                         (row) => {
@@ -68,6 +57,7 @@ const CourseGroup = () => {
                         fetchData(newPage);
                     }}
                 />
+
                 <ModalForm
                     open={modalOpen}
                     onOpenChange={setModalOpen}
@@ -101,8 +91,7 @@ const CourseGroup = () => {
                     <ToastViewport />
                 </ToastProvider>
             </div>
-        </AppLayout>
     );
 };
 
-export default CourseGroup;
+export default WaktuKuliahPages;

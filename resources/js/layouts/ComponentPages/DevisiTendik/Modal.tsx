@@ -16,7 +16,7 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    code: z.string().min(5),
+    code: z.string(),
     name: z.string(),
     description: z.string(),
 });
@@ -91,7 +91,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mx-3 space-y-4">
-                            <FormTextInput id="code" label="Kode" type="text" {...register('code')} error={errors.code?.message} />
+                            <FormTextInput id="code" label="Kode" type="text" {...register('code')} error={errors.code?.message} required />
 
                             <FormTextInput id="name" label="Nama" type="text" {...register('name')} error={errors.name?.message} />
 

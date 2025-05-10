@@ -116,7 +116,6 @@
 import { Head, router } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler, useState } from 'react';
-import axios from 'axios';
 
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
@@ -163,7 +162,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
             },
             onFinish: () => {
                 setProcessing(false);
-            }
+            },
         });
     };
 
@@ -231,11 +230,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                     </Button>
                 </div>
 
-                {errorMessage && (
-                    <div className="text-red-500 text-center text-sm mt-2">
-                        {errorMessage}
-                    </div>
-                )}
+                {errorMessage && <div className="mt-2 text-center text-sm text-red-500">{errorMessage}</div>}
 
                 <div className="text-muted-foreground text-center text-sm">
                     Don't have an account?{' '}
@@ -248,4 +243,3 @@ export default function Login({ status, canResetPassword }: LoginProps) {
         </AuthLayout>
     );
 }
-

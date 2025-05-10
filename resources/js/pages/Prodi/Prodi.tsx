@@ -1,9 +1,7 @@
-
-
 const ProdiPage = () => {
     return (
         <>
-            <ProdiPage/>
+            <ProdiPage />
         </>
     );
 };

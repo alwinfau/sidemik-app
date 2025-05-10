@@ -169,6 +169,10 @@ Route::get('/elective-course-groups', function() {
     return Inertia::render(component:'MatkulPil/MatkulPil');
 })->name('MatkulPil');
 
+// Route Jam Kuliah
+Route::get('/jam-kuliah', function() {
+    return Inertia::render(component:'JamKuliah/JamKuliah');
+})->name('JamKuliah');
 
 // Tambahan route file
 require __DIR__.'/settings.php';

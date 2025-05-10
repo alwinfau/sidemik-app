@@ -57,10 +57,11 @@ export const columns = (onEdit: (row: EmployeesType) => void, onDelete: (id: str
     { accessorKey: 'foto', header: 'Foto' },
     { accessorKey: 'front_title', header: 'Nama Depan' },
     { accessorKey: 'back_title', header: 'Nama Belakang' },
-    { 
-        accessorKey: 'gender', 
+    {
+        accessorKey: 'gender',
         header: 'Jenis Kelamin',
-        cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Laki-laki' : 'Perempuan'}</div>,},
+        cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Laki-laki' : 'Perempuan'}</div>,
+    },
     { accessorKey: 'religion', header: 'Agama' },
     { accessorKey: 'birth_place', header: 'Tempat Lahir' },
     { accessorKey: 'birth_date', header: 'Tanggal Lahir' },
@@ -70,8 +71,8 @@ export const columns = (onEdit: (row: EmployeesType) => void, onDelete: (id: str
     { accessorKey: 'relationship_1', header: 'Hubungan 1' },
     { accessorKey: 'emergency_phone_2', header: 'Handphone Darurat 2' },
     { accessorKey: 'relationship_2', header: 'Hubungan 2' },
-    { 
-        accessorKey: 'status', 
+    {
+        accessorKey: 'status',
         header: 'Status',
         cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Aktif' : 'Tidak Aktif'}</div>,
     },

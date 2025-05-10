@@ -118,7 +118,7 @@ const data: AppData = {
                 },
                 {
                     title: 'Mata Kuliah Pilihan',
-                    url: '/elective-course-groups'
+                    url: '/elective-course-groups',
                 },
                 {
                     title: 'Jenis Mata Kuliah',
@@ -175,6 +175,10 @@ const data: AppData = {
                 {
                     title: 'Waktu Kuliah',
                     url: '/waktu-kuliah',
+                },
+                {
+                    title: 'Jam Kuliah',
+                    url: '/jam-kuliah',
                 },
                 {
                     title: 'Univ Level Academic',
