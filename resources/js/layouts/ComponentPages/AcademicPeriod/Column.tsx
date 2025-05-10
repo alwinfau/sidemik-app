@@ -4,7 +4,7 @@ import { Pencil, Trash2 } from 'lucide-react';
 
 export type PeriodeAcademicType = {
     id?: number;
-    code: string;
+    
     academic_year: {
         name: string;
     };
@@ -29,7 +29,6 @@ export const columns = (onEdit: (row: PeriodeAcademicType) => void, onDelete: (i
         header: () => <div className="text-center">No</div>,
         cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
     },
-    { accessorKey: 'code', header: 'Code' },
     {
         header: 'Tahun Ajaran',
         accessorFn: (row) => row.academic_year?.name ?? null,
