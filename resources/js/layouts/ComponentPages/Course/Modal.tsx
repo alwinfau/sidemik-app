@@ -99,10 +99,10 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
 
     const handleCourseTypeChange = (value: string) => {
         // Temukan ID dari tipe mata kuliah "Peminatan"
-        const peminatanType = courseTypes.find((type: any) => type.name === 'Peminatan');
+        const peminatanType = courseTypes.find((type: any) => type.name === 'Pilihan');
 
         // Cek apakah value dari jenis mata kuliah sesuai dengan ID peminatan
-        setShowElectiveCourse(value === String(peminatanType?.id));
+        setShowElectiveCourse(value === String (peminatanType?.id));
     };
 
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {

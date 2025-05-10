@@ -1,8 +1,10 @@
-const ProdiPage = () => {
+import Prodipage from "@/layouts/ComponentPages/Prodi";
+
+const Prodi = () => {
     return (
         <>
-            <ProdiPage />
+            <Prodipage />
         </>
     );
 };
-export default ProdiPage;
+export default Prodi;
