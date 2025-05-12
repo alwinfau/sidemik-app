@@ -77,7 +77,7 @@ export const columns = (onEdit: (row: EmployeesType) => void, onDelete: (id: str
         cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Aktif' : 'Tidak Aktif'}</div>,
     },
     { accessorKey: 'type', header: 'Jenis' },
-    { accessorKey: 'pns_rank', header: 'PNS Rank' },
+    { accessorKey: 'pns_rank', header: 'Golongan' },
     { accessorKey: 'nidn', header: 'NIDN' },
     { accessorKey: 'nuptk', header: 'NUPTK' },
     { accessorKey: 'nitk', header: 'NITK' },
