@@ -4,13 +4,13 @@ import { FormSelectInput, FormTextInput } from '@/components/ui/Components_1/For
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { SelectItem } from '@/components/ui/select';
 import { Switch } from '@/components/ui/swicth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useEmployees } from './useEmploye';
+import { SelectItem } from '@/components/ui/select';
 
 type ModalProps = {
     open: boolean;
@@ -19,12 +19,12 @@ type ModalProps = {
     defaultValues?: any;
 };
 const schema = z.object({
-    nip: z.string().min(1, 'NIP Harus Lebih Dari 1 Karakter'),
-    name: z.string().min(1, 'Nama Harus Lebih Dari 1 Karakter'),
+    nip: z.string(),
+    name: z.string(),
     foto: z.string().nullable(),
     front_title: z.string().nullable(),
-    back_title: z.string().min(1, 'Nama Harus Lebih Dari 1 Karakter'),
-    gender: z.boolean(),
+    back_title: z.string(),
+    gender: z.string(),
     religion: z.string(),
     birth_place: z.string(),
     birth_date: z.string(),
@@ -72,7 +72,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 foto: defaultValues.foto || '',
                 front_title: defaultValues.front_title || '',
                 back_title: defaultValues.back_title || '',
-                gender: Boolean(defaultValues.gender) || false,
+                gender: (defaultValues.gender) || '',
                 religion: defaultValues.religion || '',
                 birth_place: defaultValues.birth_place || '',
                 birth_date: defaultValues.birth_date || '',
@@ -103,7 +103,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 foto: null,
                 front_title: null,
                 back_title: '',
-                gender: false,
+                gender: '',
                 religion: '',
                 birth_place: '',
                 birth_date: '',
@@ -166,7 +166,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 id="nip"
                                 type="text"
                                 label="NIP"
-                                placeholder="Enter  NIP"
+                                placeholder="Masukan NIP"
                                 {...register('nip')}
                                 error={errors.nip?.message}
                             />
@@ -174,31 +174,31 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 id="name"
                                 type="text"
                                 label="Nama"
-                                placeholder="Enter Name"
+                                placeholder="Masukan Name"
                                 {...register('name')}
                                 error={errors.name?.message}
                             />
                             <FormTextInput
                                 id="foto"
-                                type="text"
+                                type="file"
                                 label="Foto"
-                                placeholder="Enter Foto"
+                                placeholder="Masukan Foto"
                                 {...register('foto')}
                                 error={errors.foto?.message}
                             />
                             <FormTextInput
                                 id="front_title"
                                 type="text"
-                                label="Nama Depan"
-                                placeholder="Enter Nama Depan"
+                                label="Gelar Depan"
+                                placeholder="Masukan Nama Depan"
                                 {...register('front_title')}
                                 error={errors.front_title?.message}
                             />
                             <FormTextInput
                                 id="back_title"
                                 type="text"
-                                label="Nama Belakang"
-                                placeholder="Enter Nama Belakang"
+                                label="Gelar Belakang"
+                                placeholder="Masukan Nama Belakang"
                                 {...register('back_title')}
                                 error={errors.back_title?.message}
                             />
@@ -209,12 +209,12 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     <FormSelectInput
                                         id="gender"
                                         label="Jenis Kelamin"
-                                        value={field.value ? 'true' : 'false'}
+                                        value={field.value}
                                         onValueChange={field.onChange}
                                         error={errors.gender?.message}
                                     >
-                                        <SelectItem value="true">Laki-Laki</SelectItem>
-                                        <SelectItem value="false">Perempuan</SelectItem>
+                                        <SelectItem value="Pria">Pria</SelectItem>
+                                        <SelectItem value="Wanita">Wanita</SelectItem>
                                     </FormSelectInput>
                                 )}
                             />
@@ -242,14 +242,14 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 id="birth_place"
                                 type="text"
                                 label="Tempat Lahir"
-                                placeholder="Enter Tempat Lahir"
+                                placeholder="Masukan Tempat Lahir"
                                 {...register('birth_place')}
                                 error={errors.birth_place?.message}
                             />
                             <DateInput
                                 id="birth_date"
                                 label="Tanggal Lahir"
-                                placeholder="Enter Tanggal Lahir"
+                                placeholder="Masukan Tanggal Lahir"
                                 register={register('birth_date')}
                                 error={errors.birth_date}
                             />
@@ -257,7 +257,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 id="email_pt"
                                 type="text"
                                 label="Email PT"
-                                placeholder="Enter Email PT"
+                                placeholder="Masukan Email PT"
                                 {...register('email_pt')}
                                 error={errors.email_pt?.message}
                             />
@@ -265,7 +265,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 id="phone"
                                 type="text"
                                 label="Nomor Telepon"
-                                placeholder="Enter Nomor Telepon"
+                                placeholder="Masukan Nomor Telepon"
                                 {...register('phone')}
                                 error={errors.phone?.message}
                             />
@@ -273,7 +273,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 id="emergency_phone_1"
                                 type="text"
                                 label="Nomor Telepon Darurat"
-                                placeholder="Enter Nomor Telepon Darurat"
+                                placeholder="Masukan Nomor Telepon Darurat"
                                 {...register('emergency_phone')}
                                 error={errors.emergency_phone?.message}
                             />
@@ -281,7 +281,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 id="relationship_1"
                                 type="text"
                                 label="Hubungan"
-                                placeholder="Enter Hubungan Darurat"
+                                placeholder="Masukan Hubungan Darurat"
                                 {...register('relationship_1')}
                                 error={errors.relationship_1?.message}
                             />
@@ -289,7 +289,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 id="emergency_phone_2"
                                 type="text"
                                 label="Nomor Telepon Darurat 2"
-                                placeholder="Enter Nomor Telepon Darurat 2"
+                                placeholder="Masukan Nomor Telepon Darurat 2"
                                 {...register('emergency_phone_2')}
                                 error={errors.emergency_phone_2?.message}
                             />
@@ -297,7 +297,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 id="relationship_2"
                                 type="text"
                                 label="Hubungan 2"
-                                placeholder="Enter Hubungan 2"
+                                placeholder="Masukan Hubungan 2"
                                 {...register('relationship_2')}
                                 error={errors.relationship_2?.message}
                             />
@@ -340,7 +340,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         id="nidn"
                                         type="number"
                                         label="NIDN"
-                                        placeholder="Enter NIDN"
+                                        placeholder="Masukan NIDN"
                                         {...register('nidn', { valueAsNumber: true })}
                                         error={errors.nidn?.message}
                                     />
@@ -348,17 +348,17 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         id="nidk"
                                         type="number"
                                         label="NIDK"
-                                        placeholder="Enter NIDK"
+                                        placeholder="Masukan NIDK"
                                         {...register('nidk', { valueAsNumber: true })}
                                         error={errors.nidk?.message}
                                     />
-                                    <FormTextInput
-                                        id="pns_rank"
-                                        type="text"
-                                        label="Golongan"
-                                        placeholder="Enter Golongan"
-                                        {...register('pns_rank')}
-                                        error={errors.pns_rank?.message}
+                                    < FormTextInput
+                                        id="nuptk"
+                                        type="number"
+                                        label="NUPTK"
+                                        placeholder="Masukan NUPTK"
+                                        {...register('nuptk', { valueAsNumber: true })}
+                                        error={errors.nuptk?.message}
                                     />
                                     <Controller
                                         name="lecture_status_id"
@@ -401,26 +401,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         )}
                                     />
                                     <Controller
-                                        name="struktural_position_id"
-                                        control={control}
-                                        rules={{ required: 'Jabatan Structural is required' }}
-                                        render={({ field }) => (
-                                            <FormSelectInput
-                                                id="struktural_position_id"
-                                                label="Jabatan Struktural"
-                                                value={String(field.value)}
-                                                onValueChange={field.onChange}
-                                                error={errors.struktural_position_id?.message}
-                                            >
-                                                {strukturalposition.map((strukturalposition: any) => (
-                                                    <SelectItem key={strukturalposition.id} value={String(strukturalposition.id)}>
-                                                        {strukturalposition.name}
-                                                    </SelectItem>
-                                                ))}
-                                            </FormSelectInput>
-                                        )}
-                                    />
-                                    <Controller
                                         name="funtional_position_id"
                                         control={control}
                                         rules={{ required: 'Funtional Position is required' }}
@@ -440,6 +420,37 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                             </FormSelectInput>
                                         )}
                                     />
+                                    <FormTextInput
+                                        id="pns_rank"
+                                        type="text"
+                                        label="Golongan"
+                                        placeholder="Masukan Golongan"
+                                        {...register('pns_rank')}
+                                        error={errors.pns_rank?.message}
+                                    />
+                                    
+                                    
+                                    <Controller
+                                        name="struktural_position_id"
+                                        control={control}
+                                        rules={{ required: 'Jabatan Structural di perlukan' }}
+                                        render={({ field }) => (
+                                            <FormSelectInput
+                                                id="struktural_position_id"
+                                                label="Jabatan Struktural"
+                                                value={String(field.value)}
+                                                onValueChange={field.onChange}
+                                                error={errors.struktural_position_id?.message}
+                                            >
+                                                {strukturalposition.map((strukturalposition: any) => (
+                                                    <SelectItem key={strukturalposition.id} value={String(strukturalposition.id)}>
+                                                        {strukturalposition.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </FormSelectInput>
+                                        )}
+                                    />
+                                    
                                 </>
                             ) : (
                                 // kondisi tendik
@@ -448,9 +459,17 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         id="nitk"
                                         type="number"
                                         label="NITK"
-                                        placeholder="Enter NITK"
+                                        placeholder="Masukan NITK"
                                         {...register('nitk', { valueAsNumber: true })}
                                         error={errors.nitk?.message}
+                                    />
+                                    < FormTextInput
+                                        id="nuptk"
+                                        type="number"
+                                        label="NUPTK"
+                                        placeholder="Masukan NUPTK"
+                                        {...register('nuptk', { valueAsNumber: true })}
+                                        error={errors.nuptk?.message}
                                     />
                                     <Controller
                                         name="staff_division_id"
@@ -459,7 +478,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         render={({ field }) => (
                                             <FormSelectInput
                                                 id="staff_division_id"
-                                                label="Tendik Divisi"
+                                                label="Divisi Tendik"
                                                 value={String(field.value)}
                                                 onValueChange={field.onChange}
                                                 error={errors.staff_division_id?.message}
@@ -472,32 +491,38 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                             </FormSelectInput>
                                         )}
                                     />
-                                    <Controller
-                                        name="staff_status_id"
-                                        control={control}
-                                        rules={{ required: 'Staff Status is required' }}
-                                        render={({ field }) => (
-                                            <FormSelectInput
-                                                id="staff_status_id"
-                                                label="Status Tendik"
-                                                value={String(field.value)}
-                                                onValueChange={field.onChange}
-                                                error={errors.staff_status_id?.message}
-                                            >
-                                                {staffstatus.map((staffStatus: any) => (
-                                                    <SelectItem key={staffStatus.id} value={String(staffStatus.id)}>
-                                                        {staffStatus.name}
-                                                    </SelectItem>
-                                                ))}
-                                            </FormSelectInput>
-                                        )}
-                                    />
+                                  
+                                      <Controller
+                                            name="staff_status_id"
+                                            control={control}
+                                            rules={{ required: 'Staff Status is required' }}
+                                            render={({ field }) => {
+                                                console.log("field.value", field.value); // Tambahkan log untuk debug
+                                                return (
+                                                    <FormSelectInput
+                                                        id="staff_status_id"
+                                                        label="Status Tendik"
+                                                        value={String(field.value)}  // pastikan nilai sesuai dengan ID yang dipilih
+                                                        onValueChange={field.onChange}
+                                                        error={errors.staff_status_id?.message}
+                                                    >
+                                                        {staffstatus.map((staffstatus: any) => (
+                                                            <SelectItem key={staffstatus.id} value={String(staffstatus.id)}>
+                                                                {staffstatus.name}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </FormSelectInput>
+                                                );
+                                            }}
+                                        />
+
                                 </>
                             )}
 
                             {/* kondisi selain  dosen dan tendik */}
 
                             {errors.root && <p className="text-red-600">{errors.root.message}</p>}
+                            
 
                             <Button
                                 type="submit"

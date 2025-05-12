@@ -1,10 +1,10 @@
+import { useAxios } from '@/hooks/useAxios';
 import { useState } from 'react';
-import { useAxios } from '../../../hooks/useAxios';
-import { StatusTendik } from './Column';
+import { JamKuliah } from './Column';
 
-export const useStatusTendik = () => {
+export const useJamKuliah = () => {
     const { get, post, put, del } = useAxios();
-    const [data, setData] = useState<StatusTendik[]>([]);
+    const [data, setData] = useState<JamKuliah[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [page, setPage] = useState<number>(1);
@@ -13,7 +13,7 @@ export const useStatusTendik = () => {
     const fetchData = async (currentPage = 1) => {
         try {
             setIsLoading(true);
-            const res: any = await get(`/staff-status?page=${currentPage}&limit=10`);
+            const res: any = await get(`/jam-kuliah?page=${currentPage}&limit=10`);
             setData(res.data.data);
 
             setPage(res.data.current_page);
@@ -24,27 +24,27 @@ export const useStatusTendik = () => {
             setIsLoading(false);
         }
     };
-    const handleSubmit = async (data: Omit<StatusTendik, 'id'>, id?: number, onSuccess?: () => void) => {
+    const handleSubmit = async (data: Omit<JamKuliah, 'id'>, id?: number, onSuccess?: () => void) => {
         try {
             setIsLoading(true);
             if (id) {
-                const res: any = await put(`/staff-status/${id}`, data);
+                const res: any = await put(`/jam-kuliah/${id}`, data);
                 setData((prev) => prev.map((p) => (p.id === id ? res.data : p)));
                 await fetchData();
                 onSuccess?.();
-                setToast({ message: 'Status Tendik updated successfully', type: 'success' });
+                setToast({ message: 'Waktu Kuliah updated successfully', type: 'success' });
                 return res;
             } else {
-                const res: any = await post('/staff-status', data);
+                const res: any = await post('/jam-kuliah', data);
                 setData((prev) => [...prev, res.data]);
                 await fetchData();
                 onSuccess?.();
-                setToast({ message: ' Status Tendik created successfully', type: 'success' });
+                setToast({ message: 'Waktu Kuliah created successfully', type: 'success' });
                 return res;
             }
         } catch (error: any) {
             if (error?.response?.status === 500) {
-                setToast({ message: 'Gagal Mengirim Status Tendik', type: 'error' });
+                setToast({ message: 'Failed to submit Waktu Kuliah', type: 'error' });
             }
             throw error.response.data;
         } finally {
@@ -55,7 +55,7 @@ export const useStatusTendik = () => {
     const handleDelete = async (id: number, onSuccess?: () => void) => {
         try {
             setIsLoading(true);
-            await del(`/staff-status/${id}`);
+            await del(`/jam-kuliah/${id}`);
             setData((prev) => prev.filter((item) => item.id !== id));
             await fetchData();
             onSuccess?.();

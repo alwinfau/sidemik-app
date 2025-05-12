@@ -15,6 +15,7 @@ export const useEmployees = () => {
     const [functionalposition, setFunctionalPosition] = useState<any>([]);
     const [strukturalposition, setStructuralPosition] = useState<any>([]);
     const [staffdivision, setStaffDivision] = useState<any>([]);
+    const [preview, setPreview] = useState<any>([]);
 
     const fetchData = async (currentPage = 1) => {
         try {

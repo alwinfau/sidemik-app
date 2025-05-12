@@ -36,7 +36,7 @@ const EmployeesPage = () => {
                     }}
                     className="flex items-center rounded bg-green-500 p-3 font-bold text-white hover:bg-green-600"
                 >
-                    <CirclePlus className="h-6 w-6" /> Add Pegawai
+                    <CirclePlus className="h-6 w-6" /> Tambah Pegawai
                 </Button>
             </div>
 

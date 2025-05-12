@@ -18,6 +18,7 @@ export const useCurriculum = () => {
             setData(res.data.data);
             setPage(res.data.current_page);
             setTotalPages(res.data.last_page);
+            console.log(data);
         } catch (err) {
             setToast({ message: 'Failed to get curriculum', type: 'error' });
         } finally {

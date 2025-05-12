@@ -173,6 +173,12 @@ Route::get('/elective-course-groups', function() {
 Route::get('/course', function() {
     return Inertia::render(component:'Course/CoursePages');
 })->name('course');
+
+// Route Jam Kuliah
+Route::get('/jam-kuliah', function() {
+    return Inertia::render(component:'JamKuliah/JamKuliah');
+})->name('JamKuliah');
+
 // Tambahan route file
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
