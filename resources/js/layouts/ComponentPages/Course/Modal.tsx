@@ -125,6 +125,51 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         }
     };
 
+// fungsi untuk kode 
+const getCoddeprefix = (code: string) => {
+    // value dari user langsung keterima huruf besar
+    const match = code.match(/^[A-Z]+/)
+    return match ? match[0]: '';
+}
+const handleCodeChange =( value : string) => {
+    // ubah jadi kapital
+    const uppercaseValue = value.toUpperCase();
+    setValue('code', uppercaseValue);
+
+    // extrak prefic ke kapital
+    const prefix = getCoddeprefix(uppercaseValue);
+
+    
+    // Filter kelompok mata kuliah berdasarkan prefix
+    const filteredGroups = courseGroups.filter((group: any) =>
+        group.name.startsWith(prefix)
+    );
+
+    // Jika ada kelompok yang cocok, set sebagai nilai default
+    if (filteredGroups.length > 0) {
+        setValue('course_groups_id', String(filteredGroups[0].id));
+    }
+    
+    // Filter kelompok mata kuliah berdasarkan prefix
+    const filterMatkulPIL = MatkulPil.filter((Pil: any) =>
+        Pil.name.startsWith(prefix)
+    );
+
+    // Jika ada kelompok yang cocok, set sebagai nilai default
+    if (filterMatkulPIL.length > 0) {
+        setValue('elective_course_groups_id', String(filterMatkulPIL[0].id));
+    }
+    // Filter kurikulum berdasarkan prefix
+    const CuriculumFilter = curriculum.filter((ur: any) =>
+        ur.code.startsWith(prefix)
+    );
+
+    // Jika ada kelompok yang cocok, set sebagai nilai default
+    if (CuriculumFilter.length > 0) {
+        setValue('curriculums_id', String(CuriculumFilter[0].id));
+    }
+}
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
@@ -140,7 +185,9 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 label="Kode"
                                 placeholder="Isi Kode Mata Kuliah"
                                 type="text"
-                                {...register('code')}
+                                {...register('code', {
+                                    onChange: (e) => handleCodeChange(e.target.value), // Panggil fungsi saat berubah
+                                })}
                                 error={errors.code?.message}
                             />
                             <FormTextInput 
