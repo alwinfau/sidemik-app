@@ -44,6 +44,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         register,
         handleSubmit,
         reset,
+        setValue,
         setError,
         control,
         formState: { errors, isSubmitting },
@@ -68,8 +69,8 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 end_midterm_exam: defaultValues.end_midterm_exam,
                 start_final_exam: defaultValues.start_final_exam,
                 end_final_exam: defaultValues.end_final_exam,
-                number_of_meetings: defaultValues.number_of_meetings || 0,
-                min_presence: defaultValues.min_presence || 0,
+                number_of_meetings: defaultValues.number_of_meetings || null,
+                min_presence: defaultValues.min_presence || null,
                 is_active: Boolean(defaultValues.is_active) || true,
                 description: defaultValues.description || '',
             });
@@ -86,14 +87,60 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 end_midterm_exam: '',
                 start_final_exam: '',
                 end_final_exam: '',
-                number_of_meetings: 0,
-                min_presence: 0,
+                number_of_meetings: null,
+                min_presence: null,
                 is_active: true,
                 description: '',
             });
         }
     }, [defaultValues, reset]);
+    useEffect(() => {
+        if (defaultValues?.academic_year_id) {
+            // Cari tahun akademik yang sesuai berdasarkan ID
+            const selectedYear = AcademicYears.find((item: any) => item.id === Number(defaultValues.academic_year_id));
+            if (selectedYear) {
+                // Contoh: Mengatur tanggal mulai dan berakhir secara otomatis
+                const startDate = `${selectedYear.academic_year}`;  // Format tanggal Anda mungkin berbeda
+                const endDate = `${selectedYear.academic_year}`;
+                const UTS = `${selectedYear.academic_year}`;
+                const UTSselesai = `${selectedYear.academic_year}`;
+                const UAS = `${selectedYear.academic_year}`;
+                const UASselesai = `${selectedYear.academic_year}`;
+                setValue('start_date', startDate);
+                setValue('end_date', endDate);
+                setValue('start_midterm_exam', UTS);
+                setValue('end_midterm_exam', UTSselesai);
+                setValue('start_final_exam', endDate);
+                setValue('end_final_exam', UASselesai);
+            }
+        }
+    }, [defaultValues?.academic_year_id, AcademicYears, setValue]);
 
+    
+    useEffect(() => {
+        if (defaultValues?.academic_year_id) {
+            const selectedYear = AcademicYears.find(
+                (item: any) => item.id === Number(defaultValues.academic_year_id)
+            );
+            if (selectedYear) {
+                // Format tanggal dari data update
+                const startDate = defaultValues.start_date || `${selectedYear.academic_year}-01-01`;
+                const endDate = defaultValues.end_date || `${selectedYear.academic_year}-12-31`;
+                const UTS = defaultValues.start_midterm_exam || `${selectedYear.academic_year}-05-15`;
+                const UTSselesai = defaultValues.end_midterm_exam || `${selectedYear.academic_year}-05-20`;
+                const UAS = defaultValues.start_final_exam || `${selectedYear.academic_year}-12-15`;
+                const UASselesai = defaultValues.end_final_exam || `${selectedYear.academic_year}-12-20`;
+    
+                // Set nilai ke form
+                setValue('start_date', startDate);
+                setValue('end_date', endDate);
+                setValue('start_midterm_exam', UTS);
+                setValue('end_midterm_exam', UTSselesai);
+                setValue('start_final_exam', UAS);
+                setValue('end_final_exam', UASselesai);
+            }
+        }
+    }, [defaultValues?.academic_year_id, AcademicYears, setValue]);
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
         try {
             const result = await submit(data, defaultValues?.id);
@@ -167,23 +214,42 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <Controller
                                 name="academic_year_id"
                                 control={control}
-                                rules={{ required: 'Academic is required' }}
+                                rules={{ required: 'Tahun Akademik wajib diisi' }}
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="academic_year_id"
                                         label="Tahun Akademik"
                                         value={String(field.value)}
-                                        onValueChange={field.onChange}
+                                        onValueChange={(value) => {
+                                            field.onChange(value);
+                                            const selectedYear = AcademicYears.find((item: any) => item.id === Number(value));
+                                            if (selectedYear) {
+                                                const startDate = `${selectedYear.academic_year}-01-01`;
+                                                const endDate = `${selectedYear.academic_year}-12-31`;
+                                                const UTS = `${selectedYear.academic_year}-12-31`;
+                                                const UTSselesai = `${selectedYear.academic_year}-12-31`;
+                                                const UAS = `${selectedYear.academic_year}-12-31`;
+                                                const UASselesai = `${selectedYear.academic_year}-12-31`;
+                                                setValue('start_date', startDate);
+                                                setValue('end_date', endDate);
+                                                setValue('start_midterm_exam', UTS);
+                                                setValue('end_midterm_exam', UTSselesai);
+                                                setValue('start_final_exam', UAS);
+                                                setValue('end_final_exam', UASselesai);
+                                            }
+                                        }}
                                         error={errors.academic_year_id?.message}
                                     >
                                         {AcademicYears.map((Academic: any) => (
                                             <SelectItem key={Academic.id} value={String(Academic.id)}>
-                                                {Academic.name}
+                                                {Academic.academic_year}
                                             </SelectItem>
                                         ))}
                                     </FormSelectInput>
                                 )}
                             />
+
+
                             <FormTextInput
                                 id="name"
                                 label="Nama"
@@ -201,14 +267,14 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 error={errors.short_name?.message}
                             />
                             <DateInput
-                                label="Dimulai sejak"
+                                label="Tanggal Mulai"
                                 id="start_date"
                                 placeholder="Enter Start Date"
                                 register={register('start_date')}
                                 error={errors.start_date}
                             />
                             <DateInput
-                                label="Berakhir"
+                                label="Tanggal Selesai"
                                 id="end_date"
                                 placeholder="Enter End Date"
                                 register={register('end_date')}
@@ -258,6 +324,14 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 {...register('min_presence', { valueAsNumber: true })}
                                 error={errors.min_presence?.message}
                             />
+                            <FormTextInput
+                                id="description"
+                                placeholder="Masukan deskripsi akademik periode"
+                                label="description"
+                                type="text"
+                                {...register('description')}
+                                error={errors.description?.message}
+                            />
                             <div className="pt-2">
                                 <Label>Status</Label>
                                 <Controller
@@ -271,14 +345,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     )}
                                 />
                             </div>
-                            <FormTextInput
-                                id="description"
-                                placeholder="Masukan deskripsi akademik periode"
-                                label="description"
-                                type="text"
-                                {...register('description')}
-                                error={errors.description?.message}
-                            />
                             {errors.root && <p className="text-red-600">{errors.root.message}</p>}
 
                             <Button

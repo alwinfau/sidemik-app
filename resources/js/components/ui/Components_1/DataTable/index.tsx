@@ -16,9 +16,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import { Skeleton } from "@/components/ui/skeleton"
-
 import Pagination from '@mui/material/Pagination';
-import { DataTableSkeleton } from "./skeleton-table"
 
 
 interface DataTableProps<TData> {

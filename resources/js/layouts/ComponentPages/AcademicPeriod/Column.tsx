@@ -6,7 +6,7 @@ export type PeriodeAcademicType = {
     id?: number;
     
     academic_year: {
-        name: string;
+        academic_year: string;
     };
     semester: string;
     name: string;
@@ -31,7 +31,7 @@ export const columns = (onEdit: (row: PeriodeAcademicType) => void, onDelete: (i
     },
     {
         header: 'Tahun Ajaran',
-        accessorFn: (row) => row.academic_year?.name ?? null,
+        accessorFn: (row) => row.academic_year?.academic_year ?? null,
         id: 'academic_year',
     },
     { accessorKey: 'semester', header: 'Semester' },
@@ -43,14 +43,27 @@ export const columns = (onEdit: (row: PeriodeAcademicType) => void, onDelete: (i
     { accessorKey: 'end_midterm_exam', header: 'Tanggal Selesai UTS' },
     { accessorKey: 'start_final_exam', header: 'Tanggal Mulai UAS' },
     { accessorKey: 'end_final_exam', header: 'Tanggal Selesai UAS' },
-    { accessorKey: 'number_of_meetings', header: 'Jumlah Pertemuan' },
-    { accessorKey: 'min_presence', header: 'Jumlah Min Presensi' },
+    {
+        accessorKey: 'number_of_meetings',
+        header: 'Jumlah Pertemuan',
+        cell: ({ getValue }) => getValue<number>() ?? '-',
+    },
+    {
+        accessorKey: 'min_presence',
+        header: 'Jumlah Min Presensi',
+        cell: ({ getValue }) => getValue<number>() ?? '-',
+    },
     {
         accessorKey: 'is_active',
         header: 'Status',
         cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Aktif' : 'Tidak Aktif'}</div>,
     },
-    { accessorKey: 'description', header: 'Description' },
+    {
+        accessorKey: 'description',
+        header: 'Deskripsi',
+        cell: ({ getValue }) => getValue<string>() ?? '-',
+    },
+    
     {
         id: 'actions',
         header: 'Actions',

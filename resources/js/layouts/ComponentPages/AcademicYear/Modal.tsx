@@ -4,13 +4,19 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import DateInput from '@/components/ui/Components_1/DateInput';
 import { AcademicYearType } from './Column';
 import { Label } from '@/components/ui/label';
 import YearPicker from '@/components/ui/Components_1/YearsInput';
+import DatePickerYearsOrder from '@/components/ui/Components_1/YearsInput';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import dayjs, { Dayjs } from 'dayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LoaderCircle } from 'lucide-react';
 
 type ModalProps = {
     open: boolean;
@@ -20,9 +26,9 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    // academic_year: z.string().regex(/^\d{4}$/, { message: 'Academic year harus berupa 4 digit tahun (misal: 2025)' }),
-    academic_year: z.string(),
-    name: z.string().min(5, 'Nama harus lebih dari 5 karakterz'),
+    academic_year: z.string().regex(/^\d{4}$/, { message: 'Tahun Ajaran harus berupa 4 digit tahun (misal: 2025)' }),
+    // academic_year: z.string(),
+    name: z.string().min(2, 'Nama harus lebih dari 2 karakter'),
     start_date: z.string(),
     end_date: z.string(),
     description: z.string(),
@@ -33,19 +39,39 @@ type FormInputs = z.infer<typeof schema>;
 const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) => {
     const {
         register,
-        setValue,
         handleSubmit,
+        watch,
+        setValue,
         reset,
         setError,
+        control,
+
         formState: { errors, isSubmitting },
     } = useForm<FormInputs>({
         resolver: zodResolver(schema),
     });
 
+
+    const academicYear = watch('academic_year');
+
+    useEffect(() => {
+        if (academicYear && /^\d{4}$/.test(academicYear)) {
+            const calculatedYear = parseInt(academicYear);
+            // Format tahun menjadi 'YYYY-MM-DD'
+            const calculatedDate = `${calculatedYear}-01-01`;
+            setValue('start_date', calculatedDate);
+            // Hitung untuk end date + 1 tahun setelah tahun ajaran
+            const calculatedYearenddate = parseInt(academicYear) + 1;
+            // Format tahunnya
+            const calculatedenddate = `${calculatedYearenddate}-01-01`;
+            setValue('end_date', calculatedenddate)
+        }
+    }, [academicYear, setValue]);
+
     useEffect(() => {
         if (defaultValues) {
             reset({
-                academic_year: defaultValues.academic_year,
+                academic_year: defaultValues.academic_year || '',
                 name: defaultValues.name || '',
                 start_date: defaultValues.start_date,
                 end_date: defaultValues.end_date,
@@ -94,9 +120,10 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             });
         }
     };
-    const handleYearChange = (year: number) => {
-        setValue('academic_year', year.toString());
-    };
+
+    
+    const currentYear = dayjs();
+    
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
@@ -106,30 +133,14 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4">
-                            {/* <FormTextInput
-                                    id="academic_year"
-                                    label="Tahun Akademik"
-                                    placeholder="Masukan tahun akademik"
-                                    type="text"
-                                    {...register('academic_year')}
-                                    error={errors.academic_year?.message}
-                                /> */}
-                            {/* <DateInput
-                                label="Tahun Akademik"
+                            <FormTextInput
                                 id="academic_year"
-                                placeholder="Masukan Tahun Ajaran"
-                                register={register('academic_year')}
-                                error={errors.academic_year}
-                            /> */}
-                            <Label>Tahun Ajaran</Label>
-                            <YearPicker
-                                startYear={2015}
-                                endYear={2030}
-                                value={defaultValues?.academic_year ? parseInt(defaultValues.academic_year) : undefined}
-                                onSelect={handleYearChange}
+                                label="Tahun Akademik"
+                                placeholder="Masukan tahun akademik"
+                                type="text"
+                                {...register('academic_year')}
+                                error={errors.academic_year?.message}
                             />
-
-
                             <FormTextInput
                                 placeholder="Masukan nama akademik"
                                 id="name"
@@ -147,7 +158,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 error={errors.start_date}
                             />
                             <DateInput
-                                label="Berakhir"
+                                label="Tanggal Selsai"
                                 id="end_date"
                                 placeholder="Enter Valid From"
                                 register={register('end_date')}
@@ -166,10 +177,12 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
 
                             <Button
                                 type="submit"
-                                className={`mb-5 rounded px-4 py-2 font-bold text-white ${defaultValues ? 'bg-blue-600 hover:bg-blue-500' : 'bg-green-500 hover:bg-green-600'} `}
+                                className={`mb-5 rounded px-4 py-2 font-bold text-white ${
+                                    defaultValues ? 'bg-blue-600 hover:bg-blue-500' : 'bg-green-500 hover:bg-green-600'
+                                }`}
                                 disabled={isSubmitting}
                             >
-                                {isSubmitting ? 'Loading...' : defaultValues ? 'Update' : 'Create'}
+                                {isSubmitting ? <LoaderCircle className="h-4 w-4 animate-spin" /> : defaultValues ? 'Update' : 'Create'}
                             </Button>
                         </div>
                     </form>

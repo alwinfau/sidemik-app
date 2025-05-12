@@ -36,6 +36,8 @@ export const columns = (onEdit: (row: Proditype) => void, onDelete: (id: string)
         header: () => <div className="text-center">No</div>,
         cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
     },
+    { header: 'Fakultas', accessorFn: (row) => row.faculty?.name ?? null, id: 'faculty' },
+    { header: 'Periode Akademik', accessorFn: (row) => row.academic_period?.name ?? null, id: 'academic_period' },
     { accessorKey: 'sp_code', header: 'Code ' },
     { accessorKey: 'idn_sp_name', header: 'Nama Prodi' },
     { accessorKey: 'eng_sp_name', header: 'Nama(ENG)' },
@@ -65,8 +67,7 @@ export const columns = (onEdit: (row: Proditype) => void, onDelete: (id: string)
     //     header: 'Learning Outcomes',
     // },
     { accessorKey: 'max_semester', header: 'Max Semester' },
-    { header: 'Fakultas', accessorFn: (row) => row.faculty?.name ?? null, id: 'faculty' },
-    { header: 'Academic Period', accessorFn: (row) => row.academic_period?.name ?? null, id: 'academic_period' },
+    
 
     {
         accessorKey: 'status',

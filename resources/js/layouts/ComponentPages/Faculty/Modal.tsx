@@ -20,10 +20,10 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    code: z.string().min(1, 'Code harus lebih dari 3 karakter'),
-    name: z.string().min(5, 'Name harus lebih dari 5 karakter'),
-    eng_name: z.string().min(5, 'English Name harus lebih dari 5 karakter'),
-    short_name: z.string().min(2, 'Short Name harus lebih dari 2 karakter'),
+    code: z.string({message: 'Kode harus diisi'}).min(1, 'Code harus lebih dari 3 karakter'),
+    name: z.string({message: 'Nama harus diisi'}).min(5, 'Name harus lebih dari 5 karakter'),
+    eng_name: z.string({message: 'Nama harus diisi'}).min(5, 'English Name harus lebih dari 5 karakter'),
+    short_name: z.string({message: 'Singkatan Wajib diisi'}),
     address: z.string().nullable(),
     telephone: z.string().max(15, 'Telephone harus kurang dari 15 karakter').nullable(),
     academic_period_id: z.string(),
@@ -57,7 +57,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 address: defaultValues.address || '',
                 telephone: defaultValues.telephone || '',
                 academic_period_id: String(defaultValues.academic_period_id) || '0',
-                is_active: Boolean(defaultValues.is_active) || false,
+                is_active: Boolean(defaultValues.is_active) || true,
                 vision: defaultValues.vision || '',
                 mission: defaultValues.mission || '',
                 description: defaultValues.description || '',
@@ -71,7 +71,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 address: '',
                 telephone: '',
                 academic_period_id: '',
-                is_active: false,
+                is_active: true,
                 vision: '',
                 mission: '',
                 description: '',
@@ -96,7 +96,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                     address: '',
                     telephone: '',
                     academic_period_id: '',
-                    is_active: false,
+                    is_active: true,
                     vision: '',
                     mission: '',
                     description: '',
@@ -131,6 +131,25 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mx-3 space-y-4">
+                            <Controller
+                                name="academic_period_id"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormSelectInput
+                                        id="academic_period_id"
+                                        label="Periode Akademik"
+                                        value={field.value}
+                                        onValueChange={field.onChange}
+                                        error={errors.academic_period_id?.message}
+                                    >
+                                        {academicPeriods.map((period: any) => (
+                                            <SelectItem key={period.id} value={String(period.id)}>
+                                                {period.name}
+                                            </SelectItem>
+                                        ))}
+                                    </FormSelectInput>
+                                )}
+                            />
                             <FormTextInput
                                 placeholder="Masukan Kode Fakultas"
                                 id="code"
@@ -146,9 +165,9 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 error={errors.name?.message}
                             />
                             <FormTextInput
-                                placeholder="Masukan Nama Fakultas (ING)"
+                                placeholder="Masukan Nama Fakultas (ENG)"
                                 id="eng_name"
-                                label="Nama Fakultas(ING)"
+                                label="Nama Fakultas(ENG)"
                                 {...register('eng_name')}
                                 error={errors.eng_name?.message}
                             />
@@ -174,40 +193,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 error={errors.telephone?.message}
                             />
 
-                            <Controller
-                                name="academic_period_id"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="academic_period_id"
-                                        label="Periode Akademik"
-                                        value={field.value}
-                                        onValueChange={field.onChange}
-                                        error={errors.academic_period_id?.message}
-                                    >
-                                        {academicPeriods.map((period: any) => (
-                                            <SelectItem key={period.id} value={String(period.id)}>
-                                                {period.name}
-                                            </SelectItem>
-                                        ))}
-                                    </FormSelectInput>
-                                )}
-                            />
-
-                            <div className="pt-2">
-                                <Label>Status</Label>
-                                <Controller
-                                    name="is_active"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <div className="flex items-center gap-4">
-                                            <Switch checked={field.value} onCheckedChange={field.onChange} id="is_active" />
-                                            <Label htmlFor="is_active">{field.value ? 'Active' : 'Non Aktif'}</Label>
-                                        </div>
-                                    )}
-                                />
-                            </div>
-
                             <FormTextInput
                                 placeholder="Masukan Visi Fakultas"
                                 id="vision"
@@ -232,6 +217,19 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 {...register('description')}
                                 error={errors.description?.message}
                             />
+                            <div className="pt-2">
+                                <Label>Status</Label>
+                                <Controller
+                                    name="is_active"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <div className="flex items-center gap-4">
+                                            <Switch checked={field.value} onCheckedChange={field.onChange} id="is_active" />
+                                            <Label htmlFor="is_active">{field.value ? 'Active' : 'Non Aktif'}</Label>
+                                        </div>
+                                    )}
+                                />
+                            </div>
 
                             {errors.root && <p className="text-red-600">{errors.root.message}</p>}
 

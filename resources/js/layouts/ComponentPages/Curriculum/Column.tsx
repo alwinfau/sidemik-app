@@ -5,7 +5,7 @@ import { Pencil, Trash2 } from 'lucide-react';
 export type CurriculumType = {
     id?: number;
     code: string;
-    curriculum_year: Date;
+    curriculum_year: string;
     sks_required: string;
     sks_elective: string;
     // description: string
@@ -19,16 +19,16 @@ export const columns = (onEdit: (row: CurriculumType) => void, onDelete: (id: st
         header: () => <div className="text-center">No</div>,
         cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
     },
-    { accessorKey: 'code', header: 'Code' },
-    { accessorKey: 'curriculum_year', header: 'Tahun Kurikulum' },
-    { accessorKey: 'sks_required', header: 'SKS Wajib' },
-    { accessorKey: 'sks_elective', header: 'SKS Pilihan' },
-    // { accessorKey:'description', header: 'Keterangan'},
     {
         header: 'Prodi',
         accessorFn: (row) => row.study_program?.idn_sp_name ?? null,
         id: 'study_program',
     },
+    { accessorKey: 'code', header: 'Code' },
+    { accessorKey: 'curriculum_year', header: 'Tahun Kurikulum' },
+    { accessorKey: 'sks_required', header: 'SKS Wajib' },
+    { accessorKey: 'sks_elective', header: 'SKS Pilihan' },
+    // { accessorKey:'description', header: 'Keterangan'},
     {
         id: 'actions',
         header: 'Actions',

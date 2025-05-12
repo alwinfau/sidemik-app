@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useStudyProgram } from './useStudy-program';
+import { LoaderCircle } from 'lucide-react';
 
 type ModalProps = {
     open: boolean;
@@ -68,7 +69,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 sp_mission: defaultValues.sp_mission || '',
                 sp_competencies: defaultValues.sp_competencies || '',
                 program_learning_outcomes: defaultValues.program_learning_outcomes || '',
-                max_semester: defaultValues.max_semester || 0,
+                max_semester: defaultValues.max_semester || null,
                 faculty_id: String(defaultValues.faculty_id) || '',
                 academic_periods_id: String(defaultValues.academic_periods_id) || '',
                 final_project_types_id: String(defaultValues.final_project_types_id) || '',
@@ -89,7 +90,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 sp_mission: '',
                 sp_competencies: '',
                 program_learning_outcomes: '',
-                max_semester: 0,
+                max_semester: null,
                 faculty_id: '',
                 academic_periods_id: '',
                 final_project_types_id: '',
@@ -126,23 +127,64 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 </DialogHeader>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
-                        <div className="space-y-4 px-2">
-                            <FormTextInput id="sp_code" label="code" {...register('sp_code')} error={errors.sp_code?.message} />
+                        <div className="space-y-4">
+                        <Controller
+                                name="faculty_id"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormSelectInput
+                                        id="faculty_id"
+                                        label="Fakultas"
+                                        value={field.value}
+                                        onValueChange={field.onChange}
+                                        error={errors.faculty_id?.message}
+                                    >
+                                        {Facultas.map((Fakultas: any) => (
+                                            <SelectItem key={Fakultas.id} value={String(Fakultas.id)}>
+                                                {Fakultas.name}
+                                            </SelectItem>
+                                        ))}
+                                    </FormSelectInput>
+                                )}
+                            />
+                            <Controller
+                                name="academic_periods_id"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormSelectInput
+                                        id="academic_periods_id"
+                                        label="Periode Akademik"
+                                        value={field.value}
+                                        onValueChange={field.onChange}
+                                        error={errors.academic_periods_id?.message}
+                                    >
+                                        {AcademicPeriod.map((Academic: any) => (
+                                            <SelectItem key={Academic.id} value={String(Academic.id)}>
+                                                {Academic.name}
+                                            </SelectItem>
+                                        ))}
+                                    </FormSelectInput>
+                                )}
+                            />
+                            <FormTextInput id="sp_code" placeholder='Masukan Kode prodi' label="code" {...register('sp_code')} error={errors.sp_code?.message} />
                             <FormTextInput
                                 id="idn_sp_name"
+                                placeholder='Masukan Nama Prodi'
                                 label="Nama Prodi (ID)"
                                 {...register('idn_sp_name')}
                                 error={errors.idn_sp_name?.message}
                             />
                             <FormTextInput
                                 id="eng_sp_name"
-                                label="Nama Prodi (eng)"
+                                label="Nama Prodi (ENG)"
+                                placeholder='Masukan Nama Prodi dalam b.ing'
                                 {...register('eng_sp_name')}
                                 error={errors.eng_sp_name?.message}
                             />
                             <FormTextInput
                                 id="sp_short_name"
                                 label="Singkatan"
+                                placeholder='Masukan singkatan prodi'
                                 type="text"
                                 {...register('sp_short_name')}
                                 error={errors.sp_short_name?.message}
@@ -185,46 +227,9 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 id="max_semester"
                                 label="Maximal Semeter"
                                 type="number"
+                                placeholder='Masukan Jumlah max semester'
                                 {...register('max_semester', { valueAsNumber: true })}
                                 error={errors.max_semester?.message}
-                            />
-                            <Controller
-                                name="faculty_id"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="faculty_id"
-                                        label="Fakultas"
-                                        value={field.value}
-                                        onValueChange={field.onChange}
-                                        error={errors.faculty_id?.message}
-                                    >
-                                        {Facultas.map((Fakultas: any) => (
-                                            <SelectItem key={Fakultas.id} value={String(Fakultas.id)}>
-                                                {Fakultas.name}
-                                            </SelectItem>
-                                        ))}
-                                    </FormSelectInput>
-                                )}
-                            />
-                            <Controller
-                                name="academic_periods_id"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="academic_periods_id"
-                                        label="Periode Akademik"
-                                        value={field.value}
-                                        onValueChange={field.onChange}
-                                        error={errors.academic_periods_id?.message}
-                                    >
-                                        {AcademicPeriod.map((Academic: any) => (
-                                            <SelectItem key={Academic.id} value={String(Academic.id)}>
-                                                {Academic.name}
-                                            </SelectItem>
-                                        ))}
-                                    </FormSelectInput>
-                                )}
                             />
                             {/* <FormTextInput
                                 id="sp_vision"
@@ -260,15 +265,17 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     )}
                                 />
                             </div>
-                        </div>
-                        <div className="flex gap-3 pt-2">
+                        
                             <Button
                                 type="submit"
-                                className={`rounded px-4 py-2 font-bold text-white ${defaultValues ? 'bg-blue-600 hover:bg-blue-500' : 'bg-green-500 hover:bg-green-600'}`}
+                                className={`mb-5 rounded px-4 py-2 font-bold text-white ${
+                                    defaultValues ? 'bg-blue-600 hover:bg-blue-500' : 'bg-green-500 hover:bg-green-600'
+                                }`}
                                 disabled={isSubmitting}
                             >
-                                {isSubmitting ? 'Loading...' : defaultValues ? 'Update' : 'Create'}
+                                {isSubmitting ? <LoaderCircle className="h-4 w-4 animate-spin" /> : defaultValues ? 'Update' : 'Create'}
                             </Button>
+                        
                         </div>
                     </form>
                 </ScrollArea>

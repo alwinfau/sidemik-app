@@ -8,6 +8,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { CourseGroupType } from './Column';
+import { LoaderCircle } from 'lucide-react';
 
 type ModalProps = {
     open: boolean;
@@ -17,8 +18,8 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    code: z.string().min(3, 'Code harus lebih dari 3 Krakter'),
-    name: z.string().min(5, 'Nama harus lebih dari 5 Krakter'),
+    code: z.string({message: 'Kode Wajib Diisi'}),
+    name: z.string({message: 'Nama Wajib Diisi'}),
     description: z.string().nullable(),
 });
 
@@ -108,10 +109,12 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
 
                             <Button
                                 type="submit"
-                                className={`mb-5 rounded px-4 py-2 font-bold text-white ${defaultValues ? 'bg-blue-600 hover:bg-blue-500' : 'bg-green-500 hover:bg-green-600'} `}
+                                className={`mb-5 rounded px-4 py-2 font-bold text-white ${
+                                    defaultValues ? 'bg-blue-600 hover:bg-blue-500' : 'bg-green-500 hover:bg-green-600'
+                                }`}
                                 disabled={isSubmitting}
                             >
-                                {isSubmitting ? 'Loading...' : defaultValues ? 'Update' : 'Create'}
+                                {isSubmitting ? <LoaderCircle className="h-4 w-4 animate-spin" /> : defaultValues ? 'Update' : 'Create'}
                             </Button>
                         </div>
                     </form>

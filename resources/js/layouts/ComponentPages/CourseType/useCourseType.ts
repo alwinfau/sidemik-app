@@ -48,7 +48,7 @@ export const useCourseType = () => {
             }
             throw error.response.status.data;
         } finally {
-            setIsLoading(true);
+            setIsLoading(false);
         }
     };
 

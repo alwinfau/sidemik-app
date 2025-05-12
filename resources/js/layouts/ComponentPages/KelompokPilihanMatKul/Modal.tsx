@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useMatkulPilihan } from './usePilihanMatKul';
+import { LoaderCircle } from 'lucide-react';
 
 type ModalProps = {
     open: boolean;
@@ -20,7 +21,7 @@ type ModalProps = {
 
 const schema = z.object({
     code: z.string({ message: 'Kode harus diisi' }).min(1, 'Code harus lebih dari 1 kata'),
-    name: z.string({ message: 'Nama harus diisi' }).min(5, 'Nama harus lebih dari 5 karakter'),
+    name: z.string({ message: 'Nama harus diisi' }),
     is_active: z.boolean(),
     description: z.string().nullable(),
     study_program_id: z.string(),
@@ -87,14 +88,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 </DialogHeader>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
-                        <div className="space-y-4 px-2">
-                            <FormTextInput
-                                id="code"
-                                label="Kode"
-                                placeholder="Masukan Kode Matkul pilihan"
-                                {...register('code')}
-                                error={errors.code?.message}
-                            />
+                        <div className="space-y-4">
                             <Controller
                                 name="study_program_id"
                                 control={control}
@@ -113,6 +107,13 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         ))}
                                     </FormSelectInput>
                                 )}
+                            />
+                            <FormTextInput
+                                id="code"
+                                label="Kode"
+                                placeholder="Masukan Kode Matkul pilihan"
+                                {...register('code')}
+                                error={errors.code?.message}
                             />
                             <FormTextInput
                                 id="name"
@@ -134,15 +135,16 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     )}
                                 />
                             </div>
-                            <div className="flex gap-3 pt-2">
+                            
                                 <Button
                                     type="submit"
-                                    className={`rounded px-4 py-2 font-bold text-white ${defaultValues ? 'bg-blue-600 hover:bg-blue-500' : 'bg-green-500 hover:bg-green-600'}`}
+                                    className={`mb-5 rounded px-4 py-2 font-bold text-white ${
+                                        defaultValues ? 'bg-blue-600 hover:bg-blue-500' : 'bg-green-500 hover:bg-green-600'
+                                    }`}
                                     disabled={isSubmitting}
                                 >
-                                    {isSubmitting ? 'Loading...' : defaultValues ? 'Update' : 'Create'}
-                                </Button>
-                            </div>
+                                    {isSubmitting ? <LoaderCircle className="h-4 w-4 animate-spin" /> : defaultValues ? 'Update' : 'Create'}
+                            </Button>
                         </div>
                     </form>
                 </ScrollArea>
