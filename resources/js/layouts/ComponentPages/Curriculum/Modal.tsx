@@ -69,6 +69,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         fecthRelasi();
     }, []);
 
+
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
         try {
             const result = await submit(data, defaultValues?.id);
