@@ -4,18 +4,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import DateInput from '@/components/ui/Components_1/DateInput';
 import { AcademicYearType } from './Column';
-import { Label } from '@/components/ui/label';
-import YearPicker from '@/components/ui/Components_1/YearsInput';
-import DatePickerYearsOrder from '@/components/ui/Components_1/YearsInput';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import dayjs, { Dayjs } from 'dayjs';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 import { LoaderCircle } from 'lucide-react';
 
 type ModalProps = {

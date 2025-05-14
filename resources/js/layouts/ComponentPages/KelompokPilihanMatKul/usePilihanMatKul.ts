@@ -27,7 +27,7 @@ export const useMatkulPilihan = () => {
     const fecthRelasi = async () => {
         try {
             const resProdi: any = await get('/study-program');
-            setProdi(resProdi.data.data);
+            setProdi(resProdi.data);
         } catch (err) {
             console.error('Error fetching:', err);
         }

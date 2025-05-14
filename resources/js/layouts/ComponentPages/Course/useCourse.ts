@@ -32,16 +32,16 @@ export const useCourse = () => {
     const fectRelasi = async () => {
         try {
             const resTypes: any = await get('/course-type');
-            setCourseTypes(resTypes.data.data);
+            setCourseTypes(resTypes.data);
 
             const resGroups: any = await get('/course-group');
-            setCourseGroups(resGroups.data.data);
+            setCourseGroups(resGroups.data);
 
             const resCuriculum: any = await get('/curriculum');
-            setCurriculum(resCuriculum.data.data);
+            setCurriculum(resCuriculum.data);
 
             const resMatkulPil: any = await get('/elective-course-groups');
-            setMatkulPil(resMatkulPil.data.data);
+            setMatkulPil(resMatkulPil.data);
         } catch (err) {
             console.error('Error fetching:', err);
         }

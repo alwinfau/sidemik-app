@@ -24,7 +24,7 @@ export const columns = (onEdit: (row: MatkulPilihan) => void, onDelete: (id: str
     {
         accessorKey: 'is_active',
         header: 'Status',
-        cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Aktif' : 'Tidak Aktif'}</div>,
+        cell: ({ getValue }) => <div>{getValue<boolean>() ? 'Aktif' : 'Tidak Aktif'}</div>,
     },
     {
         header: 'Prodi',

@@ -19,7 +19,7 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    code: z.string({ message: 'Code Harus Diisi' }).min(1, 'Code Harus lebih dari 1 karakter'),
+    code: z.string({ message: 'Code Harus Diisi' }),
     curriculum_year: z.string().regex(/^\d{4}$/, { message: 'kurikulum harus berupa 4 digit tahun (misal: 2025)' }),
     sks_required: z.number({ message: 'SKS wajib Diisi' }).positive('SKS harus diisi dengan bilangan positive'),
     sks_elective: z.number({ message: 'SKS wajib Diisi' }).positive('SKS harus diisi dengan bilangan positive'),
@@ -45,7 +45,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         if (defaultValues) {
             reset({
                 code: defaultValues.code || '',
-                curriculum_year: defaultValues.curriculum_year,
+                curriculum_year: defaultValues.curriculum_year || '',
                 sks_required: defaultValues.sks_required || null,
                 sks_elective: defaultValues.sks_elective || null,
                 // description: defaultValues.description || '',
@@ -55,8 +55,8 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             reset({
                 code: '',
                 curriculum_year: '',
-                sks_required: 0,
-                sks_elective: 0,
+                sks_required: null,
+                sks_elective: null,
                 // description: '',
                 study_programs_id: '',
             });
@@ -139,6 +139,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 <FormTextInput
                                     id="sks_required"
                                     label="SKS Wajib"
+                                    placeholder='Masukan Jumlah SKS '
                                     type="number"
                                     {...register('sks_required', { valueAsNumber: true })}
                                     error={errors.sks_required?.message}
@@ -146,6 +147,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 <FormTextInput
                                     id="sks_elective"
                                     label="SKS Pilihan"
+                                    placeholder='Masukan Jumlah SKS pilihan'
                                     type="number"
                                     {...register('sks_elective', { valueAsNumber: true })}
                                     error={errors.sks_elective?.message}

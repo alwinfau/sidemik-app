@@ -22,7 +22,7 @@ export type CourseType = {
         name: string;
     };
     curriculumns: {
-        curriculum_year: string;
+        code: string;
     };
     elective_course_group: {
         name: string;
@@ -30,6 +30,11 @@ export type CourseType = {
 };
 export const columns = (onEdit: (row: CourseType) => void, onDelete: (id: string) => void): ColumnDef<CourseType>[] => [
     { id: 'rowNumber', header: 'No', cell: ({ row }) => <div className="text-center">{row.index + 1}</div> },
+    {
+        header: 'Kurikulum',
+        accessorFn: (row) => row.curriculumns.code,
+        id: 'curriculum',
+    },
     { accessorKey: 'code', header: 'Kode' },
     { accessorKey: 'semester', header: 'Semester' },
     { accessorKey: 'name_idn', header: 'Nama Matakuliah' },
@@ -56,11 +61,7 @@ export const columns = (onEdit: (row: CourseType) => void, onDelete: (id: string
         accessorFn: (row) => row.course_group?.name ?? null,
         id: 'course_group',
     },
-    {
-        header: 'Kurikulum',
-        accessorFn: (row) => row.curriculumns?.curriculum_year?.slice(0, 4) ?? null,
-        id: 'curriculum',
-    },
+    
     {
         header: 'Mata Kuliah Pilihan',
         accessorFn: (row) => row.elective_course_group?.name ?? null,

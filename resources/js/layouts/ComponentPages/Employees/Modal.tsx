@@ -84,13 +84,13 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 relationship_2: defaultValues.relationship_2 || '',
                 status: Boolean(defaultValues.status) || false,
                 type: defaultValues.type || '',
-                lecture_status_id: String(defaultValues.lecture_status_id) || '0',
-                staff_status_id: String(defaultValues.staff_status_id) || '0',
-                funtional_position_id: String(defaultValues.funtional_position_id) || '0',
-                pns_rank: String(defaultValues.pns_rank) || '0',
-                struktural_position_id: String(defaultValues.struktural_position_id) || '0',
-                staff_division_id: String(defaultValues.staff_division_id) || '0',
-                study_programs_id: String(defaultValues.study_programs_id) || '0',
+                lecture_status_id: String(defaultValues.lecture_status_id),
+                staff_status_id: String(defaultValues.staff_status_id),
+                funtional_position_id: String(defaultValues.funtional_position_id),
+                pns_rank: String(defaultValues.pns_rank),
+                struktural_position_id: String(defaultValues.struktural_position_id),
+                staff_division_id: String(defaultValues.staff_division_id),
+                study_programs_id: String(defaultValues.study_programs_id),
                 nidn: defaultValues.nidn || null,
                 nuptk: defaultValues.nuptk || null,
                 nitk: defaultValues.nitk || null,
@@ -472,6 +472,29 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         error={errors.nuptk?.message}
                                     />
                                     <Controller
+                                        name="staff_status_id"
+                                        control={control}
+                                        // rules={{ required: 'Staff Status is required' }}
+                                        render={({ field }) => {
+                                            return (
+                                                <FormSelectInput
+                                                id="staff_status_id"
+                                                label="Status Tendik"
+                                                value={String(field.value)}  
+                                                onValueChange={field.onChange}
+                                                error={errors.staff_status_id?.message}
+                                                
+                                                >
+                                                    {staffstatus.map((status: any) => (
+                                                        <SelectItem key={status.id} value={String(status.id)}>
+                                                            {status.name}
+                                                        </SelectItem>
+                                                    ))}
+                                                </FormSelectInput>
+                                            );
+                                        }}
+                                    />
+                                    <Controller
                                         name="staff_division_id"
                                         control={control}
                                         rules={{ required: 'Tendik Divisi is required' }}
@@ -483,38 +506,15 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                                 onValueChange={field.onChange}
                                                 error={errors.staff_division_id?.message}
                                             >
-                                                {staffdivision.map((staffdivision: any) => (
-                                                    <SelectItem key={staffdivision.id} value={String(staffdivision.id)}>
-                                                        {staffdivision.name}
+                                                {staffdivision?.map((division: any) => (
+                                                    <SelectItem key={division.id} value={String(division.id)}>
+                                                        {division.name}
                                                     </SelectItem>
                                                 ))}
                                             </FormSelectInput>
                                         )}
                                     />
-                                  
-                                      <Controller
-                                            name="staff_status_id"
-                                            control={control}
-                                            rules={{ required: 'Staff Status is required' }}
-                                            render={({ field }) => {
-                                                console.log("field.value", field.value); // Tambahkan log untuk debug
-                                                return (
-                                                    <FormSelectInput
-                                                        id="staff_status_id"
-                                                        label="Status Tendik"
-                                                        value={String(field.value)}  // pastikan nilai sesuai dengan ID yang dipilih
-                                                        onValueChange={field.onChange}
-                                                        error={errors.staff_status_id?.message}
-                                                    >
-                                                        {staffstatus.map((staffstatus: any) => (
-                                                            <SelectItem key={staffstatus.id} value={String(staffstatus.id)}>
-                                                                {staffstatus.name}
-                                                            </SelectItem>
-                                                        ))}
-                                                    </FormSelectInput>
-                                                );
-                                            }}
-                                        />
+
 
                                 </>
                             )}
