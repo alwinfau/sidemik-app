@@ -103,13 +103,13 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
 
 
     const handleCourseTypeChange = (value: string) => {
-        // Temukan ID dari tipe mata kuliah "Peminatan"
+        
         const peminatanType = courseTypes.find((type: any) => type.name === 'Pilihan');
 
-        // Cek apakah value dari jenis mata kuliah sesuai dengan ID peminatan
+        
         const isElective = value === String(peminatanType?.id);
-        // kondisi yang dimana jika nilai bukan pilihan maka data nya akan ke rest
-        if(!isElective){
+        
+        if(!isElective && !defaultValues){
             setValue('elective_course_groups_id', null)
         }
         setShowElectiveCourse(isElective);

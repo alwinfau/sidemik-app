@@ -85,19 +85,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 relationship_2: defaultValues.relationship_2 || '',
                 status: Boolean(defaultValues.status) || false,
                 type: defaultValues.type || '',
-<<<<<<< HEAD
-                lecture_status_id: String(defaultValues.lecture_status_id),
-                staff_status_id: String(defaultValues.staff_status_id),
-                funtional_position_id: String(defaultValues.funtional_position_id),
-                pns_rank: String(defaultValues.pns_rank),
-                struktural_position_id: String(defaultValues.struktural_position_id),
-                staff_division_id: String(defaultValues.staff_division_id),
-                study_programs_id: String(defaultValues.study_programs_id),
-                nidn: defaultValues.nidn || null,
-                nuptk: defaultValues.nuptk || null,
-                nitk: defaultValues.nitk || null,
-                nidk: defaultValues.nidk || null,
-=======
+
                 lecture_status_id: String(defaultValues.lecture_status_id) || '0',
                 staff_status_id: String(defaultValues.staff_status_id) || '0',
                 funtional_position_id: String(defaultValues.funtional_position_id) || '0',
@@ -109,7 +97,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 nuptk: defaultValues.nuptk || "",
                 nitk: defaultValues.nitk || "",
                 nidk: defaultValues.nidk || "",
->>>>>>> 6ea6b0f5dbdb7d7fc30f3314cced21436dd49b45
+
             });
         } else {
             reset({
@@ -167,28 +155,27 @@ const type = watch('type');
             });
         }
     };
-    useEffect(() => {
-        // Ketika nilai "type" berubah, reset nilai lainnya (misal, nama, email, dll)
+useEffect(() => {
+    
+    if (!defaultValues) {
         if (type === 'staff') {
-            // Reset nilai yang tidak diinginkan ketika "type" menjadi "staff"
-            setValue('nitk', ''); // Menghapus nilai 'nama'
-            setValue('nuptk', ''); // Menghapus nilai 'email'
-            setValue('staff_division_id', ''); // Menghapus nilai 'email'
-            setValue('staff_status_id', ''); // Menghapus nilai 'email'
-            // Lakukan reset untuk field lain sesuai kebutuhan
-        } else if (type === 'lecture') {
-            // Reset nilai untuk tipe lainnya jika diperlukan
             setValue('nidn', '');
             setValue('nidk', '');
-            setValue('nuptk', '');
             setValue('lecture_status_id', '');
             setValue('study_programs_id', '');
             setValue('funtional_position_id', '');
             setValue('pns_rank', '');
             setValue('struktural_position_id', '');
-            // Lakukan reset untuk field lainnya juga
+        } else if (type === 'lecture') {
+            setValue('nitk', '');
+            setValue('nuptk', '');
+            setValue('staff_division_id', '');
+            setValue('staff_status_id', '');
         }
-    }, [type, setValue]);
+    }
+}, [type, setValue, defaultValues?.id]);
+
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
