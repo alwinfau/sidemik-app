@@ -201,7 +201,7 @@ const data: AppData = {
             icon: Users,
             items: [
                 {
-                    title: 'Lecture',
+                    title: 'Pegawai',
                     url: '/employee',
                 },
                 // {

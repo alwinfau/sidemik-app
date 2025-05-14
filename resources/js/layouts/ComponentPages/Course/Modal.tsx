@@ -129,6 +129,29 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         }
     };
 
+    const [filterMatkulPil, setFilterMatkulPil] = useState <any[]>([]);
+
+    const getProdiFromCurri = (curriculums_id:string) =>{
+        const selectedCurriculum = curriculum.find((item:any) => item.id === Number(curriculums_id));
+        return selectedCurriculum.study_program.id;
+    }
+
+    const handleCurriculumChange = (curriculums_id: string) => {
+        setValue('curriculums_id', curriculums_id);
+
+        // get prodi
+        const study_programs_id = getProdiFromCurri(curriculums_id);
+
+        if (study_programs_id) {
+            const filtered = MatkulPil.filter((matkul: any) => 
+                String(matkul.study_program.id) === String(study_programs_id)
+            );
+            setFilterMatkulPil(filtered);
+        } else {
+            setFilterMatkulPil([]);
+        }
+        
+    }
 
 // Fungsi untuk mendapatkan prefix dari kode
 const getCoddeprefix = (code: string) => {
@@ -177,7 +200,10 @@ const handleCodeChange = (value: string) => {
                                         id="curriculums_id"
                                         label="Kurikulum"
                                         value={field.value}
-                                        onValueChange={field.onChange}
+                                        onValueChange={(val) => {
+                                            field.onChange(val);
+                                            handleCurriculumChange(val);
+                                        }}
                                         error={errors.curriculums_id?.message}
                                     >
                                         {curriculum.map((Curr: any) => (
@@ -304,6 +330,7 @@ const handleCodeChange = (value: string) => {
                                 )}
                             />
                             {showElectiveCourse && (
+                                
                                 <Controller
                                     name="elective_course_groups_id"
                                     control={control}
@@ -315,15 +342,17 @@ const handleCodeChange = (value: string) => {
                                             onValueChange={field.onChange}
                                             error={errors.elective_course_groups_id?.message}
                                         >
-                                            {MatkulPil.map((Matkul: any) => (
-                                                <SelectItem key={Matkul.id} value={String(Matkul.id)}>
-                                                    {Matkul.name}
+                                            
+                                            {filterMatkulPil.map((matkul: any) => (
+                                                <SelectItem key={matkul.id} value={String(matkul.id)}>
+                                                    {matkul.name}
                                                 </SelectItem>
                                             ))}
                                         </FormSelectInput>
                                     )}
                                 />
                             )}
+
 
                             {/* <FormTextInput
                                 id="course_desc"

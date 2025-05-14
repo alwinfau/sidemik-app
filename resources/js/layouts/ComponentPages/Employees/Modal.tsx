@@ -43,10 +43,10 @@ const schema = z.object({
     pns_rank: z.string().nullable(),
     struktural_position_id: z.string().nullable(),
     staff_division_id: z.string().nullable(),
-    nidn: z.number().nullable(),
-    nuptk: z.number().nullable(),
-    nitk: z.number().nullable(),
-    nidk: z.number().nullable(),
+    nidn: z.string().nullable(),
+    nuptk: z.string().nullable(),
+    nitk: z.string().nullable(),
+    nidk: z.string().nullable(),
 });
 
 type FormInputs = z.infer<typeof schema>;
@@ -55,6 +55,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
     const {
         register,
         handleSubmit,
+        setValue,
         reset,
         setError,
         control,
@@ -69,7 +70,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             reset({
                 nip: defaultValues.nip || '',
                 name: defaultValues.full_name || '',
-                foto: defaultValues.foto || '',
+                foto: defaultValues.foto || null,
                 front_title: defaultValues.front_title || '',
                 back_title: defaultValues.back_title || '',
                 gender: (defaultValues.gender) || '',
@@ -84,6 +85,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 relationship_2: defaultValues.relationship_2 || '',
                 status: Boolean(defaultValues.status) || false,
                 type: defaultValues.type || '',
+<<<<<<< HEAD
                 lecture_status_id: String(defaultValues.lecture_status_id),
                 staff_status_id: String(defaultValues.staff_status_id),
                 funtional_position_id: String(defaultValues.funtional_position_id),
@@ -95,13 +97,26 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 nuptk: defaultValues.nuptk || null,
                 nitk: defaultValues.nitk || null,
                 nidk: defaultValues.nidk || null,
+=======
+                lecture_status_id: String(defaultValues.lecture_status_id) || '0',
+                staff_status_id: String(defaultValues.staff_status_id) || '0',
+                funtional_position_id: String(defaultValues.funtional_position_id) || '0',
+                pns_rank: String(defaultValues.pns_rank) || '0',
+                struktural_position_id: String(defaultValues.struktural_position_id) || '0',
+                staff_division_id: String(defaultValues.staff_division_id) || '0',
+                study_programs_id: String(defaultValues.study_programs_id) || '0',
+                nidn: defaultValues.nidn || "",
+                nuptk: defaultValues.nuptk || "",
+                nitk: defaultValues.nitk || "",
+                nidk: defaultValues.nidk || "",
+>>>>>>> 6ea6b0f5dbdb7d7fc30f3314cced21436dd49b45
             });
         } else {
             reset({
                 nip: '',
                 name: '',
-                foto: null,
-                front_title: null,
+                foto: "",
+                front_title: "",
                 back_title: '',
                 gender: '',
                 religion: '',
@@ -122,14 +137,14 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 struktural_position_id: '',
                 staff_division_id: '',
                 study_programs_id: '',
-                nidn: null,
-                nuptk: null,
-                nitk: null,
-                nidk: null,
+                nidn: "",
+                nuptk: "",
+                nitk: "",
+                nidk: "",
             });
         }
     }, [defaultValues, reset]);
-
+const type = watch('type');
     const typeValue = watch('type');
 
     const { lecturestatus, staffstatus, studyprogram, functionalposition, strukturalposition, staffdivision, fecthRelasi } = useEmployees();
@@ -137,6 +152,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
     useEffect(() => {
         fecthRelasi();
     }, []);
+
 
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
         try {
@@ -151,7 +167,28 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             });
         }
     };
-
+    useEffect(() => {
+        // Ketika nilai "type" berubah, reset nilai lainnya (misal, nama, email, dll)
+        if (type === 'staff') {
+            // Reset nilai yang tidak diinginkan ketika "type" menjadi "staff"
+            setValue('nitk', ''); // Menghapus nilai 'nama'
+            setValue('nuptk', ''); // Menghapus nilai 'email'
+            setValue('staff_division_id', ''); // Menghapus nilai 'email'
+            setValue('staff_status_id', ''); // Menghapus nilai 'email'
+            // Lakukan reset untuk field lain sesuai kebutuhan
+        } else if (type === 'lecture') {
+            // Reset nilai untuk tipe lainnya jika diperlukan
+            setValue('nidn', '');
+            setValue('nidk', '');
+            setValue('nuptk', '');
+            setValue('lecture_status_id', '');
+            setValue('study_programs_id', '');
+            setValue('funtional_position_id', '');
+            setValue('pns_rank', '');
+            setValue('struktural_position_id', '');
+            // Lakukan reset untuk field lainnya juga
+        }
+    }, [type, setValue]);
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
@@ -229,12 +266,12 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         onValueChange={field.onChange}
                                         error={errors.religion?.message}
                                     >
-                                        <SelectItem value="islam">Islam</SelectItem>
-                                        <SelectItem value="kristen">Kristen Protestan</SelectItem>
-                                        <SelectItem value="katholik">Katholik</SelectItem>
-                                        <SelectItem value="hindu">Hindu</SelectItem>
-                                        <SelectItem value="buddha">Buddha</SelectItem>
-                                        <SelectItem value="konghucu">Konghucu</SelectItem>
+                                        <SelectItem value="Islam">Islam</SelectItem>
+                                        <SelectItem value="Kristen">Kristen Protestan</SelectItem>
+                                        <SelectItem value="Katholik">Katholik</SelectItem>
+                                        <SelectItem value="Hindu">Hindu</SelectItem>
+                                        <SelectItem value="Buddha">Buddha</SelectItem>
+                                        <SelectItem value="Konghucu">Konghucu</SelectItem>
                                     </FormSelectInput>
                                 )}
                             />
@@ -324,7 +361,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         id="type"
                                         label="Tipe"
                                         value={String(field.value)}
-                                        onValueChange={field.onChange}
+                                        onValueChange={(value) => field.onChange(value)}
                                         error={errors.type?.message}
                                     >
                                         <SelectItem value={'lecture'}>Dosen</SelectItem>
@@ -338,26 +375,26 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 <>
                                     <FormTextInput
                                         id="nidn"
-                                        type="number"
+                                        type="text"
                                         label="NIDN"
                                         placeholder="Masukan NIDN"
-                                        {...register('nidn', { valueAsNumber: true })}
+                                        {...register('nidn')}
                                         error={errors.nidn?.message}
                                     />
                                     <FormTextInput
                                         id="nidk"
-                                        type="number"
+                                        type="text"
                                         label="NIDK"
                                         placeholder="Masukan NIDK"
-                                        {...register('nidk', { valueAsNumber: true })}
+                                        {...register('nidk')}
                                         error={errors.nidk?.message}
                                     />
                                     < FormTextInput
                                         id="nuptk"
-                                        type="number"
+                                        type="text"
                                         label="NUPTK"
                                         placeholder="Masukan NUPTK"
-                                        {...register('nuptk', { valueAsNumber: true })}
+                                        {...register('nuptk')}
                                         error={errors.nuptk?.message}
                                     />
                                     <Controller
@@ -457,18 +494,18 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 <>
                                     <FormTextInput
                                         id="nitk"
-                                        type="number"
+                                        type="text"
                                         label="NITK"
                                         placeholder="Masukan NITK"
-                                        {...register('nitk', { valueAsNumber: true })}
+                                        {...register('nitk')}
                                         error={errors.nitk?.message}
                                     />
                                     < FormTextInput
                                         id="nuptk"
-                                        type="number"
+                                        type="text"
                                         label="NUPTK"
                                         placeholder="Masukan NUPTK"
-                                        {...register('nuptk', { valueAsNumber: true })}
+                                        {...register('nuptk')}
                                         error={errors.nuptk?.message}
                                     />
                                     <Controller

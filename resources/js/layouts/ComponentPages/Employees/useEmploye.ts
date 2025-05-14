@@ -34,22 +34,22 @@ export const useEmployees = () => {
     const fecthRelasi = async () => {
         try {
             const resLectureStatus: any = await get('/lecture-status');
-            setLectureStatus(resLectureStatus.data.data);
+            setLectureStatus(resLectureStatus.data);
 
             const resStaffStatus: any = await get('/staff-status');
-            setStaffStatus(resStaffStatus.data.data);
+            setStaffStatus(resStaffStatus.data);
 
             const resStudyProgram: any = await get('/study-program');
-            setStudyProgram(resStudyProgram.data.data);
+            setStudyProgram(resStudyProgram.data);
 
             const resFunctionalPosition: any = await get('/functional-position');
-            setFunctionalPosition(resFunctionalPosition.data.data);
+            setFunctionalPosition(resFunctionalPosition.data);
 
             const resStructuralPosition: any = await get('/structural-position');
-            setStructuralPosition(resStructuralPosition.data.data);
+            setStructuralPosition(resStructuralPosition.data);
 
             const resStaffDivision: any = await get('/staff-division');
-            setStaffDivision(resStaffDivision.data.data);
+            setStaffDivision(resStaffDivision.data);
         } catch (err) {
             console.error('Error fetching:', err);
         }

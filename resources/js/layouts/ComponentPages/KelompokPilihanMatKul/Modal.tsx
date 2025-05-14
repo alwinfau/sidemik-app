@@ -24,7 +24,7 @@ const schema = z.object({
     name: z.string({ message: 'Nama harus diisi' }),
     is_active: z.boolean(),
     description: z.string().nullable(),
-    study_program_id: z.string(),
+    study_programs_id: z.string(),
 });
 type FormInputs = z.infer<typeof schema>;
 
@@ -47,7 +47,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 name: defaultValues.name || '',
                 description: defaultValues.description || '',
                 is_active: Boolean(defaultValues.is_active) || true,
-                study_program_id: String(defaultValues.study_program_id) || '',
+                study_programs_id: String(defaultValues.study_programs_id) || '',
             });
         } else {
             reset({
@@ -55,7 +55,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 name: '',
                 description: '',
                 is_active: true,
-                study_program_id: '',
+                study_programs_id: '',
             });
         }
     }, [defaultValues, reset]);
@@ -90,15 +90,15 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4">
                             <Controller
-                                name="study_program_id"
+                                name="study_programs_id"
                                 control={control}
                                 render={({ field }) => (
                                     <FormSelectInput
-                                        id="study_program_id"
+                                        id="study_programs_id"
                                         label="Prodi"
                                         value={field.value}
                                         onValueChange={field.onChange}
-                                        error={errors.study_program_id?.message}
+                                        error={errors.study_programs_id?.message}
                                     >
                                         {Prodi.map((Study: any) => (
                                             <SelectItem key={Study.id} value={String(Study.id)}>
