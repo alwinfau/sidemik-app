@@ -69,7 +69,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         if (defaultValues) {
             reset({
                 nip: defaultValues.nip || '',
-                name: defaultValues.full_name || '',
+                name: defaultValues.name || '',
                 foto: defaultValues.foto || null,
                 front_title: defaultValues.front_title || '',
                 back_title: defaultValues.back_title || '',
@@ -85,23 +85,10 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 relationship_2: defaultValues.relationship_2 || '',
                 status: Boolean(defaultValues.status) || false,
                 type: defaultValues.type || '',
-<<<<<<< HEAD
-                lecture_status_id: String(defaultValues.lecture_status_id),
-                staff_status_id: String(defaultValues.staff_status_id),
-                funtional_position_id: String(defaultValues.funtional_position_id),
-                pns_rank: String(defaultValues.pns_rank),
-                struktural_position_id: String(defaultValues.struktural_position_id),
-                staff_division_id: String(defaultValues.staff_division_id),
-                study_programs_id: String(defaultValues.study_programs_id),
-                nidn: defaultValues.nidn || null,
-                nuptk: defaultValues.nuptk || null,
-                nitk: defaultValues.nitk || null,
-                nidk: defaultValues.nidk || null,
-=======
                 lecture_status_id: String(defaultValues.lecture_status_id) || '0',
                 staff_status_id: String(defaultValues.staff_status_id) || '0',
                 funtional_position_id: String(defaultValues.funtional_position_id) || '0',
-                pns_rank: String(defaultValues.pns_rank) || '0',
+                pns_rank: defaultValues.pns_rank || '',
                 struktural_position_id: String(defaultValues.struktural_position_id) || '0',
                 staff_division_id: String(defaultValues.staff_division_id) || '0',
                 study_programs_id: String(defaultValues.study_programs_id) || '0',
@@ -109,7 +96,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 nuptk: defaultValues.nuptk || "",
                 nitk: defaultValues.nitk || "",
                 nidk: defaultValues.nidk || "",
->>>>>>> 6ea6b0f5dbdb7d7fc30f3314cced21436dd49b45
             });
         } else {
             reset({
@@ -511,7 +497,7 @@ const type = watch('type');
                                     <Controller
                                         name="staff_status_id"
                                         control={control}
-                                        // rules={{ required: 'Staff Status is required' }}
+                                        rules={{ required: 'Staff Status is required' }}
                                         render={({ field }) => {
                                             return (
                                                 <FormSelectInput
