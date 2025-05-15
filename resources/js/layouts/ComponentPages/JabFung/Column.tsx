@@ -2,14 +2,14 @@ import { Button } from '@/components/ui/button';
 import { ColumnDef } from '@tanstack/react-table';
 import { Pencil, Trash2 } from 'lucide-react';
 
-export type JabatanFungsional = {
+export type JabatanFungsionalType = {
     id?: number;
     code: string;
     name: string;
     description: string;
 };
 
-export const columns = (onEdit: (row: JabatanFungsional) => void, onDelete: (id: string) => void): ColumnDef<JabatanFungsional>[] => [
+export const columns = (onEdit: (row: JabatanFungsionalType) => void, onDelete: (id: string) => void): ColumnDef<JabatanFungsionalType>[] => [
     { id: 'rowNumber', header: 'No', cell: ({ row }) => <div className="text-center">{row.index + 1}</div> },
     { accessorKey: 'code', header: ' Kode' },
     { accessorKey: 'name', header: ' Nama' },

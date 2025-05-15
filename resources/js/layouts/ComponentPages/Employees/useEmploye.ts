@@ -1,6 +1,7 @@
 import { useAxios } from '@/hooks/useAxios';
 import { useState } from 'react';
 import { EmployeesType } from './Column';
+import { schemaEmployees } from './Modal';
 
 export const useEmployees = () => {
     const { get, post, put, del } = useAxios();
@@ -54,7 +55,7 @@ export const useEmployees = () => {
             console.error('Error fetching:', err);
         }
     };
-    const handleSubmit = async (data: Omit<EmployeesType, 'id'>, id?: number, onSuccess?: () => void) => {
+    const handleSubmit = async (data: Omit<schemaEmployees, 'id'>, id?: number, onSuccess?: () => void) => {
         try {
             setIsLoading(true);
             if (id) {

@@ -4,14 +4,14 @@ import ConfirmDeleteDialog from '@/components/ui/Components_1/DeleteModal';
 import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@/components/ui/toast';
 import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { JabatanStruktural, columns } from './Column';
+import { JabatanStrukturalType, columns } from './Column';
 import ModalForm from './Modal';
 import { useJabatanStruktural } from './useJabStruk';
 
 const JabatanStrukturalPage = () => {
     const { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useJabatanStruktural();
     const [modalOpen, setModalOpen] = useState(false);
-    const [editing, setEditing] = useState<JabatanStruktural | undefined>();
+    const [editing, setEditing] = useState<JabatanStrukturalType | undefined>();
     const [deleteId, setDeleteId] = useState<number | null>(null);
 
     useEffect(() => {

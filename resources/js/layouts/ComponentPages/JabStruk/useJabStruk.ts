@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useAxios } from '../../../hooks/useAxios';
-import { JabatanStruktural } from './Column';
+import { JabatanStrukturalType } from './Column';
+import { schemaJabStruk } from './Modal';
 
 export const useJabatanStruktural = () => {
     const { get, post, put, del } = useAxios();
-    const [data, setData] = useState<JabatanStruktural[]>([]);
+    const [data, setData] = useState<JabatanStrukturalType[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [page, setPage] = useState<number>(1);
@@ -24,7 +25,7 @@ export const useJabatanStruktural = () => {
             setIsLoading(false);
         }
     };
-    const handleSubmit = async (data: Omit<JabatanStruktural, 'id'>, id?: number, onSuccess?: () => void) => {
+    const handleSubmit = async (data: Omit<schemaJabStruk, 'id'>, id?: number, onSuccess?: () => void) => {
         try {
             setIsLoading(true);
             if (id) {

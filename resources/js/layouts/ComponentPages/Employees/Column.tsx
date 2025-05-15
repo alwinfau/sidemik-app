@@ -6,13 +6,13 @@ export type EmployeesType = {
     id?: number;
     nip: string;
     name: string;
-    foto: null;
-    front_title: number;
+    foto: string;
+    front_title: string;
     back_title: string;
-    gender: boolean;
+    gender: string;
     religion: string;
     birth_place: string;
-    birth_date: Date;
+    birth_date: string;
     email_pt: string;
     phone: string;
     emergency_phone: string;
@@ -44,6 +44,13 @@ export type EmployeesType = {
     lecture_status: {
         name: string;
     };
+     lecture_status_id?:number;
+     staff_status_id?:number;
+     study_programs_id?:number;
+     funtional_position_id?:number;
+     struktural_position_id?:number;
+     staff_division_id?:number;
+     
 };
 
 export const columns = (onEdit: (row: EmployeesType) => void, onDelete: (id: string) => void): ColumnDef<EmployeesType>[] => [

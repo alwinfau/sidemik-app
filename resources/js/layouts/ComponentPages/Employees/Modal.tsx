@@ -11,12 +11,13 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useEmployees } from './useEmploye';
 import { SelectItem } from '@/components/ui/select';
+import { EmployeesType } from './Column';
 
 type ModalProps = {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    submit: (data: Omit<any, 'id'>, id?: number) => void;
-    defaultValues?: any;
+    submit: (data: Omit<schemaEmployees, "id">, id?: number) => void;
+    defaultValues?: EmployeesType;
 };
 const schema = z.object({
     nip: z.string(),
@@ -38,7 +39,7 @@ const schema = z.object({
     type: z.string(),
     lecture_status_id: z.string().nullable(),
     staff_status_id: z.string().nullable(),
-    study_programs_id: z.string(),
+    study_programs_id: z.string().nullable(),
     funtional_position_id: z.string().nullable(),
     pns_rank: z.string().nullable(),
     struktural_position_id: z.string().nullable(),
@@ -49,7 +50,7 @@ const schema = z.object({
     nidk: z.string().nullable(),
 });
 
-type FormInputs = z.infer<typeof schema>;
+export type schemaEmployees = z.infer<typeof schema>;
 
 const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) => {
     const {
@@ -61,7 +62,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         control,
         formState: { errors, isSubmitting },
         watch,
-    } = useForm<FormInputs>({
+    } = useForm<schemaEmployees>({
         resolver: zodResolver(schema),
     });
 
@@ -73,7 +74,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 foto: defaultValues.foto || null,
                 front_title: defaultValues.front_title || '',
                 back_title: defaultValues.back_title || '',
-                gender: (defaultValues.gender) || '',
+                gender: defaultValues.gender || '',
                 religion: defaultValues.religion || '',
                 birth_place: defaultValues.birth_place || '',
                 birth_date: defaultValues.birth_date || '',
@@ -85,17 +86,18 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 relationship_2: defaultValues.relationship_2 || '',
                 status: Boolean(defaultValues.status) || false,
                 type: defaultValues.type || '',
-                lecture_status_id: String(defaultValues.lecture_status_id) || '0',
-                staff_status_id: String(defaultValues.staff_status_id) || '0',
-                funtional_position_id: String(defaultValues.funtional_position_id) || '0',
-                pns_rank: defaultValues.pns_rank || '',
-                struktural_position_id: String(defaultValues.struktural_position_id) || '0',
-                staff_division_id: String(defaultValues.staff_division_id) || '0',
-                study_programs_id: String(defaultValues.study_programs_id) || '0',
-                nidn: defaultValues.nidn || "",
-                nuptk: defaultValues.nuptk || "",
-                nitk: defaultValues.nitk || "",
-                nidk: defaultValues.nidk || "",
+                lecture_status_id: String(defaultValues.lecture_status) || null,
+                staff_status_id: String(defaultValues.staff_status) || null,
+                funtional_position_id: String(defaultValues.functional_positons) || null,
+                pns_rank: defaultValues.pns_rank || null,
+                struktural_position_id: String(defaultValues.struktural_positions) || null,
+                staff_division_id: String(defaultValues.staff_division) || null,
+                study_programs_id: String(defaultValues.study_programs) || null,
+                nidn: defaultValues.nidn || null,
+                nuptk: defaultValues.nuptk || null,
+                nitk: defaultValues.nitk || null,
+                nidk: defaultValues.nidk || null,
+
             });
         } else {
             reset({
@@ -116,17 +118,17 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 relationship_2: '',
                 status: false,
                 type: 'lecture',
-                lecture_status_id: '',
-                staff_status_id: '',
-                funtional_position_id: '',
+                lecture_status_id: null,
+                staff_status_id: null,
+                funtional_position_id: null,
                 pns_rank: '',
-                struktural_position_id: '',
-                staff_division_id: '',
-                study_programs_id: '',
-                nidn: "",
-                nuptk: "",
-                nitk: "",
-                nidk: "",
+                struktural_position_id: null,
+                staff_division_id: null,
+                study_programs_id: null,
+                nidn: null,
+                nuptk: null,
+                nitk: null,
+                nidk: null,
             });
         }
     }, [defaultValues, reset]);
@@ -140,7 +142,7 @@ const type = watch('type');
     }, []);
 
 
-    const onSubmit: SubmitHandler<FormInputs> = async (data) => {
+    const onSubmit: SubmitHandler<schemaEmployees> = async (data) => {
         try {
             const result = await submit(data, defaultValues?.id);
             if (result != null && !isSubmitting && !defaultValues) {
@@ -153,28 +155,27 @@ const type = watch('type');
             });
         }
     };
-    useEffect(() => {
-        // Ketika nilai "type" berubah, reset nilai lainnya (misal, nama, email, dll)
+useEffect(() => {
+    
+    if (!defaultValues) {
         if (type === 'staff') {
-            // Reset nilai yang tidak diinginkan ketika "type" menjadi "staff"
-            setValue('nitk', ''); // Menghapus nilai 'nama'
-            setValue('nuptk', ''); // Menghapus nilai 'email'
-            setValue('staff_division_id', ''); // Menghapus nilai 'email'
-            setValue('staff_status_id', ''); // Menghapus nilai 'email'
-            // Lakukan reset untuk field lain sesuai kebutuhan
+            setValue('nidn', null);
+            setValue('nidk', null);
+            setValue('lecture_status_id', null);
+            setValue('study_programs_id', null);
+            setValue('funtional_position_id', null);
+            setValue('pns_rank', null);
+            setValue('struktural_position_id', null);
         } else if (type === 'lecture') {
-            // Reset nilai untuk tipe lainnya jika diperlukan
-            setValue('nidn', '');
-            setValue('nidk', '');
-            setValue('nuptk', '');
-            setValue('lecture_status_id', '');
-            setValue('study_programs_id', '');
-            setValue('funtional_position_id', '');
-            setValue('pns_rank', '');
-            setValue('struktural_position_id', '');
-            // Lakukan reset untuk field lainnya juga
+            setValue('nitk', null);
+            setValue('nuptk', null);
+            setValue('staff_division_id', null);
+            setValue('staff_status_id', null);
         }
-    }, [type, setValue]);
+    }
+}, [type, setValue, defaultValues?.id]);
+
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
@@ -232,7 +233,7 @@ const type = watch('type');
                                     <FormSelectInput
                                         id="gender"
                                         label="Jenis Kelamin"
-                                        value={field.value}
+                                        value={field.value? 'Pria' : 'Wanita'}
                                         onValueChange={field.onChange}
                                         error={errors.gender?.message}
                                     >

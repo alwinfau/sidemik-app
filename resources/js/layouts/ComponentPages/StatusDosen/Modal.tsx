@@ -11,7 +11,7 @@ import { z } from 'zod';
 type ModalProps = {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    submit: (data: Omit<any, 'id'>, id?: number) => void;
+    submit: (data: Omit<schemaStatusDosen, 'id'>, id?: number) => void;
     defaultValues?: any;
 };
 
@@ -21,7 +21,7 @@ const schema = z.object({
     description: z.string().nullable(),
 });
 
-type FormInputs = z.infer<typeof schema>;
+export type schemaStatusDosen = z.infer<typeof schema>;
 
 const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) => {
     const {
@@ -30,7 +30,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         reset,
         setError,
         formState: { errors, isSubmitting },
-    } = useForm<FormInputs>({
+    } = useForm<schemaStatusDosen>({
         resolver: zodResolver(schema),
     });
 
@@ -50,7 +50,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         }
     }, [defaultValues, reset]);
 
-    const onSubmit: SubmitHandler<FormInputs> = async (data) => {
+    const onSubmit: SubmitHandler<schemaStatusDosen> = async (data) => {
         try {
             const result = await submit(data, defaultValues?.id);
             if (result != null) {

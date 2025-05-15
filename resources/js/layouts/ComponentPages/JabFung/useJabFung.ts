@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useAxios } from '../../../hooks/useAxios';
-import { JabatanFungsional } from './Column';
+import { JabatanFungsionalType } from './Column';
+import { schemaJabFung } from './Modal';
 
 export const useJabatanFungsional = () => {
     const { get, post, put, del } = useAxios();
-    const [data, setData] = useState<JabatanFungsional[]>([]);
+    const [data, setData] = useState<JabatanFungsionalType[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [page, setPage] = useState<number>(1);
@@ -24,7 +25,7 @@ export const useJabatanFungsional = () => {
             setIsLoading(false);
         }
     };
-    const handleSubmit = async (data: Omit<JabatanFungsional, 'id'>, id?: number, onSuccess?: () => void) => {
+    const handleSubmit = async (data: Omit<schemaJabFung, 'id'>, id?: number, onSuccess?: () => void) => {
         try {
             setIsLoading(true);
             if (id) {

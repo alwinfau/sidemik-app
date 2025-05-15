@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useAxios } from '../../../hooks/useAxios';
-import { StatusDosen } from './Column';
+import { StatusDosenType } from './Column';
+import { schemaStatusDosen } from './Modal';
 
 export const useStatusDosen = () => {
     const { get, post, put, del } = useAxios();
-    const [data, setData] = useState<StatusDosen[]>([]);
+    const [data, setData] = useState<StatusDosenType[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [page, setPage] = useState<number>(1);
@@ -24,7 +25,7 @@ export const useStatusDosen = () => {
             setIsLoading(false);
         }
     };
-    const handleSubmit = async (data: Omit<StatusDosen, 'id'>, id?: number, onSuccess?: () => void) => {
+    const handleSubmit = async (data: Omit<schemaStatusDosen, 'id'>, id?: number, onSuccess?: () => void) => {
         try {
             setIsLoading(true);
             if (id) {

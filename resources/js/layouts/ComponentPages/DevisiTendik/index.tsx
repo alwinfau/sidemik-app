@@ -4,14 +4,14 @@ import ConfirmDeleteDialog from '@/components/ui/Components_1/DeleteModal';
 import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@/components/ui/toast';
 import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { DevisiTendik, columns } from './Column';
+import { DevisiTendikType, columns } from './Column';
 import ModalForm from './Modal';
 import { useDevisiTendik } from './useDevisiTendik';
 
 const DevisiTendikPage = () => {
     const { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useDevisiTendik();
     const [modalOpen, setModalOpen] = useState(false);
-    const [editing, setEditing] = useState<DevisiTendik | undefined>();
+    const [editing, setEditing] = useState<DevisiTendikType | undefined>();
     const [deleteId, setDeleteId] = useState<number | null>(null);
 
     useEffect(() => {
