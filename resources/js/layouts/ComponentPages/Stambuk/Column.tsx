@@ -27,9 +27,6 @@ export const columns = (onEdit: (row: Stambuk) => void, onDelete: (id: string) =
         header: 'Tahun',
         cell: ({ row }) => row.original.year.slice(0, 4),
     },
-    { accessorKey: 'name', header: 'Nama Stambuk' },
-    { accessorKey: 'ukt', header: 'UKT' },
-    // { accessorKey: 'description', header: 'Keterangan' },
     {
         header: 'Tahun Kurikulum',
         accessorFn: (row) => row.curriculums?.code ?? null,
@@ -40,6 +37,9 @@ export const columns = (onEdit: (row: Stambuk) => void, onDelete: (id: string) =
         accessorFn: (row) => row.study_programs?.idn_sp_name ?? null,
         id: 'study_program',
     },
+    { accessorKey: 'name', header: 'Nama Stambuk' },
+    { accessorKey: 'ukt', header: 'UKT' },
+    // { accessorKey: 'description', header: 'Keterangan' },
     {
         id: 'actions',
         header: 'Actions',

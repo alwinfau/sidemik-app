@@ -89,7 +89,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 lecture_status_id: String(defaultValues.lecture_status_id) || '0',
                 staff_status_id: String(defaultValues.staff_status_id) || '0',
                 funtional_position_id: String(defaultValues.funtional_position_id) || '0',
-                pns_rank: String(defaultValues.pns_rank) || '0',
+                pns_rank: defaultValues.pns_rank || '',
                 struktural_position_id: String(defaultValues.struktural_position_id) || '0',
                 staff_division_id: String(defaultValues.staff_division_id) || '0',
                 study_programs_id: String(defaultValues.study_programs_id) || '0',

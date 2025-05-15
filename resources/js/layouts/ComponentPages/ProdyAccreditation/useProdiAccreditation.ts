@@ -29,7 +29,7 @@ export const useProdiAccreditation = () => {
     const fetchAgency = async () => {
         try {
             const agencyResponse: any = await get('/accreditation-agency');
-            setAgencies(agencyResponse.data.data);
+            setAgencies(agencyResponse.data);
         } catch (error) {
             throw error;
         }

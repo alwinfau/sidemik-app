@@ -28,7 +28,7 @@ export const useFakultas = () => {
     const fetchAcademicPeriods = async () => {
         try {
             const res: any = await get('/academic-period');
-            setAcademicPeriods(res.data.data);
+            setAcademicPeriods(res.data);
         } catch (err) {
             console.error('Error fetching academic periods:', err);
         }

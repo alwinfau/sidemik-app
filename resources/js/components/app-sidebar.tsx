@@ -100,25 +100,36 @@ const data: AppData = {
             plan: 'Free',
         },
     ],
-
+    
     navMain: [
         {
-            title: 'Resource',
+            title: 'Akademik',
             url: '#',
-            icon: DatabaseIcon,
-            isActive: true,
+            isActive:true,
             items: [
                 {
-                    title: 'Students',
-                    url: '/students',
+                    title: 'Academic Year',
+                    url: '/academic-year',
                 },
                 {
-                    title: 'Mata Kuliah',
-                    url: '/course',
+                    title: 'Academic Period',
+                    url: '/academic-period',
                 },
                 {
-                    title: 'Mata Kuliah Pilihan',
-                    url: '/elective-course-groups',
+                    title: 'Fakultas',
+                    url: '/faculty',
+                },
+                {
+                    title: 'Progaram Studi',
+                    url: '/study-program',
+                },
+                {
+                    title: 'Kurikulum',
+                    url: '/curriculum',
+                },
+                {
+                    title: 'Stambuk',
+                    url: '/stambuk',
                 },
                 {
                     title: 'Jenis Mata Kuliah',
@@ -127,6 +138,26 @@ const data: AppData = {
                 {
                     title: 'Kelompok Mata Kuliah',
                     url: '/course-group',
+                },
+                {
+                    title: 'Mata Kuliah Pilihan',
+                    url: '/elective-course-groups',
+                },
+                {
+                    title: 'Mata Kuliah',
+                    url: '/course',
+                },
+            ]
+        },
+        {
+            title: 'Resource',
+            url: '#',
+            icon: DatabaseIcon,
+            isActive: false,
+            items: [
+                {
+                    title: 'Students',
+                    url: '/students',
                 },
                 {
                     title: 'Room',
@@ -156,22 +187,7 @@ const data: AppData = {
                     title: 'Profile University',
                     url: 'resources/university-profile',
                 },
-                {
-                    title: 'Faculty',
-                    url: '/faculty',
-                },
-                {
-                    title: 'Study Program',
-                    url: '/study-program',
-                },
-                {
-                    title: 'Academic Period',
-                    url: '/academic-period',
-                },
-                {
-                    title: 'Academic Year',
-                    url: '/academic-year',
-                },
+                
                 {
                     title: 'Waktu Kuliah',
                     url: '/waktu-kuliah',
@@ -184,14 +200,7 @@ const data: AppData = {
                     title: 'Univ Level Academic',
                     url: '/univ-level-education',
                 },
-                {
-                    title: 'Kurikulum',
-                    url: '/curriculum',
-                },
-                {
-                    title: 'Stambuk',
-                    url: '/stambuk',
-                },
+                
             ],
         },
 
@@ -201,9 +210,30 @@ const data: AppData = {
             icon: Users,
             items: [
                 {
+                    title: 'Status Dosen',
+                    url: '/lecture-status',
+                },
+                {
                     title: 'Pegawai',
                     url: '/employee',
                 },
+                {
+                    title: 'Divisi Tendik',
+                    url: '/staff-division',
+                },
+                {
+                    title: 'Jabatan Struktural',
+                    url: '/structural-position',
+                },
+                {
+                    title: 'Jabatan Fungsional',
+                    url: '/functional-position',
+                },
+                {
+                    title: 'Status Tendik',
+                    url: '/staff-status',
+                },
+                
                 // {
                 //     title: 'Administrative Staff',
                 //     url: '#',
@@ -232,26 +262,7 @@ const data: AppData = {
                 //     title: 'Academic Position Types',
                 //     url: '/academic-position-types',
                 // },
-                {
-                    title: 'Divisi Tendik',
-                    url: '/staff-division',
-                },
-                {
-                    title: 'Jabatan Struktural',
-                    url: '/structural-position',
-                },
-                {
-                    title: 'Jabatan Fungsional',
-                    url: '/functional-position',
-                },
-                {
-                    title: 'Status Tendik',
-                    url: '/staff-status',
-                },
-                {
-                    title: 'Status Dosen',
-                    url: '/lecture-status',
-                },
+                
             ],
         },
         {

@@ -24,7 +24,7 @@ const schema = z.object({
     name: z.string({ message: 'Nama harus diisi' }),
     is_active: z.boolean(),
     description: z.string().nullable(),
-    study_programs_id: z.string(),
+    study_program_id: z.string(),
 });
 type FormInputs = z.infer<typeof schema>;
 
@@ -47,7 +47,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 name: defaultValues.name || '',
                 description: defaultValues.description || '',
                 is_active: Boolean(defaultValues.is_active) || true,
-                study_programs_id: String(defaultValues.study_programs_id) || '',
+                study_program_id: String(defaultValues.study_program_id) || '',
             });
         } else {
             reset({
@@ -55,7 +55,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 name: '',
                 description: '',
                 is_active: true,
-                study_programs_id: '',
+                study_program_id: '',
             });
         }
     }, [defaultValues, reset]);
@@ -70,12 +70,29 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         try {
             const result = await submit(data, defaultValues?.id);
             if (result != null && !isSubmitting && !defaultValues) {
-                reset();
+                reset({
+                    code: '',
+                    name: '',
+                    description: '',
+                    is_active: true,
+                    study_program_id: '',
+                });
             }
         } catch (error: any) {
+            const errorsData = error?.data;
+            let lastErrorMessage = '';
+            let firstErrorMessage = error.meta.message;
+
+            Object.entries(errorsData).forEach(([field, messages], index) => {
+                const messageText = (messages as string[])[0];
+                lastErrorMessage = messageText;
+            });
+
+            let finalErrorMessage = firstErrorMessage.includes('Duplicate record') ? firstErrorMessage : lastErrorMessage;
+
             setError('root', {
                 type: 'manual',
-                message: error?.response?.meta?.message || 'Something went wrong',
+                message: finalErrorMessage,
             });
         }
     };
@@ -90,15 +107,15 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4">
                             <Controller
-                                name="study_programs_id"
+                                name="study_program_id"
                                 control={control}
                                 render={({ field }) => (
                                     <FormSelectInput
-                                        id="study_programs_id"
+                                        id="study_program_id"
                                         label="Prodi"
                                         value={field.value}
                                         onValueChange={field.onChange}
-                                        error={errors.study_programs_id?.message}
+                                        error={errors.study_program_id?.message}
                                     >
                                         {Prodi.map((Study: any) => (
                                             <SelectItem key={Study.id} value={String(Study.id)}>
