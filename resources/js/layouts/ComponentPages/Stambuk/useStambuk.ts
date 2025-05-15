@@ -28,10 +28,10 @@ export const useStambuk = () => {
     const fectRelasi = async () => {
         try {
             const resAcademic: any = await get('/curriculum');
-            setCurriculum(resAcademic.data.data);
+            setCurriculum(resAcademic.data);
 
             const resProdi: any = await get('/study-program');
-            setProdi(resProdi.data.data);
+            setProdi(resProdi.data);
         } catch (err) {
             console.error('Error fetching academic periods:', err);
         }

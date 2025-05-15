@@ -442,7 +442,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         {...register('nidk')}
                                         error={errors.nidk?.message}
                                     />
-
                                     <Controller
                                         name="lecture_status_id"
                                         control={control}
@@ -511,7 +510,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         {...register('pns_rank')}
                                         error={errors.pns_rank?.message}
                                     />
-
                                     <Controller
                                         name="struktural_position_id"
                                         control={control}

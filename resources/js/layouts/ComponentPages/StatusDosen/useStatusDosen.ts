@@ -2,7 +2,6 @@ import { ApiResponse, PaginatedApiResponse } from '@/types';
 import { useState } from 'react';
 import { useAxios } from '../../../hooks/useAxios';
 import { StatusDosen } from './Column';
-import { SchemaStatusDosen } from './Modal';
 
 export const useStatusDosen = () => {
     const { get, post, put, del } = useAxios();
@@ -26,7 +25,7 @@ export const useStatusDosen = () => {
             setIsLoading(false);
         }
     };
-    const handleSubmit = async (data: Omit<SchemaStatusDosen, 'id'>, id?: number, onSuccess?: () => void) => {
+    const handleSubmit = async (data: Omit<any, 'id'>, id?: number, onSuccess?: () => void) => {
         try {
             setIsLoading(true);
             const res: ApiResponse<StatusDosen> = id ? await put(`/lecture-status/${id}`, data) : await post('/lecture-status', data);

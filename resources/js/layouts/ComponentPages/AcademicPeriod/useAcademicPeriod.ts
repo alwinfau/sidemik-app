@@ -28,7 +28,7 @@ export const useAcademicPriod = () => {
     const fecthAcademicYears = async () => {
         try {
             const res: any = await get('/academic-year');
-            setAcademicYears(res.data.data);
+            setAcademicYears(res.data);
         } catch (err) {
             throw err;
         }

@@ -1,6 +1,7 @@
 import { useAxios } from '@/hooks/useAxios';
 import { useState } from 'react';
 import { CurriculumType } from './Column';
+import { Search } from 'lucide-react';
 
 export const useCurriculum = () => {
     const { get, post, put, del } = useAxios();
@@ -10,6 +11,9 @@ export const useCurriculum = () => {
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
     const [Prodi, setProdi] = useState<any>([]);
+    const [TahunKurikulum, setTahunKurikulum] =  useState<CurriculumType[]>([]);
+    const [searchTahunKurikulum, setSearchTahunKurikulum] = useState <string>('');
+
 
     const fetchData = async (currentPage = 1) => {
         try {
@@ -18,7 +22,6 @@ export const useCurriculum = () => {
             setData(res.data.data);
             setPage(res.data.current_page);
             setTotalPages(res.data.last_page);
-            console.log(data);
         } catch (err) {
             setToast({ message: 'Failed to get curriculum', type: 'error' });
         } finally {
@@ -26,10 +29,30 @@ export const useCurriculum = () => {
         }
     };
 
+    const fecthSearch = async () => {
+        try {
+            setIsLoading(true);
+            const response = await get(`/curriculum?search=${searchTahunKurikulum}`);
+            console.log('Response:', response);
+            if (response && response.data && Array.isArray(response.data.data)) {
+                setData(response.data.data);
+            } else {
+                setToast({ message: 'Data Tidak Ditemukan', type: 'error' });
+                setData([]);  
+            }
+        } catch (err) {
+            console.error('Error during search:', err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    
+
+
     const fecthRelasi = async () => {
         try {
             const resProdi: any = await get('/study-program');
-            setProdi(resProdi.data);
+            setProdi(resProdi.data );
         } catch (err) {
             console.error('Error fetching:', err);
         }
@@ -80,14 +103,19 @@ export const useCurriculum = () => {
         data,
         isLoading,
         toast,
+        page,
+        totalPages,
+        Prodi,
+        TahunKurikulum,
+        searchTahunKurikulum,
+        setSearchTahunKurikulum,
+        setTahunKurikulum,
+        setPage,
         fetchData,
         handleSubmit,
         handleDelete,
         setToast,
-        page,
-        totalPages,
-        setPage,
-        Prodi,
+        fecthSearch,
         fecthRelasi,
     };
 };

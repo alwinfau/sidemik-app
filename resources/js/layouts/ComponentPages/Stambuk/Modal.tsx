@@ -16,7 +16,7 @@ type ModalProps = {
     defaultValues?: any;
 };
 const schema = z.object({
-    year: z.string(),
+    year: z.string().regex(/^\d{4}$/, { message: 'Tahun Ajaran harus berupa 4 digit tahun (misal: 2025)' }),
     name: z.string({ message: 'Nama Wajib diisi' }).min(3, 'Nama wajib lebih dari 3 kata'),
     ukt: z.number({ message: 'Masukan jumlah UKT' }),
     description: z.string().nullable(),
@@ -43,16 +43,16 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             reset({
                 year: defaultValues.year || '',
                 name: defaultValues.name || '',
-                ukt: defaultValues.ukt || '',
+                ukt: defaultValues.ukt || null,
                 description: defaultValues.description || '',
-                curriculums_id: String(defaultValues.curriculums_id) || '0',
-                study_programs_id: String(defaultValues.study_programs_id) || '0',
+                curriculums_id: String(defaultValues.curriculums_id) || '',
+                study_programs_id: String(defaultValues.study_programs_id) || '',
             });
         } else {
             reset({
                 year: '',
                 name: '',
-                ukt: 0,
+                ukt: null,
                 description: '',
                 curriculums_id: '',
                 study_programs_id: '',
@@ -99,12 +99,13 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mx-3 space-y-4">
-                            <DateInput
-                                label="Tahun Stambuk"
+                        <FormTextInput
                                 id="year"
-                                placeholder="Masukan Tahun Stambuk"
-                                register={register('year')}
-                                error={errors.year}
+                                label="Tahun Stambuk"
+                                placeholder="Masukan tahun Stambuk"
+                                type="text"
+                                {...register('year')}
+                                error={errors.year?.message}
                             />
 
                             <FormTextInput

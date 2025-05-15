@@ -7,13 +7,12 @@ import { LoaderCircle } from 'lucide-react';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { StatusDosen } from './Column';
 
 type ModalProps = {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    submit: (data: Omit<SchemaStatusDosen, 'id'>, id?: number) => void;
-    defaultValues?: StatusDosen;
+    submit: (data: Omit<any, 'id'>, id?: number) => void;
+    defaultValues?: any;
 };
 
 const schema = z.object({
@@ -22,7 +21,7 @@ const schema = z.object({
     description: z.string().nullable(),
 });
 
-export type SchemaStatusDosen = z.infer<typeof schema>;
+type FormInputs = z.infer<typeof schema>;
 
 const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) => {
     const {
@@ -31,7 +30,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         reset,
         setError,
         formState: { errors, isSubmitting },
-    } = useForm<SchemaStatusDosen>({
+    } = useForm<FormInputs>({
         resolver: zodResolver(schema),
     });
 
@@ -51,7 +50,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         }
     }, [defaultValues, reset]);
 
-    const onSubmit: SubmitHandler<SchemaStatusDosen> = async (data) => {
+    const onSubmit: SubmitHandler<FormInputs> = async (data) => {
         try {
             const result = await submit(data, defaultValues?.id);
             if (result != null) {
@@ -66,14 +65,14 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         } catch (error: any) {
             const errorsData = error?.data;
             let lastErrorMessage = '';
-            const firstErrorMessage = error.meta.message;
+            let firstErrorMessage = error.meta.message;
 
             Object.entries(errorsData).forEach(([field, messages], index) => {
                 const messageText = (messages as string[])[0];
                 lastErrorMessage = messageText;
             });
 
-            const finalErrorMessage = firstErrorMessage.includes('Duplicate record') ? firstErrorMessage : lastErrorMessage;
+            let finalErrorMessage = firstErrorMessage.includes('Duplicate record') ? firstErrorMessage : lastErrorMessage;
 
             setError('root', {
                 type: 'manual',

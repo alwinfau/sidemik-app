@@ -98,14 +98,18 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
 
     const [showElectiveCourse, setShowElectiveCourse] = useState(false);
 
+    const [filteredGroups, setFilteredGroups] = useState(courseGroups);
+    
+
+
     const handleCourseTypeChange = (value: string) => {
-        // Temukan ID dari tipe mata kuliah "Peminatan"
+        
         const peminatanType = courseTypes.find((type: any) => type.name === 'Pilihan');
 
-        // Cek apakah value dari jenis mata kuliah sesuai dengan ID peminatan
+        
         const isElective = value === String(peminatanType?.id);
-        // kondisi yang dimana jika nilai bukan pilihan maka data nya akan ke rest
-        if(!isElective){
+        
+        if(!isElective && !defaultValues){
             setValue('elective_course_groups_id', null)
         }
         setShowElectiveCourse(isElective);
@@ -125,50 +129,58 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         }
     };
 
-// fungsi untuk kode 
+    const [filterMatkulPil, setFilterMatkulPil] = useState <any[]>([]);
+
+    const getProdiFromCurri = (curriculums_id:string) =>{
+        const selectedCurriculum = curriculum.find((item:any) => item.id === Number(curriculums_id));
+        return selectedCurriculum.study_program.id;
+    }
+
+    const handleCurriculumChange = (curriculums_id: string) => {
+        setValue('curriculums_id', curriculums_id);
+
+        // get prodi
+        const study_programs_id = getProdiFromCurri(curriculums_id);
+
+        if (study_programs_id) {
+            const filtered = MatkulPil.filter((matkul: any) => 
+                String(matkul.study_program.id) === String(study_programs_id)
+            );
+            setFilterMatkulPil(filtered);
+        } else {
+            setFilterMatkulPil([]);
+        }
+        
+    }
+
+// Fungsi untuk mendapatkan prefix dari kode
 const getCoddeprefix = (code: string) => {
-    // value dari user langsung keterima huruf besar
-    const match = code.match(/^[A-Z]+/)
-    return match ? match[0]: '';
-}
-const handleCodeChange =( value : string) => {
-    // ubah jadi kapital
+    // Ambil prefix dari kode (huruf kapital)
+    const match = code.match(/^[A-Z]+/);
+    return match ? match[0] : '';
+};
+
+const handleCodeChange = (value: string) => {
     const uppercaseValue = value.toUpperCase();
     setValue('code', uppercaseValue);
 
-    // extrak prefic ke kapital
+    // Ekstrak prefix kode
     const prefix = getCoddeprefix(uppercaseValue);
 
-    
-    // Filter kelompok mata kuliah berdasarkan prefix
-    const filteredGroups = courseGroups.filter((group: any) =>
-        group.name.startsWith(prefix)
+    // Filter kelompok mata kuliah berdasarkan kode yang mengandung prefix
+    const newFilteredGroups = courseGroups.filter((group: any) =>
+        group.code?.toUpperCase().includes(prefix) || group.name.toUpperCase().includes(prefix)
     );
 
-    // Jika ada kelompok yang cocok, set sebagai nilai default
-    if (filteredGroups.length > 0) {
-        setValue('course_groups_id', String(filteredGroups[0].id));
-    }
-    
-    // Filter kelompok mata kuliah berdasarkan prefix
-    const filterMatkulPIL = MatkulPil.filter((Pil: any) =>
-        Pil.name.startsWith(prefix)
-    );
+    setFilteredGroups(newFilteredGroups);
 
-    // Jika ada kelompok yang cocok, set sebagai nilai default
-    if (filterMatkulPIL.length > 0) {
-        setValue('elective_course_groups_id', String(filterMatkulPIL[0].id));
+    // Jika ada satu kelompok yang cocok, langsung set value-nya
+    if (newFilteredGroups.length === 1) {
+        setValue('course_groups_id', String(newFilteredGroups[0].id));
     }
-    // Filter kurikulum berdasarkan prefix
-    const CuriculumFilter = curriculum.filter((ur: any) =>
-        ur.code.startsWith(prefix)
-    );
+};
 
-    // Jika ada kelompok yang cocok, set sebagai nilai default
-    if (CuriculumFilter.length > 0) {
-        setValue('curriculums_id', String(CuriculumFilter[0].id));
-    }
-}
+
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -180,6 +192,28 @@ const handleCodeChange =( value : string) => {
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mx-3 space-y-4">
+                            <Controller
+                                name="curriculums_id"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormSelectInput
+                                        id="curriculums_id"
+                                        label="Kurikulum"
+                                        value={field.value}
+                                        onValueChange={(val) => {
+                                            field.onChange(val);
+                                            handleCurriculumChange(val);
+                                        }}
+                                        error={errors.curriculums_id?.message}
+                                    >
+                                        {curriculum.map((Curr: any) => (
+                                            <SelectItem key={Curr.id} value={String(Curr.id)}>
+                                                {Curr.code}
+                                            </SelectItem>
+                                        ))}
+                                    </FormSelectInput>
+                                )}
+                            />
                             <FormTextInput
                                 id="code"
                                 label="Kode"
@@ -287,7 +321,7 @@ const handleCodeChange =( value : string) => {
                                         onValueChange={field.onChange}
                                         error={errors.course_groups_id?.message}
                                     >
-                                        {courseGroups.map((group: any) => (
+                                        {filteredGroups.map((group: any) => (
                                             <SelectItem key={group.id} value={String(group.id)}>
                                                 {group.name}
                                             </SelectItem>
@@ -295,28 +329,8 @@ const handleCodeChange =( value : string) => {
                                     </FormSelectInput>
                                 )}
                             />
-
-                            <Controller
-                                name="curriculums_id"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="curriculums_id"
-                                        label="Kurirkulum"
-                                        value={field.value}
-                                        onValueChange={field.onChange}
-                                        error={errors.curriculums_id?.message}
-                                    >
-                                        {curriculum.map((Curr: any) => (
-                                            <SelectItem key={Curr.id} value={String(Curr.id)}>
-                                                {Curr.code}
-                                            </SelectItem>
-                                        ))}
-                                    </FormSelectInput>
-                                )}
-                            />
-
                             {showElectiveCourse && (
+                                
                                 <Controller
                                     name="elective_course_groups_id"
                                     control={control}
@@ -328,9 +342,10 @@ const handleCodeChange =( value : string) => {
                                             onValueChange={field.onChange}
                                             error={errors.elective_course_groups_id?.message}
                                         >
-                                            {MatkulPil.map((Matkul: any) => (
-                                                <SelectItem key={Matkul.id} value={String(Matkul.id)}>
-                                                    {Matkul.name}
+                                            
+                                            {filterMatkulPil.map((matkul: any) => (
+                                                <SelectItem key={matkul.id} value={String(matkul.id)}>
+                                                    {matkul.name}
                                                 </SelectItem>
                                             ))}
                                         </FormSelectInput>

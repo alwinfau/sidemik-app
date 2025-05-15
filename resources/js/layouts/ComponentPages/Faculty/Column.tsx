@@ -35,7 +35,7 @@ export const columns = (onEdit: (row: FakultasType) => void, onDelete: (id: stri
     { accessorKey: 'eng_name', header: 'Nama Fakultas(ENG)' },
     { accessorKey: 'short_name', header: 'Singkatan' },
     { accessorKey: 'address', header: 'Alamat' },
-    { accessorKey: 'telephone', header: 'Telephone' },
+    { accessorKey: 'telephone', header: 'Telephone', cell: ({ getValue }) => getValue<number>() ?? '-', },
     { accessorKey: 'vision', header: 'Visi', cell: ({ getValue }) => getValue<string>() ?? '-', },
     { accessorKey: 'mission', header: 'Misi', cell: ({ getValue }) => getValue<string>() ?? '-', },
     { accessorKey: 'description', header: 'Keterangan', cell: ({ getValue }) => getValue<string>() ?? '-', },

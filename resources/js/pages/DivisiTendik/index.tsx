@@ -3,7 +3,9 @@ import DevisiTendikPage from '@/layouts/ComponentPages/DevisiTendik';
 import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 
-const DevisiTendik = () => {
+type Props = {};
+
+const DevisiTendik = (props: Props) => {
     const breadcrumbs: BreadcrumbItem[] = [{ title: ' Staff Division ', href: '/staff-division' }];
 
     return (

@@ -51,11 +51,11 @@ export function DataTable<TData>({
 
   return (
     <div className="space-y-4">
-      <Input
+      {/* <Input
         placeholder="Search..."
         onChange={(e) => onSearch(e.target.value)}
         className="max-w-sm bg-white mt-3"
-      />
+      /> */}
   
 
       <div className="rounded-md border bg-white">
