@@ -353,7 +353,6 @@ const handleCodeChange = (value: string) => {
                                 />
                             )}
 
-
                             {/* <FormTextInput
                                 id="course_desc"
                                 label="Course Description"

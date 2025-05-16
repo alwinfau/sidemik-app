@@ -22,7 +22,6 @@ const CoursePages = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [editing, setEditing] = useState<CourseType | undefined>();
     const [deleteId, setDeleteId] = useState<number | null>(null);
-
     useEffect(() => {
         fetchData();
     }, []);
@@ -32,7 +31,6 @@ const CoursePages = () => {
             return () => clearTimeout(timer);
         }
     }, [toast]);
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Mata Kuliah" />

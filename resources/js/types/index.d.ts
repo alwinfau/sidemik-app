@@ -44,3 +44,30 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export interface ApiResponse<T> {
+    meta: {
+        code: number;
+        status: string;
+        message: string;
+    };
+    data: T;
+}
+
+export type PaginatedApiResponse<T> = {
+    meta: {
+        code: number;
+        status: string;
+        message: string;
+    };
+    data: {
+        current_page: number;
+        data: T[];
+        from?: number;
+        last_page?: number;
+        per_page?: number;
+        to?: number;
+        total?: number;
+        [key: string]: any; // biar fleksibel kalau ada tambahan
+    };
+};

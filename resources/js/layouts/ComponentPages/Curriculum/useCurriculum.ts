@@ -1,7 +1,7 @@
 import { useAxios } from '@/hooks/useAxios';
 import { useState } from 'react';
 import { CurriculumType } from './Column';
-import { Search } from 'lucide-react';
+import Curriculum from '@/pages/Curriculum/Curriculum';
 
 export const useCurriculum = () => {
     const { get, post, put, del } = useAxios();
@@ -29,25 +29,13 @@ export const useCurriculum = () => {
         }
     };
 
-    const fecthSearch = async () => {
-        try {
-            setIsLoading(true);
-            const response = await get(`/curriculum?search=${searchTahunKurikulum}`);
-            console.log('Response:', response);
-            if (response && response.data && Array.isArray(response.data.data)) {
-                setData(response.data.data);
-            } else {
-                setToast({ message: 'Data Tidak Ditemukan', type: 'error' });
-                setData([]);  
-            }
-        } catch (err) {
-            console.error('Error during search:', err);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-    
-
+    // const fecthsearch = async () => {
+    //     try {
+    //         const response = await get(``)
+    //     } catch (error) {
+            
+    //     }
+    // }
 
     const fecthRelasi = async () => {
         try {
@@ -115,7 +103,7 @@ export const useCurriculum = () => {
         handleSubmit,
         handleDelete,
         setToast,
-        fecthSearch,
+        
         fecthRelasi,
     };
 };

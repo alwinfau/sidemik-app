@@ -12,7 +12,7 @@ export const columns = (onEdit: (row: WaktuKuliahType) => void, onDelete: (id: s
     {
         id: 'rowNumber',
         header: 'No',
-        cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
+        cell: ({ row }) => <div className="">{row.index + 1}</div>,
     },
     { accessorKey: 'time', header: 'Waktu Kuliah' },
     { accessorKey: 'description', header: 'Keterangan Waktu Kuliah' },
