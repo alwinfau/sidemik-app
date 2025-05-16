@@ -77,7 +77,6 @@ export const columns = (onEdit: (row: EmployeesType) => void, onDelete: (id: str
     {
         accessorKey: 'gender',
         header: 'Jenis Kelamin',
-        cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Laki-laki' : 'Perempuan'}</div>,
     },
     { accessorKey: 'religion', header: 'Agama' },
     { accessorKey: 'birth_place', header: 'Tempat Lahir' },
