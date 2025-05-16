@@ -18,7 +18,7 @@ export const useCourse = () => {
     const fetchData = async (currentPage = 1) => {
         try {
             setIsLoading(true);
-            const res: any = await get(`/course?page=${currentPage}&limit=5`);
+            const res: any = await get(`/course?page=${currentPage}&limit=10`);
             setData(res.data.data);
             setPage(res.data.current_page);
             setTotalPages(res.data.last_page);
@@ -53,7 +53,7 @@ export const useCourse = () => {
             if (id) {
                 const res: any = await put(`/course/${id}`, data);
                 setData((prev) => prev.map((p) => (p.id === id ? res.data : p)));
-                setToast({ message: 'Course updated successfully', type: 'success' });
+                setToast({ message: 'Mata Kuliah updated successfully', type: 'success' });
                 await fetchData();
                 onSuccess?.();
                 return res;
@@ -62,7 +62,7 @@ export const useCourse = () => {
                 setData((prev) => [...prev, res.data]);
                 await fetchData();
                 onSuccess?.();
-                setToast({ message: 'Course created successfully', type: 'success' });
+                setToast({ message: 'Mata Kuliah created successfully', type: 'success' });
                 return res;
             }
         } catch (error: any) {
