@@ -10,11 +10,12 @@ import { useEffect, useState } from 'react';
 import { columns, CurriculumType } from './Column';
 import ModalForm from './Modal';
 import { useCurriculum } from './useCurriculum';
+import { Input } from '@/components/ui/input';
 
-const breadcrumbs: BreadcrumbItem[] = [{ title: 'Curriculum', href: '/curriculum' }];
+const breadcrumbs: BreadcrumbItem[] = [{ title: 'Kurikulum', href: '/curriculum' }];
 
 const Curiculumpage = () => {
-    const { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useCurriculum();
+    const { data, isLoading, toast, TahunKurikulum, setTahunKurikulum, setSearchTahunKurikulum,fetchData, fecthSearch, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useCurriculum();
     const [modalOpen, setModalOpen] = useState(false);
     const [editing, setEditing] = useState<CurriculumType | undefined>();
     const [deleteId, setDeleteId] = useState<number | null>(null);
@@ -29,9 +30,27 @@ const Curiculumpage = () => {
         fetchData();
     }, []);
 
+    const handleSearch = () => {
+        fecthSearch();
+    }
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Kurikulum" />
+            <div className="flex items-center gap-2">
+                <Input
+                    id='search'
+                    placeholder="Search. .."
+                    onChange={(e) => {
+                        setSearchTahunKurikulum(e.target.value)
+                    }}
+                    
+                    className="max-w-sm bg-white mt-3"
+                />
+                <Button onClick={handleSearch} className='self-end'>
+                    search
+                </Button>
+            </div>
             <div className="m-6">
                 <div className="mb-4 flex justify-between">
                     <h2 className="text-2xl font-bold">Kurikulum</h2>

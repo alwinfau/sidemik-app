@@ -28,10 +28,10 @@ export const useStudyProgram = () => {
     const fecthRelasi = async () => {
         try {
             const resFacultas: any = await get('/faculty');
-            setFakultas(resFacultas.data.data);
+            setFakultas(resFacultas.data);
 
             const resAcademicPeriod: any = await get('/academic-period');
-            setAcademicPeriod(resAcademicPeriod.data.data);
+            setAcademicPeriod(resAcademicPeriod.data);
         } catch (err) {
             console.error('Error fetching:', err);
         }

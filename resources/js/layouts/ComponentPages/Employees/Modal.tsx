@@ -1,34 +1,42 @@
 import { Button } from '@/components/ui/button';
 import DateInput from '@/components/ui/Components_1/DateInput';
 import { FormSelectInput, FormTextInput } from '@/components/ui/Components_1/FormInput';
+import { FormFileInput } from '@/components/ui/Components_1/InputFile';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { SelectItem } from '@/components/ui/select';
 import { Switch } from '@/components/ui/swicth';
+import { useAxios } from '@/hooks/useAxios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { Proditype } from '../Prodi/Column';
 import { useEmployees } from './useEmploye';
-import { SelectItem } from '@/components/ui/select';
-import { EmployeesType } from './Column';
+import { StatusDosenType } from '../StatusDosen/Column';
+import { JabatanFungsionalType } from '../JabFung/Column';
+import { JabatanStrukturalType } from '../JabStruk/Column';
+import { DevisiTendikType } from '../DevisiTendik/Column';
+import { StatusTendikType } from '../StatusTendik/Column';
 
 type ModalProps = {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    submit: (data: Omit<schemaEmployees, "id">, id?: number) => void;
-    defaultValues?: EmployeesType;
+    submit: (data: Omit<SchemaEmployee, 'id'>, id?: number) => void;
+    defaultValues?: any;
 };
+
 const schema = z.object({
     nip: z.string(),
     name: z.string(),
-    foto: z.string().nullable(),
+    file: z.union([z.instanceof(File), z.string(), z.null()]),
     front_title: z.string().nullable(),
     back_title: z.string(),
     gender: z.string(),
     religion: z.string(),
     birth_place: z.string(),
-    birth_date: z.string(),
+    birth_date: z.string().date(),
     email_pt: z.string().email('Email tidak valid'),
     phone: z.string(),
     emergency_phone: z.string().nullable(),
@@ -43,14 +51,14 @@ const schema = z.object({
     funtional_position_id: z.string().nullable(),
     pns_rank: z.string().nullable(),
     struktural_position_id: z.string().nullable(),
-    staff_division_id: z.string().nullable(),
+    staff_divisions_id: z.string().nullable(),
     nidn: z.string().nullable(),
     nuptk: z.string().nullable(),
     nitk: z.string().nullable(),
     nidk: z.string().nullable(),
 });
 
-export type schemaEmployees = z.infer<typeof schema>;
+export type SchemaEmployee = z.infer<typeof schema>;
 
 const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) => {
     const {
@@ -62,16 +70,56 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         control,
         formState: { errors, isSubmitting },
         watch,
-    } = useForm<schemaEmployees>({
+    } = useForm<SchemaEmployee>({
         resolver: zodResolver(schema),
     });
 
+    const { post } = useAxios();
+
+    const { lecturestatus, staffstatus, studyprogram, functionalposition, strukturalposition, staffdivision, fecthRelasi } = useEmployees();
+
     useEffect(() => {
-        if (defaultValues) {
+        fecthRelasi();
+    }, []);
+
+    const type = watch('type');
+
+    useEffect(() => {
+        if (type === defaultValues?.type) return;
+
+        if (type === 'staff') {
+            setValue('nitk', '');
+            setValue('staff_divisions_id', null);
+            setValue('staff_status_id', null);
+            setValue('nidn', '');
+            setValue('nidk', '');
+            setValue('lecture_status_id', '');
+            setValue('study_programs_id', '');
+            setValue('funtional_position_id', '');
+            setValue('pns_rank', '');
+            setValue('struktural_position_id', '');
+        } else if (type === 'lecture') {
+            setValue('nitk', '');
+            setValue('staff_divisions_id', null);
+            setValue('staff_status_id', null);
+            setValue('nidn', '');
+            setValue('nidk', '');
+            setValue('lecture_status_id', '');
+            setValue('study_programs_id', '');
+            setValue('funtional_position_id', '');
+            setValue('pns_rank', '');
+            setValue('struktural_position_id', '');
+        }
+
+    }, [type, setValue]);
+
+    useEffect(() => {
+        if (open) {
+            if (defaultValues ) {
             reset({
                 nip: defaultValues.nip || '',
                 name: defaultValues.name || '',
-                foto: defaultValues.foto || null,
+                file: defaultValues.foto || null,
                 front_title: defaultValues.front_title || '',
                 back_title: defaultValues.back_title || '',
                 gender: defaultValues.gender || '',
@@ -86,25 +134,24 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 relationship_2: defaultValues.relationship_2 || '',
                 status: Boolean(defaultValues.status) || false,
                 type: defaultValues.type || '',
-                lecture_status_id: String(defaultValues.lecture_status) || null,
-                staff_status_id: String(defaultValues.staff_status) || null,
-                funtional_position_id: String(defaultValues.functional_positons) || null,
-                pns_rank: defaultValues.pns_rank || null,
-                struktural_position_id: String(defaultValues.struktural_positions) || null,
-                staff_division_id: String(defaultValues.staff_division) || null,
-                study_programs_id: String(defaultValues.study_programs) || null,
-                nidn: defaultValues.nidn || null,
-                nuptk: defaultValues.nuptk || null,
-                nitk: defaultValues.nitk || null,
-                nidk: defaultValues.nidk || null,
-
+                lecture_status_id: defaultValues.lecture_status_id ? String(defaultValues.lecture_status_id) : null,
+                staff_status_id: defaultValues.staff_status_id ? String(defaultValues.staff_status_id) : null,
+                funtional_position_id: defaultValues.funtional_position_id ? String(defaultValues.funtional_position_id) : null,
+                pns_rank: defaultValues.pns_rank ? String(defaultValues.pns_rank) : null,
+                struktural_position_id: defaultValues.struktural_position_id ? String(defaultValues.struktural_position_id) : null,
+                staff_divisions_id: defaultValues.staff_divisions_id ? String(defaultValues.staff_divisions_id) : null,
+                study_programs_id: defaultValues.study_programs_id ? String(defaultValues.study_programs_id) : null,
+                nidn: defaultValues.nidn ?? '',
+                nuptk: defaultValues.nuptk ?? '',
+                nitk: defaultValues.nitk ?? '',
+                nidk: defaultValues.nidk ?? '',
             });
         } else {
             reset({
                 nip: '',
                 name: '',
-                foto: "",
-                front_title: "",
+                file: null,
+                front_title: '',
                 back_title: '',
                 gender: '',
                 religion: '',
@@ -118,63 +165,70 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 relationship_2: '',
                 status: false,
                 type: 'lecture',
-                lecture_status_id: null,
-                staff_status_id: null,
-                funtional_position_id: null,
+                lecture_status_id: '',
+                staff_status_id: '',
+                funtional_position_id: '',
                 pns_rank: '',
-                struktural_position_id: null,
-                staff_division_id: null,
-                study_programs_id: null,
-                nidn: null,
-                nuptk: null,
-                nitk: null,
-                nidk: null,
+                struktural_position_id: '',
+                staff_divisions_id: '',
+                study_programs_id: '',
+                nidn: '',
+                nuptk: '',
+                nitk: '',
+                nidk: '',
             });
         }
-    }, [defaultValues, reset]);
-const type = watch('type');
-    const typeValue = watch('type');
+        }
+        
+    }, [defaultValues, reset, open]);
 
-    const { lecturestatus, staffstatus, studyprogram, functionalposition, strukturalposition, staffdivision, fecthRelasi } = useEmployees();
-
-    useEffect(() => {
-        fecthRelasi();
-    }, []);
-
-
-    const onSubmit: SubmitHandler<schemaEmployees> = async (data) => {
+    const onSubmit: SubmitHandler<SchemaEmployee> = async (data) => {
         try {
-            const result = await submit(data, defaultValues?.id);
+            const formData = new FormData();
+            let fotoPath = defaultValues?.foto ?? null;
+
+            if (data.file) {
+                if (data.file instanceof File) {
+                    formData.append('file', data.file);
+
+                    const foto: any = await post('/upload-file', formData);
+                    if (foto.meta.code === 200) {
+                        fotoPath = foto.data.file_path;
+                    }
+                } else if (typeof data.file === 'string') {
+                    fotoPath = data.file;
+                }
+            }
+
+            console.log(data);
+
+            const payload = {
+                ...data,
+                foto: fotoPath,
+            };
+
+            const result = await submit(payload, defaultValues?.id);
             if (result != null && !isSubmitting && !defaultValues) {
                 reset();
             }
         } catch (error: any) {
+            const errorsData = error?.data;
+            const firstErrorMessage = error.meta.message;
+            let lastErrorMessage = '';
+
+            Object.entries(errorsData).forEach(([field, messages], index) => {
+                const messageText = (messages as string[])[0];
+                lastErrorMessage = messageText;
+            });
+
+            const finalErrorMessage = firstErrorMessage.includes('Duplicate record') ? firstErrorMessage : lastErrorMessage;
+
             setError('root', {
                 type: 'manual',
-                message: error?.response?.meta?.message || 'Something went wrong',
+                message: finalErrorMessage,
             });
         }
     };
-useEffect(() => {
-    
-    if (!defaultValues) {
-        if (type === 'staff') {
-            setValue('nidn', null);
-            setValue('nidk', null);
-            setValue('lecture_status_id', null);
-            setValue('study_programs_id', null);
-            setValue('funtional_position_id', null);
-            setValue('pns_rank', null);
-            setValue('struktural_position_id', null);
-        } else if (type === 'lecture') {
-            setValue('nitk', null);
-            setValue('nuptk', null);
-            setValue('staff_division_id', null);
-            setValue('staff_status_id', null);
-        }
-    }
-}, [type, setValue, defaultValues?.id]);
-
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -202,14 +256,16 @@ useEffect(() => {
                                 {...register('name')}
                                 error={errors.name?.message}
                             />
-                            <FormTextInput
-                                id="foto"
-                                type="file"
-                                label="Foto"
-                                placeholder="Masukan Foto"
-                                {...register('foto')}
-                                error={errors.foto?.message}
-                            />
+
+                            {defaultValues?.foto && (
+                                <div className="">
+                                    <img src={`http://127.0.0.1:8080${defaultValues.foto}`} className="w-1/2" />
+                                </div>
+                            )}
+
+                            <FormFileInput name="file" control={control} label="Masukkan Foto" errors={errors} />
+
+                            <span>{errors.file?.message}</span>
                             <FormTextInput
                                 id="front_title"
                                 type="text"
@@ -233,7 +289,7 @@ useEffect(() => {
                                     <FormSelectInput
                                         id="gender"
                                         label="Jenis Kelamin"
-                                        value={field.value? 'Pria' : 'Wanita'}
+                                        value={field.value}
                                         onValueChange={field.onChange}
                                         error={errors.gender?.message}
                                     >
@@ -339,6 +395,15 @@ useEffect(() => {
                                 />
                             </div>
 
+                            <FormTextInput
+                                id="nuptk"
+                                type="text"
+                                label="NUPTK"
+                                placeholder="Masukan NUPTK"
+                                {...register('nuptk')}
+                                error={errors.nuptk?.message}
+                            />
+
                             <Controller
                                 name="type"
                                 control={control}
@@ -357,7 +422,7 @@ useEffect(() => {
                                 )}
                             />
 
-                            {typeValue === 'lecture' ? (
+                            {type === 'lecture' ? (
                                 // kondisi dosen
                                 <>
                                     <FormTextInput
@@ -376,14 +441,7 @@ useEffect(() => {
                                         {...register('nidk')}
                                         error={errors.nidk?.message}
                                     />
-                                    < FormTextInput
-                                        id="nuptk"
-                                        type="text"
-                                        label="NUPTK"
-                                        placeholder="Masukan NUPTK"
-                                        {...register('nuptk')}
-                                        error={errors.nuptk?.message}
-                                    />
+
                                     <Controller
                                         name="lecture_status_id"
                                         control={control}
@@ -392,11 +450,11 @@ useEffect(() => {
                                             <FormSelectInput
                                                 id="lecture_status_id"
                                                 label="Status Dosen"
-                                                value={String(field.value)}
-                                                onValueChange={field.onChange}
+                                                value={field.value === null ? '' : field.value}
+                                                onValueChange={(value) => field.onChange(value || null)}
                                                 error={errors.lecture_status_id?.message}
                                             >
-                                                {lecturestatus.map((lecturestatus: any) => (
+                                                {lecturestatus.map((lecturestatus: StatusDosenType) => (
                                                     <SelectItem key={lecturestatus.id} value={String(lecturestatus.id)}>
                                                         {lecturestatus.name}
                                                     </SelectItem>
@@ -412,11 +470,11 @@ useEffect(() => {
                                             <FormSelectInput
                                                 id="study_programs_id"
                                                 label="Program Studi"
-                                                value={String(field.value)}
-                                                onValueChange={field.onChange}
+                                                value={field.value === null ? '' : field.value}
+                                                onValueChange={(value) => field.onChange(value || null)}
                                                 error={errors.study_programs_id?.message}
                                             >
-                                                {studyprogram.map((studyProgram: any) => (
+                                                {studyprogram.map((studyProgram: Proditype) => (
                                                     <SelectItem key={studyProgram.id} value={String(studyProgram.id)}>
                                                         {studyProgram.idn_sp_name}
                                                     </SelectItem>
@@ -432,11 +490,11 @@ useEffect(() => {
                                             <FormSelectInput
                                                 id="funtional_position_id"
                                                 label="Jabatan Fungsional"
-                                                value={String(field.value)}
-                                                onValueChange={field.onChange}
+                                                value={field.value === null ? '' : field.value}
+                                                onValueChange={(value) => field.onChange(value || null)}
                                                 error={errors.funtional_position_id?.message}
                                             >
-                                                {functionalposition.map((functionalposition: any) => (
+                                                {functionalposition.map((functionalposition: JabatanFungsionalType) => (
                                                     <SelectItem key={functionalposition.id} value={String(functionalposition.id)}>
                                                         {functionalposition.name}
                                                     </SelectItem>
@@ -452,8 +510,7 @@ useEffect(() => {
                                         {...register('pns_rank')}
                                         error={errors.pns_rank?.message}
                                     />
-                                    
-                                    
+
                                     <Controller
                                         name="struktural_position_id"
                                         control={control}
@@ -462,11 +519,11 @@ useEffect(() => {
                                             <FormSelectInput
                                                 id="struktural_position_id"
                                                 label="Jabatan Struktural"
-                                                value={String(field.value)}
-                                                onValueChange={field.onChange}
+                                                value={field.value === null ? '' : field.value}
+                                                onValueChange={(value) => field.onChange(value || null)}
                                                 error={errors.struktural_position_id?.message}
                                             >
-                                                {strukturalposition.map((strukturalposition: any) => (
+                                                {strukturalposition.map((strukturalposition: JabatanStrukturalType) => (
                                                     <SelectItem key={strukturalposition.id} value={String(strukturalposition.id)}>
                                                         {strukturalposition.name}
                                                     </SelectItem>
@@ -474,7 +531,6 @@ useEffect(() => {
                                             </FormSelectInput>
                                         )}
                                     />
-                                    
                                 </>
                             ) : (
                                 // kondisi tendik
@@ -487,14 +543,28 @@ useEffect(() => {
                                         {...register('nitk')}
                                         error={errors.nitk?.message}
                                     />
-                                    < FormTextInput
-                                        id="nuptk"
-                                        type="text"
-                                        label="NUPTK"
-                                        placeholder="Masukan NUPTK"
-                                        {...register('nuptk')}
-                                        error={errors.nuptk?.message}
+
+                                    <Controller
+                                        name="staff_divisions_id"
+                                        control={control}
+                                        rules={{ required: 'Tendik Divisi is required' }}
+                                        render={({ field }) => (
+                                            <FormSelectInput
+                                                id="staff_divisions_id"
+                                                label="Divisi Tendik"
+                                                value={field.value === null ? '' : field.value}
+                                                onValueChange={(value) => field.onChange(value || null)}
+                                                error={errors.staff_divisions_id?.message}
+                                            >
+                                                {staffdivision.map((staffdivision: DevisiTendikType) => (
+                                                    <SelectItem key={staffdivision.id} value={String(staffdivision.id)}>
+                                                        {staffdivision.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </FormSelectInput>
+                                        )}
                                     />
+
                                     <Controller
                                         name="staff_status_id"
                                         control={control}
@@ -502,51 +572,25 @@ useEffect(() => {
                                         render={({ field }) => {
                                             return (
                                                 <FormSelectInput
-                                                id="staff_status_id"
-                                                label="Status Tendik"
-                                                value={String(field.value)}  
-                                                onValueChange={field.onChange}
-                                                error={errors.staff_status_id?.message}
-                                                
+                                                    id="staff_status_id"
+                                                    label="Status Tendik"
+                                                    value={field.value === null ? '' : field.value}
+                                                    onValueChange={(value) => field.onChange(value || null)}
+                                                    error={errors.staff_status_id?.message}
                                                 >
-                                                    {staffstatus.map((status: any) => (
-                                                        <SelectItem key={status.id} value={String(status.id)}>
-                                                            {status.name}
+                                                    {staffstatus.map((staffstatus: StatusTendikType) => (
+                                                        <SelectItem key={staffstatus.id} value={String(staffstatus.id)}>
+                                                            {staffstatus.name}
                                                         </SelectItem>
                                                     ))}
                                                 </FormSelectInput>
                                             );
                                         }}
                                     />
-                                    <Controller
-                                        name="staff_division_id"
-                                        control={control}
-                                        rules={{ required: 'Tendik Divisi is required' }}
-                                        render={({ field }) => (
-                                            <FormSelectInput
-                                                id="staff_division_id"
-                                                label="Divisi Tendik"
-                                                value={String(field.value)}
-                                                onValueChange={field.onChange}
-                                                error={errors.staff_division_id?.message}
-                                            >
-                                                {staffdivision?.map((division: any) => (
-                                                    <SelectItem key={division.id} value={String(division.id)}>
-                                                        {division.name}
-                                                    </SelectItem>
-                                                ))}
-                                            </FormSelectInput>
-                                        )}
-                                    />
-
-
                                 </>
                             )}
 
-                            {/* kondisi selain  dosen dan tendik */}
-
                             {errors.root && <p className="text-red-600">{errors.root.message}</p>}
-                            
 
                             <Button
                                 type="submit"
