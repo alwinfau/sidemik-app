@@ -1,6 +1,14 @@
 import { useAxios } from '@/hooks/useAxios';
+import { ApiResponse, PaginatedApiResponse } from '@/types';
 import { useState } from 'react';
+import { DevisiTendik } from '../DevisiTendik/Column';
+import { JabatanFungsional } from '../JabFung/Column';
+import { JabatanStruktural } from '../JabStruk/Column';
+import { Proditype } from '../Prodi/Column';
+import { StatusDosen } from '../StatusDosen/Column';
+import { StatusTendik } from '../StatusTendik/Column';
 import { EmployeesType } from './Column';
+import { SchemaEmployee } from './Modal';
 
 export const useEmployees = () => {
     const { get, post, put, del } = useAxios();
@@ -9,23 +17,22 @@ export const useEmployees = () => {
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
-    const [lecturestatus, setLectureStatus] = useState<any>([]);
-    const [staffstatus, setStaffStatus] = useState<any>([]);
-    const [studyprogram, setStudyProgram] = useState<any>([]);
-    const [functionalposition, setFunctionalPosition] = useState<any>([]);
-    const [strukturalposition, setStructuralPosition] = useState<any>([]);
-    const [staffdivision, setStaffDivision] = useState<any>([]);
-    const [preview, setPreview] = useState<any>([]);
+    const [lecturestatus, setLectureStatus] = useState<StatusDosen[]>([]);
+    const [staffstatus, setStaffStatus] = useState<StatusTendik[]>([]);
+    const [studyprogram, setStudyProgram] = useState<Proditype[]>([]);
+    const [functionalposition, setFunctionalPosition] = useState<JabatanFungsional[]>([]);
+    const [strukturalposition, setStructuralPosition] = useState<JabatanStruktural[]>([]);
+    const [staffdivision, setStaffDivision] = useState<DevisiTendik[]>([]);
 
     const fetchData = async (currentPage = 1) => {
         try {
             setIsLoading(true);
-            const res: any = await get(`/employees?page=${currentPage}&limit=10`);
+            const res: PaginatedApiResponse<EmployeesType> = await get(`/employees?page=${currentPage}&limit=10`);
             setData(res.data.data);
             setPage(res.data.current_page);
-            setTotalPages(res.data.last_page);
+            setTotalPages(res.data.last_page ?? 1);
         } catch (err) {
-            setToast({ message: 'Failed to fetch data', type: 'error' });
+            setToast({ message: `Failed to fetch data ${err}`, type: 'error' });
         } finally {
             setIsLoading(false);
         }
@@ -33,39 +40,39 @@ export const useEmployees = () => {
 
     const fecthRelasi = async () => {
         try {
-            const resLectureStatus: any = await get('/lecture-status');
+            const resLectureStatus: ApiResponse<StatusDosen[]> = await get('/lecture-status');
             setLectureStatus(resLectureStatus.data);
 
-            const resStaffStatus: any = await get('/staff-status');
+            const resStaffStatus: ApiResponse<StatusTendik[]> = await get('/staff-status');
             setStaffStatus(resStaffStatus.data);
 
-            const resStudyProgram: any = await get('/study-program');
+            const resStudyProgram: ApiResponse<Proditype[]> = await get('/study-program');
             setStudyProgram(resStudyProgram.data);
 
-            const resFunctionalPosition: any = await get('/functional-position');
+            const resFunctionalPosition: ApiResponse<JabatanFungsional[]> = await get('/functional-position');
             setFunctionalPosition(resFunctionalPosition.data);
 
-            const resStructuralPosition: any = await get('/structural-position');
+            const resStructuralPosition: ApiResponse<JabatanStruktural[]> = await get('/structural-position');
             setStructuralPosition(resStructuralPosition.data);
 
-            const resStaffDivision: any = await get('/staff-division');
+            const resStaffDivision: ApiResponse<DevisiTendik[]> = await get('/staff-division');
             setStaffDivision(resStaffDivision.data);
         } catch (err) {
             console.error('Error fetching:', err);
         }
     };
-    const handleSubmit = async (data: Omit<EmployeesType, 'id'>, id?: number, onSuccess?: () => void) => {
+    const handleSubmit = async (data: Omit<SchemaEmployee, 'id'>, id?: number, onSuccess?: () => void) => {
         try {
             setIsLoading(true);
             if (id) {
-                const res: any = await put(`/employees/${id}`, data);
-                setData((prev) => prev.map((p: any) => (p.id === id ? res.data : p)));
+                const res: ApiResponse<EmployeesType> = await put(`/employees/${id}`, data);
+                setData((prev) => prev.map((p) => (p.id === id ? res.data : p)));
                 await fetchData();
                 onSuccess?.();
                 setToast({ message: 'Employees updated successfully', type: 'success' });
                 return res;
             } else {
-                const res: any = await post('/employees', data);
+                const res: ApiResponse<EmployeesType> = await post('/employees', data);
                 setData((prev) => [...prev, res.data]);
                 await fetchData();
                 onSuccess?.();

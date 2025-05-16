@@ -9,7 +9,6 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useStambuk } from './useStambuk';
 
-
 type ModalProps = {
     open: boolean;
     onOpenChange: (open: boolean) => void;
