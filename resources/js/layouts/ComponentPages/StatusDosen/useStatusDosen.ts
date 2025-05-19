@@ -1,11 +1,11 @@
-import { ApiResponse, PaginatedApiResponse } from '@/types';
 import { useState } from 'react';
 import { useAxios } from '../../../hooks/useAxios';
-import { StatusDosen } from './Column';
+import { StatusDosenType } from './Column';
+import { schemaStatusDosen } from './Modal';
 
 export const useStatusDosen = () => {
     const { get, post, put, del } = useAxios();
-    const [data, setData] = useState<StatusDosen[]>([]);
+    const [data, setData] = useState<StatusDosenType[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [page, setPage] = useState<number>(1);
@@ -14,28 +14,40 @@ export const useStatusDosen = () => {
     const fetchData = async (currentPage = 1) => {
         try {
             setIsLoading(true);
-            const res: PaginatedApiResponse<StatusDosen> = await get(`/lecture-status?page=${currentPage}&limit=10`);
+            const res: any = await get(`/lecture-status?page=${currentPage}&limit=10`);
             setData(res.data.data);
 
             setPage(res.data.current_page);
-            setTotalPages(res.data.last_page ?? 1);
+            setTotalPages(res.data.last_page);
         } catch (err) {
             setToast({ message: 'Failed to fetch data', type: 'error' });
         } finally {
             setIsLoading(false);
         }
     };
-    const handleSubmit = async (data: Omit<any, 'id'>, id?: number, onSuccess?: () => void) => {
+    const handleSubmit = async (data: Omit<schemaStatusDosen, 'id'>, id?: number, onSuccess?: () => void) => {
         try {
             setIsLoading(true);
-            const res: ApiResponse<StatusDosen> = id ? await put(`/lecture-status/${id}`, data) : await post('/lecture-status', data);
-            await fetchData();
-            onSuccess?.(); // close modal
-            setToast({ message: `Lecture Status ${id ? 'updated' : 'created'} successfully`, type: 'success' });
-            return res;
+            if (id) {
+                const res: any = await put(`/lecture-status/${id}`, data);
+                setData((prev) => prev.map((p) => (p.id === id ? res.data : p)));
+                await fetchData();
+                onSuccess?.();
+                setToast({ message: 'Lecture Status updated successfully', type: 'success' });
+                return res;
+            } else {
+                const res: any = await post('/lecture-status', data);
+                setData((prev) => [...prev, res.data]);
+                await fetchData();
+                onSuccess?.();
+                setToast({ message: 'Lecture Status created successfully', type: 'success' });
+                return res;
+            }
         } catch (error: any) {
-            setToast({ message: 'Failed to submit lecture data', type: 'error' });
-            throw error.response?.data;
+            if (error?.response?.status === 500) {
+                setToast({ message: 'Failed to submit Lecture Status', type: 'error' });
+            }
+            throw error.response.data;
         } finally {
             setIsLoading(false);
         }
@@ -45,8 +57,9 @@ export const useStatusDosen = () => {
         try {
             setIsLoading(true);
             await del(`/lecture-status/${id}`);
+            setData((prev) => prev.filter((item) => item.id !== id));
             await fetchData();
-            onSuccess?.(); // close modal
+            onSuccess?.();
             setToast({ message: 'Deleted successfully', type: 'success' });
         } catch (err) {
             setToast({ message: 'Delete failed', type: 'error' });

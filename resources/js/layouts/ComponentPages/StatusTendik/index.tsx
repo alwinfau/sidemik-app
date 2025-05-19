@@ -4,14 +4,14 @@ import ConfirmDeleteDialog from '@/components/ui/Components_1/DeleteModal';
 import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@/components/ui/toast';
 import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { StatusTendik, columns } from './Column';
+import { StatusTendikType, columns } from './Column';
 import ModalForm from './Modal';
 import { useStatusTendik } from './useStatustendik';
 
 const StatusTendikPage = () => {
     const { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useStatusTendik();
     const [modalOpen, setModalOpen] = useState(false);
-    const [editing, setEditing] = useState<StatusTendik | undefined>();
+    const [editing, setEditing] = useState<StatusTendikType | undefined>();
     const [deleteId, setDeleteId] = useState<number | null>(null);
 
     useEffect(() => {

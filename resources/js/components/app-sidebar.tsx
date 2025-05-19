@@ -100,12 +100,12 @@ const data: AppData = {
             plan: 'Free',
         },
     ],
-
+    
     navMain: [
         {
             title: 'Akademik',
             url: '#',
-            isActive: true,
+            isActive:true,
             items: [
                 {
                     title: 'Academic Year',
@@ -147,7 +147,7 @@ const data: AppData = {
                     title: 'Mata Kuliah',
                     url: '/course',
                 },
-            ],
+            ]
         },
         {
             title: 'Resource',
@@ -187,7 +187,7 @@ const data: AppData = {
                     title: 'Profile University',
                     url: 'resources/university-profile',
                 },
-
+                
                 {
                     title: 'Waktu Kuliah',
                     url: '/waktu-kuliah',
@@ -200,6 +200,7 @@ const data: AppData = {
                     title: 'Univ Level Academic',
                     url: '/univ-level-education',
                 },
+                
             ],
         },
 
@@ -209,16 +210,8 @@ const data: AppData = {
             icon: Users,
             items: [
                 {
-                    title: 'Status Dosen',
-                    url: '/lecture-status',
-                },
-                {
                     title: 'Pegawai',
                     url: '/employee',
-                },
-                {
-                    title: 'Divisi Tendik',
-                    url: '/staff-division',
                 },
                 {
                     title: 'Jabatan Struktural',
@@ -229,10 +222,18 @@ const data: AppData = {
                     url: '/functional-position',
                 },
                 {
+                    title: 'Status Dosen',
+                    url: '/lecture-status',
+                },
+                {
                     title: 'Status Tendik',
                     url: '/staff-status',
                 },
-
+                {
+                    title: 'Divisi Tendik',
+                    url: '/staff-division',
+                },
+                
                 // {
                 //     title: 'Administrative Staff',
                 //     url: '#',
@@ -261,6 +262,7 @@ const data: AppData = {
                 //     title: 'Academic Position Types',
                 //     url: '/academic-position-types',
                 // },
+                
             ],
         },
         {

@@ -2,14 +2,14 @@ import { Button } from '@/components/ui/button';
 import { ColumnDef } from '@tanstack/react-table';
 import { Pencil, Trash2 } from 'lucide-react';
 
-export type StatusDosen = {
+export type StatusDosenType = {
     id?: number;
     code: string;
     name: string;
     description: string;
 };
 
-export const columns = (onEdit: (row: StatusDosen) => void, onDelete: (id: string) => void): ColumnDef<StatusDosen>[] => [
+export const columns = (onEdit: (row: StatusDosenType) => void, onDelete: (id: string) => void): ColumnDef<StatusDosenType>[] => [
     { id: 'rowNumber', header: 'No', cell: ({ row }) => <div className="text-center">{row.index + 1}</div> },
     { accessorKey: 'code', header: ' Kode' },
     { accessorKey: 'name', header: ' Nama ' },

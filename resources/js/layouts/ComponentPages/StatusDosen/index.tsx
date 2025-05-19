@@ -4,14 +4,14 @@ import ConfirmDeleteDialog from '@/components/ui/Components_1/DeleteModal';
 import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@/components/ui/toast';
 import { CirclePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { StatusDosen, columns } from './Column';
+import { StatusDosenType, columns } from './Column';
 import ModalForm from './Modal';
 import { useStatusDosen } from './useStatusDosen';
 
 const StatusDosenPage = () => {
     const { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useStatusDosen();
     const [modalOpen, setModalOpen] = useState(false);
-    const [editing, setEditing] = useState<StatusDosen | undefined>();
+    const [editing, setEditing] = useState<StatusDosenType | undefined>();
     const [deleteId, setDeleteId] = useState<number | null>(null);
 
     useEffect(() => {

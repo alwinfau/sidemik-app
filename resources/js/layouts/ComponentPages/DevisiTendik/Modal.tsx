@@ -7,12 +7,13 @@ import { LoaderCircle } from 'lucide-react';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { DevisiTendikType } from './Column';
 
 type ModalProps = {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     submit: (data: Omit<any, 'id'>, id?: number) => void;
-    defaultValues?: any;
+    defaultValues?: DevisiTendikType;
 };
 
 const schema = z.object({
@@ -21,7 +22,7 @@ const schema = z.object({
     description: z.string().nullable(),
 });
 
-type FormInputs = z.infer<typeof schema>;
+export type schemaDevisiTendik = z.infer<typeof schema>;
 
 const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) => {
     const {
@@ -30,7 +31,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         reset,
         setError,
         formState: { errors, isSubmitting },
-    } = useForm<FormInputs>({
+    } = useForm<schemaDevisiTendik>({
         resolver: zodResolver(schema),
     });
 
@@ -50,7 +51,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         }
     }, [defaultValues, reset]);
 
-    const onSubmit: SubmitHandler<FormInputs> = async (data) => {
+    const onSubmit: SubmitHandler<schemaDevisiTendik> = async (data) => {
         try {
             const result = await submit(data, defaultValues?.id);
             if (result != null) {

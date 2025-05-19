@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useAxios } from '../../../hooks/useAxios';
-import { StatusTendik } from './Column';
+import { StatusTendikType } from './Column';
+import { schemaStatusTendik } from './Modal';
 
 export const useStatusTendik = () => {
     const { get, post, put, del } = useAxios();
-    const [data, setData] = useState<StatusTendik[]>([]);
+    const [data, setData] = useState<StatusTendikType[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [page, setPage] = useState<number>(1);
@@ -24,7 +25,7 @@ export const useStatusTendik = () => {
             setIsLoading(false);
         }
     };
-    const handleSubmit = async (data: Omit<StatusTendik, 'id'>, id?: number, onSuccess?: () => void) => {
+    const handleSubmit = async (data: Omit<schemaStatusTendik, 'id'>, id?: number, onSuccess?: () => void) => {
         try {
             setIsLoading(true);
             if (id) {

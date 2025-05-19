@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useAxios } from '../../../hooks/useAxios';
-import { DevisiTendik } from './Column';
+import { DevisiTendikType } from './Column';
 
 export const useDevisiTendik = () => {
     const { get, post, put, del } = useAxios();
-    const [data, setData] = useState<DevisiTendik[]>([]);
+    const [data, setData] = useState<DevisiTendikType[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [page, setPage] = useState<number>(1);
@@ -24,7 +24,7 @@ export const useDevisiTendik = () => {
             setIsLoading(false);
         }
     };
-    const handleSubmit = async (data: Omit<DevisiTendik, 'id'>, id?: number, onSuccess?: () => void) => {
+    const handleSubmit = async (data: Omit<DevisiTendikType, 'id'>, id?: number, onSuccess?: () => void) => {
         try {
             setIsLoading(true);
             if (id) {

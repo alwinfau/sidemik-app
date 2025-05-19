@@ -1,12 +1,12 @@
 import { useAxios } from '@/hooks/useAxios';
 import { ApiResponse, PaginatedApiResponse } from '@/types';
 import { useState } from 'react';
-import { DevisiTendik } from '../DevisiTendik/Column';
-import { JabatanFungsional } from '../JabFung/Column';
-import { JabatanStruktural } from '../JabStruk/Column';
+import { DevisiTendikType } from '../DevisiTendik/Column';
+import { JabatanFungsionalType } from '../JabFung/Column';
+import { JabatanStrukturalType } from '../JabStruk/Column';
 import { Proditype } from '../Prodi/Column';
-import { StatusDosen } from '../StatusDosen/Column';
-import { StatusTendik } from '../StatusTendik/Column';
+import { StatusDosenType } from '../StatusDosen/Column';
+import { StatusTendikType } from '../StatusTendik/Column';
 import { EmployeesType } from './Column';
 import { SchemaEmployee } from './Modal';
 
@@ -17,12 +17,12 @@ export const useEmployees = () => {
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
-    const [lecturestatus, setLectureStatus] = useState<StatusDosen[]>([]);
-    const [staffstatus, setStaffStatus] = useState<StatusTendik[]>([]);
+    const [lecturestatus, setLectureStatus] = useState<StatusDosenType[]>([]);
+    const [staffstatus, setStaffStatus] = useState<StatusTendikType[]>([]);
     const [studyprogram, setStudyProgram] = useState<Proditype[]>([]);
-    const [functionalposition, setFunctionalPosition] = useState<JabatanFungsional[]>([]);
-    const [strukturalposition, setStructuralPosition] = useState<JabatanStruktural[]>([]);
-    const [staffdivision, setStaffDivision] = useState<DevisiTendik[]>([]);
+    const [functionalposition, setFunctionalPosition] = useState<JabatanFungsionalType[]>([]);
+    const [strukturalposition, setStructuralPosition] = useState<JabatanStrukturalType[]>([]);
+    const [staffdivision, setStaffDivision] = useState<DevisiTendikType[]>([]);
 
     const fetchData = async (currentPage = 1) => {
         try {
@@ -40,22 +40,22 @@ export const useEmployees = () => {
 
     const fecthRelasi = async () => {
         try {
-            const resLectureStatus: ApiResponse<StatusDosen[]> = await get('/lecture-status');
+            const resLectureStatus: ApiResponse<StatusDosenType[]> = await get('/lecture-status');
             setLectureStatus(resLectureStatus.data);
 
-            const resStaffStatus: ApiResponse<StatusTendik[]> = await get('/staff-status');
+            const resStaffStatus: ApiResponse<StatusTendikType[]> = await get('/staff-status');
             setStaffStatus(resStaffStatus.data);
 
             const resStudyProgram: ApiResponse<Proditype[]> = await get('/study-program');
             setStudyProgram(resStudyProgram.data);
 
-            const resFunctionalPosition: ApiResponse<JabatanFungsional[]> = await get('/functional-position');
+            const resFunctionalPosition: ApiResponse<JabatanFungsionalType[]> = await get('/functional-position');
             setFunctionalPosition(resFunctionalPosition.data);
 
-            const resStructuralPosition: ApiResponse<JabatanStruktural[]> = await get('/structural-position');
+            const resStructuralPosition: ApiResponse<JabatanStrukturalType[]> = await get('/structural-position');
             setStructuralPosition(resStructuralPosition.data);
 
-            const resStaffDivision: ApiResponse<DevisiTendik[]> = await get('/staff-division');
+            const resStaffDivision: ApiResponse<DevisiTendikType[]> = await get('/staff-division');
             setStaffDivision(resStaffDivision.data);
         } catch (err) {
             console.error('Error fetching:', err);

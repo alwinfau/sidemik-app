@@ -8,18 +8,17 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { SelectItem } from '@/components/ui/select';
 import { Switch } from '@/components/ui/swicth';
 import { useAxios } from '@/hooks/useAxios';
-import { ApiResponse } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { DevisiTendik } from '../DevisiTendik/Column';
-import { JabatanFungsional } from '../JabFung/Column';
-import { JabatanStruktural } from '../JabStruk/Column';
 import { Proditype } from '../Prodi/Column';
-import { StatusDosen } from '../StatusDosen/Column';
-import { StatusTendik } from '../StatusTendik/Column';
 import { useEmployees } from './useEmploye';
+import { StatusDosenType } from '../StatusDosen/Column';
+import { JabatanFungsionalType } from '../JabFung/Column';
+import { JabatanStrukturalType } from '../JabStruk/Column';
+import { DevisiTendikType } from '../DevisiTendik/Column';
+import { StatusTendikType } from '../StatusTendik/Column';
 
 type ModalProps = {
     open: boolean;
@@ -190,7 +189,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 if (data.file instanceof File) {
                     formData.append('file', data.file);
 
-                    const foto: ApiResponse<any> = await post('/upload-file', formData);
+                    const foto: any = await post('/upload-file', formData);
                     if (foto.meta.code === 200) {
                         fotoPath = foto.data.file_path;
                     }
@@ -440,6 +439,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         {...register('nidk')}
                                         error={errors.nidk?.message}
                                     />
+
                                     <Controller
                                         name="lecture_status_id"
                                         control={control}
@@ -452,7 +452,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                                 onValueChange={(value) => field.onChange(value || null)}
                                                 error={errors.lecture_status_id?.message}
                                             >
-                                                {lecturestatus.map((lecturestatus: StatusDosen) => (
+                                                {lecturestatus.map((lecturestatus: StatusDosenType) => (
                                                     <SelectItem key={lecturestatus.id} value={String(lecturestatus.id)}>
                                                         {lecturestatus.name}
                                                     </SelectItem>
@@ -492,7 +492,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                                 onValueChange={(value) => field.onChange(value || null)}
                                                 error={errors.funtional_position_id?.message}
                                             >
-                                                {functionalposition.map((functionalposition: JabatanFungsional) => (
+                                                {functionalposition.map((functionalposition: JabatanFungsionalType) => (
                                                     <SelectItem key={functionalposition.id} value={String(functionalposition.id)}>
                                                         {functionalposition.name}
                                                     </SelectItem>
@@ -508,6 +508,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         {...register('pns_rank')}
                                         error={errors.pns_rank?.message}
                                     />
+
                                     <Controller
                                         name="struktural_position_id"
                                         control={control}
@@ -520,7 +521,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                                 onValueChange={(value) => field.onChange(value || null)}
                                                 error={errors.struktural_position_id?.message}
                                             >
-                                                {strukturalposition.map((strukturalposition: JabatanStruktural) => (
+                                                {strukturalposition.map((strukturalposition: JabatanStrukturalType) => (
                                                     <SelectItem key={strukturalposition.id} value={String(strukturalposition.id)}>
                                                         {strukturalposition.name}
                                                     </SelectItem>
@@ -553,7 +554,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                                 onValueChange={(value) => field.onChange(value || null)}
                                                 error={errors.staff_divisions_id?.message}
                                             >
-                                                {staffdivision.map((staffdivision: DevisiTendik) => (
+                                                {staffdivision.map((staffdivision: DevisiTendikType) => (
                                                     <SelectItem key={staffdivision.id} value={String(staffdivision.id)}>
                                                         {staffdivision.name}
                                                     </SelectItem>
@@ -575,7 +576,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                                     onValueChange={(value) => field.onChange(value || null)}
                                                     error={errors.staff_status_id?.message}
                                                 >
-                                                    {staffstatus.map((staffstatus: StatusTendik) => (
+                                                    {staffstatus.map((staffstatus: StatusTendikType) => (
                                                         <SelectItem key={staffstatus.id} value={String(staffstatus.id)}>
                                                             {staffstatus.name}
                                                         </SelectItem>
