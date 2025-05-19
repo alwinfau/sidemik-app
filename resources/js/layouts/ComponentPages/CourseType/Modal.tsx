@@ -7,9 +7,8 @@ import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { CourseType } from './Column';
 import { LoaderCircle } from 'lucide-react';
-
+import { CourseType } from './Column';
 
 type ModalProps = {
     open: boolean;

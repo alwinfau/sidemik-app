@@ -20,10 +20,10 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    code: z.string({message: 'Kode harus diisi'}).min(1, 'Code harus lebih dari 3 karakter'),
-    name: z.string({message: 'Nama harus diisi'}).min(5, 'Name harus lebih dari 5 karakter'),
-    eng_name: z.string({message: 'Nama harus diisi'}).min(5, 'English Name harus lebih dari 5 karakter'),
-    short_name: z.string({message: 'Singkatan Wajib diisi'}),
+    code: z.string({ message: 'Kode harus diisi' }).min(1, 'Code harus lebih dari 3 karakter'),
+    name: z.string({ message: 'Nama harus diisi' }).min(5, 'Name harus lebih dari 5 karakter'),
+    eng_name: z.string({ message: 'Nama harus diisi' }).min(5, 'English Name harus lebih dari 5 karakter'),
+    short_name: z.string({ message: 'Singkatan Wajib diisi' }),
     address: z.string().nullable(),
     telephone: z.string().max(15, 'Telephone harus kurang dari 15 karakter').nullable(),
     academic_period_id: z.string(),

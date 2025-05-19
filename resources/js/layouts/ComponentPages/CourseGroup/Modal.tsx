@@ -7,8 +7,8 @@ import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { CourseGroupType } from './Column';
 import { LoaderCircle } from 'lucide-react';
+import { CourseGroupType } from './Column';
 
 type ModalProps = {
     open: boolean;
@@ -18,8 +18,8 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    code: z.string({message: 'Kode Wajib Diisi'}),
-    name: z.string({message: 'Nama Wajib Diisi'}),
+    code: z.string({ message: 'Kode Wajib Diisi' }),
+    name: z.string({ message: 'Nama Wajib Diisi' }),
     description: z.string().nullable(),
 });
 

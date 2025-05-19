@@ -1,7 +1,6 @@
 import { useAxios } from '@/hooks/useAxios';
 import { useState } from 'react';
 import { CurriculumType } from './Column';
-import Curriculum from '@/pages/Curriculum/Curriculum';
 
 export const useCurriculum = () => {
     const { get, post, put, del } = useAxios();
@@ -11,9 +10,8 @@ export const useCurriculum = () => {
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
     const [Prodi, setProdi] = useState<any>([]);
-    const [TahunKurikulum, setTahunKurikulum] =  useState<CurriculumType[]>([]);
-    const [searchTahunKurikulum, setSearchTahunKurikulum] = useState <string>('');
-
+    const [TahunKurikulum, setTahunKurikulum] = useState<CurriculumType[]>([]);
+    const [searchTahunKurikulum, setSearchTahunKurikulum] = useState<string>('');
 
     const fetchData = async (currentPage = 1) => {
         try {
@@ -33,14 +31,14 @@ export const useCurriculum = () => {
     //     try {
     //         const response = await get(``)
     //     } catch (error) {
-            
+
     //     }
     // }
 
     const fecthRelasi = async () => {
         try {
             const resProdi: any = await get('/study-program');
-            setProdi(resProdi.data );
+            setProdi(resProdi.data);
         } catch (err) {
             console.error('Error fetching:', err);
         }
@@ -103,7 +101,7 @@ export const useCurriculum = () => {
         handleSubmit,
         handleDelete,
         setToast,
-        
+
         fecthRelasi,
     };
 };

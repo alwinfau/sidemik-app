@@ -8,9 +8,9 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import DateInput from '@/components/ui/Components_1/DateInput';
-import { AcademicYearType } from './Column';
 import dayjs from 'dayjs';
 import { LoaderCircle } from 'lucide-react';
+import { AcademicYearType } from './Column';
 
 type ModalProps = {
     open: boolean;
@@ -25,7 +25,7 @@ const schema = z.object({
     name: z.string().min(2, 'Nama harus lebih dari 2 karakter'),
     start_date: z.string(),
     end_date: z.string(),
-    description: z.string(),
+    description: z.string().nullable(),
 });
 
 type FormInputs = z.infer<typeof schema>;
@@ -45,7 +45,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         resolver: zodResolver(schema),
     });
 
-
     const academicYear = watch('academic_year');
 
     useEffect(() => {
@@ -58,7 +57,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             const calculatedYearenddate = parseInt(academicYear) + 1;
             // Format tahunnya
             const calculatedenddate = `${calculatedYearenddate}-01-01`;
-            setValue('end_date', calculatedenddate)
+            setValue('end_date', calculatedenddate);
         }
     }, [academicYear, setValue]);
 
@@ -83,7 +82,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
     }, [defaultValues, reset]);
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
         try {
-            
             const result = await submit(data, defaultValues?.id);
             if (result != null) {
                 if (!isSubmitting && !defaultValues) {
@@ -115,9 +113,8 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         }
     };
 
-    
     const currentYear = dayjs();
-    
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
@@ -129,7 +126,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                         <div className="space-y-4">
                             <FormTextInput
                                 id="academic_year"
-                                label="Tahun Akademik"
+                                label="Tahun Akademik *"
                                 placeholder="Masukan tahun akademik"
                                 type="text"
                                 {...register('academic_year')}
@@ -138,21 +135,21 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 placeholder="Masukan nama akademik"
                                 id="name"
-                                label="Nama"
+                                label="Nama *"
                                 type="text"
                                 {...register('name')}
                                 error={errors.name?.message}
                             />
 
                             <DateInput
-                                label="Tanggal Mulai"
+                                label="Tanggal Mulai *"
                                 id="start_date"
                                 placeholder="Enter Certificate Date"
                                 register={register('start_date')}
                                 error={errors.start_date}
                             />
                             <DateInput
-                                label="Tanggal Selsai"
+                                label="Tanggal Selesai *"
                                 id="end_date"
                                 placeholder="Enter Valid From"
                                 register={register('end_date')}

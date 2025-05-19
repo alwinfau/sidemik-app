@@ -44,7 +44,7 @@ export const columns = (onEdit: (row: Proditype) => void, onDelete: (id: string)
     //     header: 'Nama Prodi (Singkatan)',
     //     cell: ({ row }) => `${row.original.idn_sp_name} (${row.original.sp_short_name})`,
     // },
-    
+
     { accessorKey: 'idn_sp_name', header: 'Nama Prodi' },
     { accessorKey: 'sp_short_name', header: 'Singkatan' },
     // { accessorKey: 'eng_sp_name', header: 'Nama(ENG)' },
@@ -73,7 +73,6 @@ export const columns = (onEdit: (row: Proditype) => void, onDelete: (id: string)
     //     header: 'Learning Outcomes',
     // },
     { accessorKey: 'max_semester', header: 'Max Semester' },
-    
 
     {
         accessorKey: 'status',

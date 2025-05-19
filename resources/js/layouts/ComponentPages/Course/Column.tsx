@@ -61,7 +61,7 @@ export const columns = (onEdit: (row: CourseType) => void, onDelete: (id: string
         accessorFn: (row) => row.course_group?.name ?? null,
         id: 'course_group',
     },
-    
+
     {
         header: 'Mata Kuliah Pilihan',
         accessorFn: (row) => row.elective_course_group?.name ?? null,

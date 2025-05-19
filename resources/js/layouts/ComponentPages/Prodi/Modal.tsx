@@ -6,11 +6,11 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { SelectItem } from '@/components/ui/select';
 import { Switch } from '@/components/ui/swicth';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { LoaderCircle } from 'lucide-react';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useStudyProgram } from './useStudy-program';
-import { LoaderCircle } from 'lucide-react';
 
 type ModalProps = {
     open: boolean;
@@ -128,7 +128,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4">
-                        <Controller
+                            <Controller
                                 name="faculty_id"
                                 control={control}
                                 render={({ field }) => (
@@ -166,10 +166,16 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     </FormSelectInput>
                                 )}
                             />
-                            <FormTextInput id="sp_code" placeholder='Masukan Kode prodi' label="code" {...register('sp_code')} error={errors.sp_code?.message} />
+                            <FormTextInput
+                                id="sp_code"
+                                placeholder="Masukan Kode prodi"
+                                label="code"
+                                {...register('sp_code')}
+                                error={errors.sp_code?.message}
+                            />
                             <FormTextInput
                                 id="idn_sp_name"
-                                placeholder='Masukan Nama Prodi'
+                                placeholder="Masukan Nama Prodi"
                                 label="Nama Prodi (ID)"
                                 {...register('idn_sp_name')}
                                 error={errors.idn_sp_name?.message}
@@ -177,14 +183,14 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="eng_sp_name"
                                 label="Nama Prodi (ENG)"
-                                placeholder='Masukan Nama Prodi dalam b.ing'
+                                placeholder="Masukan Nama Prodi dalam b.ing"
                                 {...register('eng_sp_name')}
                                 error={errors.eng_sp_name?.message}
                             />
                             <FormTextInput
                                 id="sp_short_name"
                                 label="Singkatan"
-                                placeholder='Masukan singkatan prodi'
+                                placeholder="Masukan singkatan prodi"
                                 type="text"
                                 {...register('sp_short_name')}
                                 error={errors.sp_short_name?.message}
@@ -227,7 +233,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 id="max_semester"
                                 label="Maximal Semeter"
                                 type="number"
-                                placeholder='Masukan Jumlah max semester'
+                                placeholder="Masukan Jumlah max semester"
                                 {...register('max_semester', { valueAsNumber: true })}
                                 error={errors.max_semester?.message}
                             />
@@ -265,7 +271,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     )}
                                 />
                             </div>
-                        
+
                             <Button
                                 type="submit"
                                 className={`mb-5 rounded px-4 py-2 font-bold text-white ${
@@ -275,7 +281,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             >
                                 {isSubmitting ? <LoaderCircle className="h-4 w-4 animate-spin" /> : defaultValues ? 'Update' : 'Create'}
                             </Button>
-                        
                         </div>
                     </form>
                 </ScrollArea>

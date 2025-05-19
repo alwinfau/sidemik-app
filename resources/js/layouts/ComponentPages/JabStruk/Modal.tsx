@@ -93,7 +93,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                         <div className="mx-3 space-y-4">
                             <FormTextInput id="code" label="Kode" type="text" {...register('code')} error={errors.code?.message} required />
 
-                            <FormTextInput id="name" label="Nama" type="text" {...register('name')} error={errors.name?.message} required/>
+                            <FormTextInput id="name" label="Nama" type="text" {...register('name')} error={errors.name?.message} required />
 
                             <FormTextInput
                                 id="description"
