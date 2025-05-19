@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { ColumnDef } from '@tanstack/react-table';
 import { Pencil, Trash2 } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
 
 export type EmployeesType = {
     id?: number;
@@ -52,7 +53,30 @@ export type EmployeesType = {
     study_programs_id?: number;
 };
 
-export const columns = (onEdit: (row: EmployeesType) => void, onDelete: (id: string) => void): ColumnDef<EmployeesType>[] => [
+export const columns = (
+    onEdit: (row: EmployeesType) => void, onDelete: (id: string) => void, selectedIds: number[], toggleSelect: (id: number) => void, toggleSelectAll: (checked: boolean) => void, allSelected: boolean): ColumnDef<EmployeesType>[] => [
+    {
+        id: 'select',
+        header: ({ table }) => (
+            <Checkbox
+                checked={allSelected}
+                onCheckedChange={(checked) => toggleSelectAll(!!checked)}
+                aria-label="Select all"
+            />
+        ),
+        cell: ({ row }) => {
+            const id = row.original.id!;
+            return (
+                <Checkbox
+                    checked={selectedIds.includes(id)}
+                    onCheckedChange={() => toggleSelect(id)}
+                    aria-label={`Select row ${id}`}
+                />
+            );
+        },
+        enableSorting: false,
+        size: 20,
+    },
     {
         id: 'rowNumber',
         header: () => <div className="text-center">No</div>,
