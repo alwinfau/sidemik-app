@@ -22,9 +22,9 @@ type ModalProps = {
 
 const schema = z.object({
     academic_year_id: z.string().min(1, 'Tahun Ajaran wajib diisi'),
-    semester: z.string({message: 'Semester wajib diisi'}),
-    name: z.string({message: 'Nama wajib diisi'}).min(1, 'Name harus lebih dari 1 karakter'),
-    short_name: z.string({message: 'Singkatan wajib diisi'}),
+    semester: z.string({ message: 'Semester wajib diisi' }),
+    name: z.string({ message: 'Nama wajib diisi' }).min(1, 'Name harus lebih dari 1 karakter'),
+    short_name: z.string({ message: 'Singkatan wajib diisi' }),
     start_date: z.string().nullable(),
     end_date: z.string().nullable(),
     start_midterm_exam: z.string().nullable(),
@@ -58,7 +58,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
     useEffect(() => {
         if (defaultValues) {
             reset({
-                
                 academic_year_id: String(defaultValues.academic_year_id) || '0',
                 semester: defaultValues.semester,
                 name: defaultValues.name || '',
@@ -76,7 +75,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             });
         } else {
             reset({
-                
                 academic_year_id: '',
                 semester: '',
                 name: '',
@@ -100,7 +98,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             const selectedYear = AcademicYears.find((item: any) => item.id === Number(defaultValues.academic_year_id));
             if (selectedYear) {
                 // Contoh: Mengatur tanggal mulai dan berakhir secara otomatis
-                const startDate = `${selectedYear.academic_year}`;  // Format tanggal Anda mungkin berbeda
+                const startDate = `${selectedYear.academic_year}`; // Format tanggal Anda mungkin berbeda
                 const endDate = `${selectedYear.academic_year}`;
                 const UTS = `${selectedYear.academic_year}`;
                 const UTSselesai = `${selectedYear.academic_year}`;
@@ -116,12 +114,9 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         }
     }, [defaultValues?.academic_year_id, AcademicYears, setValue]);
 
-    
     useEffect(() => {
         if (defaultValues?.academic_year_id) {
-            const selectedYear = AcademicYears.find(
-                (item: any) => item.id === Number(defaultValues.academic_year_id)
-            );
+            const selectedYear = AcademicYears.find((item: any) => item.id === Number(defaultValues.academic_year_id));
             if (selectedYear) {
                 // Format tanggal dari data update
                 const startDate = defaultValues.start_date || `${selectedYear.academic_year}-01-01`;
@@ -130,7 +125,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 const UTSselesai = defaultValues.end_midterm_exam || `${selectedYear.academic_year}-05-20`;
                 const UAS = defaultValues.start_final_exam || `${selectedYear.academic_year}-12-15`;
                 const UASselesai = defaultValues.end_final_exam || `${selectedYear.academic_year}-12-20`;
-    
+
                 // Set nilai ke form
                 setValue('start_date', startDate);
                 setValue('end_date', endDate);
@@ -146,7 +141,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             const result = await submit(data, defaultValues?.id);
             if (result != null && !isSubmitting && !defaultValues) {
                 reset({
-                
                     academic_year_id: '',
                     semester: '',
                     name: '',
@@ -248,7 +242,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     </FormSelectInput>
                                 )}
                             />
-
 
                             <FormTextInput
                                 id="name"

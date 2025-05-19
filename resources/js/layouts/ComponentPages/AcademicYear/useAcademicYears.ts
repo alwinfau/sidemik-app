@@ -46,7 +46,7 @@ export const useAcademicYear = () => {
             if (error.response.status === 500) {
                 setToast({ message: 'Failed to submit Academic Year', type: 'error' });
             }
-            console.log(error)
+            console.log(error);
             throw error.response.data;
         } finally {
             setIsLoading(false);

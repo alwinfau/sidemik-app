@@ -99,18 +99,14 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
     const [showElectiveCourse, setShowElectiveCourse] = useState(false);
 
     const [filteredGroups, setFilteredGroups] = useState(courseGroups);
-    
-
 
     const handleCourseTypeChange = (value: string) => {
-        
         const peminatanType = courseTypes.find((type: any) => type.name === 'Pilihan');
 
-        
         const isElective = value === String(peminatanType?.id);
-        
-        if(!isElective && !defaultValues){
-            setValue('elective_course_groups_id', null)
+
+        if (!isElective && !defaultValues) {
+            setValue('elective_course_groups_id', null);
         }
         setShowElectiveCourse(isElective);
     };
@@ -129,12 +125,12 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         }
     };
 
-    const [filterMatkulPil, setFilterMatkulPil] = useState <any[]>([]);
+    const [filterMatkulPil, setFilterMatkulPil] = useState<any[]>([]);
 
-    const getProdiFromCurri = (curriculums_id:string) =>{
-        const selectedCurriculum = curriculum.find((item:any) => item.id === Number(curriculums_id));
+    const getProdiFromCurri = (curriculums_id: string) => {
+        const selectedCurriculum = curriculum.find((item: any) => item.id === Number(curriculums_id));
         return selectedCurriculum.study_program.id;
-    }
+    };
 
     const handleCurriculumChange = (curriculums_id: string) => {
         setValue('curriculums_id', curriculums_id);
@@ -143,44 +139,39 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         const study_programs_id = getProdiFromCurri(curriculums_id);
 
         if (study_programs_id) {
-            const filtered = MatkulPil.filter((matkul: any) => 
-                String(matkul.study_program.id) === String(study_programs_id)
-            );
+            const filtered = MatkulPil.filter((matkul: any) => String(matkul.study_program.id) === String(study_programs_id));
             setFilterMatkulPil(filtered);
         } else {
             setFilterMatkulPil([]);
         }
-        
-    }
+    };
 
-// Fungsi untuk mendapatkan prefix dari kode
-const getCoddeprefix = (code: string) => {
-    // Ambil prefix dari kode (huruf kapital)
-    const match = code.match(/^[A-Z]+/);
-    return match ? match[0] : '';
-};
+    // Fungsi untuk mendapatkan prefix dari kode
+    const getCoddeprefix = (code: string) => {
+        // Ambil prefix dari kode (huruf kapital)
+        const match = code.match(/^[A-Z]+/);
+        return match ? match[0] : '';
+    };
 
-const handleCodeChange = (value: string) => {
-    const uppercaseValue = value.toUpperCase();
-    setValue('code', uppercaseValue);
+    const handleCodeChange = (value: string) => {
+        const uppercaseValue = value.toUpperCase();
+        setValue('code', uppercaseValue);
 
-    // Ekstrak prefix kode
-    const prefix = getCoddeprefix(uppercaseValue);
+        // Ekstrak prefix kode
+        const prefix = getCoddeprefix(uppercaseValue);
 
-    // Filter kelompok mata kuliah berdasarkan kode yang mengandung prefix
-    const newFilteredGroups = courseGroups.filter((group: any) =>
-        group.code?.toUpperCase().includes(prefix) || group.name.toUpperCase().includes(prefix)
-    );
+        // Filter kelompok mata kuliah berdasarkan kode yang mengandung prefix
+        const newFilteredGroups = courseGroups.filter(
+            (group: any) => group.code?.toUpperCase().includes(prefix) || group.name.toUpperCase().includes(prefix),
+        );
 
-    setFilteredGroups(newFilteredGroups);
+        setFilteredGroups(newFilteredGroups);
 
-    // Jika ada satu kelompok yang cocok, langsung set value-nya
-    if (newFilteredGroups.length === 1) {
-        setValue('course_groups_id', String(newFilteredGroups[0].id));
-    }
-};
-
-
+        // Jika ada satu kelompok yang cocok, langsung set value-nya
+        if (newFilteredGroups.length === 1) {
+            setValue('course_groups_id', String(newFilteredGroups[0].id));
+        }
+    };
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -198,7 +189,7 @@ const handleCodeChange = (value: string) => {
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="curriculums_id"
-                                        label="Kurikulum"
+                                        label="Kurikulum *"
                                         value={field.value}
                                         onValueChange={(val) => {
                                             field.onChange(val);
@@ -216,7 +207,7 @@ const handleCodeChange = (value: string) => {
                             />
                             <FormTextInput
                                 id="code"
-                                label="Kode"
+                                label="Kode *"
                                 placeholder="Isi Kode Mata Kuliah"
                                 type="text"
                                 {...register('code', {
@@ -224,12 +215,13 @@ const handleCodeChange = (value: string) => {
                                 })}
                                 error={errors.code?.message}
                             />
-                            <FormTextInput 
-                                id="semester" 
+                            <FormTextInput
+                                id="semester"
                                 label="Semester"
-                                type="number" {...register('semester')} 
-                                placeholder='Masukan Jumlah Semester'
-                                error={errors.semester?.message} 
+                                type="number"
+                                {...register('semester')}
+                                placeholder="Masukan Jumlah Semester"
+                                error={errors.semester?.message}
                             />
                             <FormTextInput
                                 id="name_idn"
@@ -251,13 +243,13 @@ const handleCodeChange = (value: string) => {
                                 id="theory_sks"
                                 label="SKS Teori"
                                 type="number"
-                                placeholder='Masukan Jumlah SKS teori'
+                                placeholder="Masukan Jumlah SKS teori"
                                 {...register('theory_sks')}
                                 error={errors.theory_sks?.message}
                             />
                             <FormTextInput
                                 id="practical_sks"
-                                placeholder='Masukan Jumlah SKS Praktek'
+                                placeholder="Masukan Jumlah SKS Praktek"
                                 label="SKS Praktek"
                                 type="number"
                                 {...register('practical_sks')}
@@ -265,7 +257,8 @@ const handleCodeChange = (value: string) => {
                             />
                             <FormTextInput
                                 id="fieldwork_sks"
-                                label="SKS Lapangan"placeholder='Masukan Jumlah SKS Lapangan'
+                                label="SKS Lapangan"
+                                placeholder="Masukan Jumlah SKS Lapangan"
                                 type="number"
                                 {...register('fieldwork_sks')}
                                 error={errors.fieldwork_sks?.message}
@@ -305,7 +298,6 @@ const handleCodeChange = (value: string) => {
                                                 {type.name}
                                             </SelectItem>
                                         ))}
-
                                     </FormSelectInput>
                                 )}
                             />
@@ -330,7 +322,6 @@ const handleCodeChange = (value: string) => {
                                 )}
                             />
                             {showElectiveCourse && (
-                                
                                 <Controller
                                     name="elective_course_groups_id"
                                     control={control}
@@ -342,7 +333,6 @@ const handleCodeChange = (value: string) => {
                                             onValueChange={field.onChange}
                                             error={errors.elective_course_groups_id?.message}
                                         >
-                                            
                                             {filterMatkulPil.map((matkul: any) => (
                                                 <SelectItem key={matkul.id} value={String(matkul.id)}>
                                                     {matkul.name}

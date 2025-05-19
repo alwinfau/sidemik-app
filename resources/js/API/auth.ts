@@ -25,7 +25,7 @@ export const login = async (data: LoginData): Promise<void> => {
     try {
         const response = await axios.post<any>(`${config.auth_url}/access-token`, data);
         const token = response.data.data.token;
-        console.log(token)
+        console.log(token);
         const username = response.data.data.user.name;
         const email = response.data.data.user.email;
 

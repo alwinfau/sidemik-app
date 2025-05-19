@@ -19,7 +19,7 @@ type ModalProps = {
 const schema = z.object({
     code: z.string(),
     name: z.string(),
-    description: z.string(). nullable(),
+    description: z.string().nullable(),
 });
 
 export type schemaDevisiTendik = z.infer<typeof schema>;

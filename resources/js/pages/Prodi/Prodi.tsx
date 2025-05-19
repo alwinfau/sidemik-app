@@ -1,4 +1,4 @@
-import Prodipage from "@/layouts/ComponentPages/Prodi";
+import Prodipage from '@/layouts/ComponentPages/Prodi';
 
 const Prodi = () => {
     return (

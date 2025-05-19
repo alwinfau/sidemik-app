@@ -1,10 +1,11 @@
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { ColumnDef } from '@tanstack/react-table';
 import { Pencil, Trash2 } from 'lucide-react';
 
 export type PeriodeAcademicType = {
     id?: number;
-    
+
     academic_year: {
         academic_year: string;
     };
@@ -23,7 +24,36 @@ export type PeriodeAcademicType = {
     descritpion: Text;
 };
 
-export const columns = (onEdit: (row: PeriodeAcademicType) => void, onDelete: (id: string) => void): ColumnDef<PeriodeAcademicType>[] => [
+export const columns = (
+    onEdit: (row: PeriodeAcademicType) => void,
+    onDelete: (id: string) => void,
+    selectedIds: number[],
+    toggleSelect: (id: number) => void,
+    toggleSelectAll: (checked: boolean) => void,
+    allSelected: boolean,
+): ColumnDef<PeriodeAcademicType>[] => [
+    {
+        id: 'select',
+        header: ({ table }) => (
+            <Checkbox
+                checked={allSelected}
+                onCheckedChange={(checked) => toggleSelectAll(!!checked)}
+                aria-label="Select all"
+            />
+        ),
+        cell: ({ row }) => {
+            const id = row.original.id!;
+            return (
+                <Checkbox
+                    checked={selectedIds.includes(id)}
+                    onCheckedChange={() => toggleSelect(id)}
+                    aria-label={`Select row ${id}`}
+                />
+            );
+        },
+        enableSorting: false,
+        size: 20,
+    },
     {
         id: 'rowNumber',
         header: () => <div className="text-center">No</div>,
@@ -36,7 +66,6 @@ export const columns = (onEdit: (row: PeriodeAcademicType) => void, onDelete: (i
     },
     { accessorKey: 'semester', header: 'Semester' },
     { accessorKey: 'name', header: 'Nama' },
-    { accessorKey: 'short_name', header: 'Singkatan' },
     { accessorKey: 'start_date', header: 'Mulai' },
     { accessorKey: 'end_date', header: 'Hingga' },
     { accessorKey: 'start_midterm_exam', header: 'Tanggal Mulai UTS' },
@@ -63,7 +92,7 @@ export const columns = (onEdit: (row: PeriodeAcademicType) => void, onDelete: (i
         header: 'Deskripsi',
         cell: ({ getValue }) => getValue<string>() ?? '-',
     },
-    
+
     {
         id: 'actions',
         header: 'Actions',

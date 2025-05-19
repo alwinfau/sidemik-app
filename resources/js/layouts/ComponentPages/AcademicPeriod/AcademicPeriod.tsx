@@ -5,7 +5,7 @@ import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } fro
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
-import { CirclePlus } from 'lucide-react';
+import { CirclePlus, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { columns, PeriodeAcademicType } from './Column';
 import ModalForm from './Modal';
@@ -23,6 +23,37 @@ const PeriodeAcademic = () => {
     const [editing, setEditing] = useState<PeriodeAcademicType | undefined>();
     const [deleteId, setDeleteId] = useState<number | null>(null);
     const { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useAcademicPriod();
+    const [selectedIds, setSelectedIds] = useState<number[]>([]);
+    const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
+    
+        
+        const toggleSelect = (id: number) => {
+            setSelectedIds((prev) =>
+                prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+            );
+        };
+    
+        
+        const toggleSelectAll = (checked: boolean) => {
+            if (checked) {
+                const allIds = data?.map((d) => d.id!).filter(Boolean) || [];
+                setSelectedIds(allIds);
+            } else {
+                setSelectedIds([]);
+            }
+        };
+    
+        const allSelected = data && data.length > 0 && selectedIds.length === data.length;
+    
+        
+        const handleBulkDelete = async () => {
+            for (const id of selectedIds) {
+                await handleDelete(id);
+            }
+            setSelectedIds([]);
+            setBulkDeleteOpen(false);
+        };
+    
     useEffect(() => {
         fetchData();
     }, []);
@@ -33,22 +64,33 @@ const PeriodeAcademic = () => {
             return () => clearTimeout(timer);
         }
     }, [toast]);
-
+    
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Periode-Akademik" />
             <div className="m-6">
-                <div className="flex items-center justify-between">
+                <div className="mb-4 flex items-center justify-between">
                     <h2 className="text-3xl font-bold">Periode-Akademik</h2>
-                    <Button
-                        onClick={() => {
-                            setEditing(undefined);
-                            setModalOpen(true);
-                        }}
-                        className="flex items-center rounded bg-green-600 p-3 font-bold text-white hover:bg-green-500"
-                    >
-                        <CirclePlus className="h-6 w-6" /> Add Periode-Akademik
-                    </Button>
+                    <div className="flex gap-2">
+                        {selectedIds.length > 0 && (
+                            <Button
+                                variant="destructive"
+                                className="flex items-center gap-1"
+                                onClick={() => setBulkDeleteOpen(true)}
+                            >
+                                <Trash2 /> Delete Selected ({selectedIds.length})
+                            </Button>
+                        )}
+                        <Button
+                            onClick={() => {
+                                setEditing(undefined);
+                                setModalOpen(true);
+                            }}
+                            className="flex items-center rounded bg-green-600 p-3 font-bold text-white hover:bg-green-500"
+                        >
+                            <CirclePlus className="h-6 w-6" /> Add Tahun Ajaran
+                        </Button>
+                    </div>
                 </div>
                 <DataTable
                     columns={columns(
@@ -57,6 +99,10 @@ const PeriodeAcademic = () => {
                             setModalOpen(true);
                         },
                         (id) => setDeleteId(parseInt(id)),
+                        selectedIds,
+                        toggleSelect,
+                        toggleSelectAll,
+                        allSelected
                     )}
                     data={data || []}
                     isLoading={isLoading}
@@ -89,6 +135,16 @@ const PeriodeAcademic = () => {
                     }}
                     isLoading={isLoading}
                 />
+                <ConfirmDeleteDialog
+                open={bulkDeleteOpen}
+                onCancel={() => setBulkDeleteOpen(false)}
+                onConfirm={() => {
+                    handleBulkDelete();
+                }}
+                isLoading={isLoading}
+                title={`Delete ${selectedIds.length} selected academic year(s)?`}
+                description="Data ini tidak bisa dikembalikan, apakah kamu ingin menghapusnya?"
+            />
                 <ToastProvider>
                     {toast && (
                         <Toast variant={toast.type === 'error' ? 'destructive' : 'default'}>

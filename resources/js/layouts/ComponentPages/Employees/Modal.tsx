@@ -110,76 +110,74 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             setValue('pns_rank', '');
             setValue('struktural_position_id', '');
         }
-
     }, [type, setValue]);
 
     useEffect(() => {
         if (open) {
-            if (defaultValues ) {
-            reset({
-                nip: defaultValues.nip || '',
-                name: defaultValues.name || '',
-                file: defaultValues.foto || null,
-                front_title: defaultValues.front_title || '',
-                back_title: defaultValues.back_title || '',
-                gender: defaultValues.gender || '',
-                religion: defaultValues.religion || '',
-                birth_place: defaultValues.birth_place || '',
-                birth_date: defaultValues.birth_date || '',
-                email_pt: defaultValues.email_pt || '',
-                phone: defaultValues.phone || '',
-                emergency_phone: defaultValues.emergency_phone || '',
-                relationship_1: defaultValues.relationship_1 || '',
-                emergency_phone_2: defaultValues.emergency_phone_2 || '',
-                relationship_2: defaultValues.relationship_2 || '',
-                status: Boolean(defaultValues.status) || false,
-                type: defaultValues.type || '',
-                lecture_status_id: defaultValues.lecture_status_id ? String(defaultValues.lecture_status_id) : null,
-                staff_status_id: defaultValues.staff_status_id ? String(defaultValues.staff_status_id) : null,
-                funtional_position_id: defaultValues.funtional_position_id ? String(defaultValues.funtional_position_id) : null,
-                pns_rank: defaultValues.pns_rank ? String(defaultValues.pns_rank) : null,
-                struktural_position_id: defaultValues.struktural_position_id ? String(defaultValues.struktural_position_id) : null,
-                staff_divisions_id: defaultValues.staff_divisions_id ? String(defaultValues.staff_divisions_id) : null,
-                study_programs_id: defaultValues.study_programs_id ? String(defaultValues.study_programs_id) : null,
-                nidn: defaultValues.nidn ?? '',
-                nuptk: defaultValues.nuptk ?? '',
-                nitk: defaultValues.nitk ?? '',
-                nidk: defaultValues.nidk ?? '',
-            });
-        } else {
-            reset({
-                nip: '',
-                name: '',
-                file: null,
-                front_title: '',
-                back_title: '',
-                gender: '',
-                religion: '',
-                birth_place: '',
-                birth_date: '',
-                email_pt: '',
-                phone: '',
-                emergency_phone: '',
-                relationship_1: '',
-                emergency_phone_2: '',
-                relationship_2: '',
-                status: false,
-                type: 'lecture',
-                lecture_status_id: '',
-                staff_status_id: '',
-                funtional_position_id: '',
-                pns_rank: '',
-                struktural_position_id: '',
-                staff_divisions_id: '',
-                study_programs_id: '',
-                nidn: '',
-                nuptk: '',
-                nitk: '',
-                nidk: '',
-            });
+            if (defaultValues) {
+                reset({
+                    nip: defaultValues.nip || '',
+                    name: defaultValues.name || '',
+                    file: defaultValues.foto || null,
+                    front_title: defaultValues.front_title || '',
+                    back_title: defaultValues.back_title || '',
+                    gender: defaultValues.gender || '',
+                    religion: defaultValues.religion || '',
+                    birth_place: defaultValues.birth_place || '',
+                    birth_date: defaultValues.birth_date || '',
+                    email_pt: defaultValues.email_pt || '',
+                    phone: defaultValues.phone || '',
+                    emergency_phone: defaultValues.emergency_phone || '',
+                    relationship_1: defaultValues.relationship_1 || '',
+                    emergency_phone_2: defaultValues.emergency_phone_2 || '',
+                    relationship_2: defaultValues.relationship_2 || '',
+                    status: Boolean(defaultValues.status) || false,
+                    type: defaultValues.type || '',
+                    lecture_status_id: defaultValues.lecture_status_id ? String(defaultValues.lecture_status_id) : null,
+                    staff_status_id: defaultValues.staff_status_id ? String(defaultValues.staff_status_id) : null,
+                    funtional_position_id: defaultValues.funtional_position_id ? String(defaultValues.funtional_position_id) : null,
+                    pns_rank: defaultValues.pns_rank ? String(defaultValues.pns_rank) : null,
+                    struktural_position_id: defaultValues.struktural_position_id ? String(defaultValues.struktural_position_id) : null,
+                    staff_divisions_id: defaultValues.staff_divisions_id ? String(defaultValues.staff_divisions_id) : null,
+                    study_programs_id: defaultValues.study_programs_id ? String(defaultValues.study_programs_id) : null,
+                    nidn: defaultValues.nidn ?? '',
+                    nuptk: defaultValues.nuptk ?? '',
+                    nitk: defaultValues.nitk ?? '',
+                    nidk: defaultValues.nidk ?? '',
+                });
+            } else {
+                reset({
+                    nip: '',
+                    name: '',
+                    file: null,
+                    front_title: '',
+                    back_title: '',
+                    gender: '',
+                    religion: '',
+                    birth_place: '',
+                    birth_date: '',
+                    email_pt: '',
+                    phone: '',
+                    emergency_phone: '',
+                    relationship_1: '',
+                    emergency_phone_2: '',
+                    relationship_2: '',
+                    status: false,
+                    type: 'lecture',
+                    lecture_status_id: '',
+                    staff_status_id: '',
+                    funtional_position_id: '',
+                    pns_rank: '',
+                    struktural_position_id: '',
+                    staff_divisions_id: '',
+                    study_programs_id: '',
+                    nidn: '',
+                    nuptk: '',
+                    nitk: '',
+                    nidk: '',
+                });
+            }
         }
-        }
-        
     }, [defaultValues, reset, open]);
 
     const onSubmit: SubmitHandler<SchemaEmployee> = async (data) => {

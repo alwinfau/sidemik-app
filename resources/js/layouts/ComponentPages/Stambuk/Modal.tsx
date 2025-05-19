@@ -99,7 +99,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mx-3 space-y-4">
-                        <FormTextInput
+                            <FormTextInput
                                 id="year"
                                 label="Tahun Stambuk"
                                 placeholder="Masukan tahun Stambuk"
