@@ -61,9 +61,12 @@ export const useAcademicYear = () => {
             setData((prev) => prev.filter((item: any) => item.id !== id));
             onSuccess?.();
             setToast({ message: 'Academic Year deleted successfully', type: 'success' });
-        } catch (err) {
-            setToast({ message: 'Failed to delete Academic Year', type: 'error' });
-        } finally {
+        } catch (err: any) {
+            setIsLoading
+            const errorMessage = err?.response?.data?.meta?.message || 'Failed to delete Academic Year';
+            setToast({ message: errorMessage, type: 'error' });
+            console.log(errorMessage);
+        }finally {
             onSuccess?.();
             setIsLoading(false);
         }
