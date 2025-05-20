@@ -149,8 +149,7 @@ const AcademicYearPage = () => {
                     handleBulkDelete();
                 }}
                 isLoading={isLoading}
-                title={`Delete ${selectedIds.length} selected academic year(s)?`}
-                description="Data ini tidak bisa dikembalikan, apakah kamu ingin menghapusnya?"
+
             />
         </div>
         </AppLayout>

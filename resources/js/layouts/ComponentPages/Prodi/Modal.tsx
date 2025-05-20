@@ -94,7 +94,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 faculty_id: '',
                 academic_periods_id: '',
                 final_project_types_id: '',
-                status: false,
+                status: true,
             });
         }
     }, [defaultValues, reset]);
@@ -134,7 +134,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="faculty_id"
-                                        label="Fakultas"
+                                        label="Fakultas *"
                                         value={field.value}
                                         onValueChange={field.onChange}
                                         error={errors.faculty_id?.message}
@@ -153,7 +153,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="academic_periods_id"
-                                        label="Periode Akademik"
+                                        label="Periode Akademik *"
                                         value={field.value}
                                         onValueChange={field.onChange}
                                         error={errors.academic_periods_id?.message}
@@ -169,27 +169,27 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="sp_code"
                                 placeholder="Masukan Kode prodi"
-                                label="code"
+                                label="Kode *"
                                 {...register('sp_code')}
                                 error={errors.sp_code?.message}
                             />
                             <FormTextInput
                                 id="idn_sp_name"
                                 placeholder="Masukan Nama Prodi"
-                                label="Nama Prodi (ID)"
+                                label="Nama Prodi (ID) *"
                                 {...register('idn_sp_name')}
                                 error={errors.idn_sp_name?.message}
                             />
                             <FormTextInput
                                 id="eng_sp_name"
-                                label="Nama Prodi (ENG)"
+                                label="Nama Prodi (ENG) *"
                                 placeholder="Masukan Nama Prodi dalam b.ing"
                                 {...register('eng_sp_name')}
                                 error={errors.eng_sp_name?.message}
                             />
                             <FormTextInput
                                 id="sp_short_name"
-                                label="Singkatan"
+                                label="Singkatan *"
                                 placeholder="Masukan singkatan prodi"
                                 type="text"
                                 {...register('sp_short_name')}
@@ -231,7 +231,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             /> */}
                             <FormTextInput
                                 id="max_semester"
-                                label="Maximal Semeter"
+                                label="Maximal Semeter *"
                                 type="number"
                                 placeholder="Masukan Jumlah max semester"
                                 {...register('max_semester', { valueAsNumber: true })}

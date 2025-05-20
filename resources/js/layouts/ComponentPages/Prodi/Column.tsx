@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { ColumnDef } from '@tanstack/react-table';
 import { Pencil, Trash2 } from 'lucide-react';
 
@@ -30,7 +31,36 @@ export type Proditype = {
     status: boolean;
 };
 
-export const columns = (onEdit: (row: Proditype) => void, onDelete: (id: string) => void): ColumnDef<Proditype>[] => [
+export const columns = (
+    onEdit: (row: Proditype) => void,
+    onDelete: (id: string) => void,
+    selectedIds: number[],
+    toggleSelect: (id: number) => void,
+    toggleSelectAll: (checked: boolean) => void,
+    allSelected: boolean,
+): ColumnDef<Proditype>[] => [
+    {
+        id: 'select',
+        header: ({ table }) => (
+            <Checkbox
+                checked={allSelected}
+                onCheckedChange={(checked) => toggleSelectAll(!!checked)}
+                aria-label="Select all"
+            />
+        ),
+        cell: ({ row }) => {
+            const id = row.original.id!;
+            return (
+                <Checkbox
+                    checked={selectedIds.includes(id)}
+                    onCheckedChange={() => toggleSelect(id)}
+                    aria-label={`Select row ${id}`}
+                />
+            );
+        },
+        enableSorting: false,
+        size: 20,
+    },
     {
         id: 'rowNumber',
         header: () => <div className="text-center">No</div>,
@@ -38,15 +68,11 @@ export const columns = (onEdit: (row: Proditype) => void, onDelete: (id: string)
     },
     { accessorKey: 'sp_code', header: 'Code ' },
     { header: 'Fakultas', accessorFn: (row) => row.faculty?.name ?? null, id: 'faculty' },
-    // { header: 'Periode Akademik', accessorFn: (row) => row.academic_period?.name ?? null, id: 'academic_period' },
-    // {
-    //     accessorKey: 'combined_name',
-    //     header: 'Nama Prodi (Singkatan)',
-    //     cell: ({ row }) => `${row.original.idn_sp_name} (${row.original.sp_short_name})`,
-    // },
-
-    { accessorKey: 'idn_sp_name', header: 'Nama Prodi' },
-    { accessorKey: 'sp_short_name', header: 'Singkatan' },
+    {
+        accessorKey: 'combined_name',
+        header: 'Nama Prodi (Singkatan)',
+        cell: ({ row }) => `${row.original.idn_sp_name} (${row.original.sp_short_name})`,
+    },
     // { accessorKey: 'eng_sp_name', header: 'Nama(ENG)' },
     // { accessorKey: 'sp_address', header: 'Address' },
     // { accessorKey: 'sp_phone', header: 'Telephone' },
@@ -77,7 +103,10 @@ export const columns = (onEdit: (row: Proditype) => void, onDelete: (id: string)
     {
         accessorKey: 'status',
         header: 'Status',
-        cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Aktif' : 'Tidak Aktif'}</div>,
+        cell: ({ getValue }) =>  
+            <div className={`font-semibold ${ getValue<boolean>() ? 'text-green-600' : 'text-red-600' }`}>
+                {getValue<boolean>() ? 'Aktif' : 'Tidak Aktif'}
+            </div> 
     },
     {
         id: 'actions',

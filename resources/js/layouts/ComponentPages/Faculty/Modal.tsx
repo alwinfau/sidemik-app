@@ -3,7 +3,6 @@ import { FormSelectInput, FormTextInput } from '@/components/ui/Components_1/For
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { SelectItem } from '@/components/ui/select';
 import { Switch } from '@/components/ui/swicth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoaderCircle } from 'lucide-react';
@@ -79,11 +78,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         }
     }, [defaultValues, reset]);
 
-    const { academicPeriods, fetchAcademicPeriods } = useFakultas();
-
-    useEffect(() => {
-        fetchAcademicPeriods();
-    }, []);
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
         try {
             const result = await submit(data, defaultValues?.id);
@@ -131,50 +125,32 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mx-3 space-y-4">
-                            <Controller
-                                name="academic_period_id"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="academic_period_id"
-                                        label="Periode Akademik"
-                                        value={field.value}
-                                        onValueChange={field.onChange}
-                                        error={errors.academic_period_id?.message}
-                                    >
-                                        {academicPeriods.map((period: any) => (
-                                            <SelectItem key={period.id} value={String(period.id)}>
-                                                {period.name}
-                                            </SelectItem>
-                                        ))}
-                                    </FormSelectInput>
-                                )}
-                            />
+                            
                             <FormTextInput
                                 placeholder="Masukan Kode Fakultas"
                                 id="code"
-                                label="Fakultas Kode"
+                                label="Fakultas Kode *"
                                 {...register('code')}
                                 error={errors.code?.message}
                             />
                             <FormTextInput
                                 placeholder="Masukan Nama Fakultas"
                                 id="name"
-                                label="Nama Fakultas"
+                                label="Nama Fakultas *"
                                 {...register('name')}
                                 error={errors.name?.message}
                             />
                             <FormTextInput
                                 placeholder="Masukan Nama Fakultas (ENG)"
                                 id="eng_name"
-                                label="Nama Fakultas(ENG)"
+                                label="Nama Fakultas(ENG) *"
                                 {...register('eng_name')}
                                 error={errors.eng_name?.message}
                             />
                             <FormTextInput
                                 placeholder="Nama Singkat Fakultas"
                                 id="short_name"
-                                label="Singkatan Fakultas"
+                                label="Singkatan Fakultas *"
                                 {...register('short_name')}
                                 error={errors.short_name?.message}
                             />
@@ -205,7 +181,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 placeholder="Masukan Missi Fakultas"
                                 id="mission"
                                 type="textarea"
-                                label="Missi"
+                                label="Misi"
                                 {...register('mission')}
                                 error={errors.mission?.message}
                             />

@@ -2,7 +2,6 @@ import { Checkbox } from '@/components/ui/checkbox'; // import komponen checkbox
 import { Button } from '@/components/ui/button';
 import { ColumnDef } from '@tanstack/react-table';
 import { Pencil, Trash2 } from 'lucide-react';
-import { useState } from 'react';
 
 export type AcademicYearType = {
     id?: number;

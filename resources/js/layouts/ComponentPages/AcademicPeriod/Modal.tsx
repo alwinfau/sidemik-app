@@ -192,7 +192,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="semester"
-                                        label="Semester"
+                                        label="Semester *"
                                         value={field.value}
                                         onValueChange={field.onChange}
                                         error={errors.semester?.message}
@@ -212,7 +212,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="academic_year_id"
-                                        label="Tahun Akademik"
+                                        label="Tahun Akademik *"
                                         value={String(field.value)}
                                         onValueChange={(value) => {
                                             field.onChange(value);
@@ -245,7 +245,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
 
                             <FormTextInput
                                 id="name"
-                                label="Nama"
+                                label="Nama *"
                                 placeholder="Masukan nama periode akadmemik"
                                 type="text"
                                 {...register('name')}
@@ -254,7 +254,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 placeholder="Masukan singkatan"
                                 id="short_name"
-                                label="Nama Singkat"
+                                label="Nama Singkat *"
                                 type="text"
                                 {...register('short_name')}
                                 error={errors.short_name?.message}

@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { ColumnDef } from '@tanstack/react-table';
 import { Pencil, Trash2 } from 'lucide-react';
 
@@ -16,11 +17,41 @@ export type Stambuk = {
     };
 };
 
-export const columns = (onEdit: (row: Stambuk) => void, onDelete: (id: string) => void): ColumnDef<Stambuk>[] => [
+export const columns = (
+    
+    onEdit: (row: Stambuk) => void,
+    onDelete: (id: string) => void,
+    selectedIds: number[],
+    toggleSelect: (id: number) => void,
+    toggleSelectAll: (checked: boolean) => void,
+    allSelected: boolean,
+): ColumnDef<Stambuk>[] => [
+    {
+        id: 'select',
+        header: ({ table }) => (
+            <Checkbox
+                checked={allSelected}
+                onCheckedChange={(checked) => toggleSelectAll(!!checked)}
+                aria-label="Select all"
+            />
+        ),
+        cell: ({ row }) => {
+            const id = row.original.id!;
+            return (
+                <Checkbox
+                    checked={selectedIds.includes(id)}
+                    onCheckedChange={() => toggleSelect(id)}
+                    aria-label={`Select row ${id}`}
+                />
+            );
+        },
+        enableSorting: false,
+        size: 20,
+    },
     {
         id: 'rowNumber',
         header: 'No',
-        cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
+        cell: ({ row }) => <div className="">{row.index + 1}</div>,
     },
     {
         accessorKey: 'year',
@@ -38,7 +69,11 @@ export const columns = (onEdit: (row: Stambuk) => void, onDelete: (id: string) =
         id: 'study_program',
     },
     { accessorKey: 'name', header: 'Nama Stambuk' },
-    { accessorKey: 'ukt', header: 'UKT' },
+    { 
+        accessorKey: 'ukt', 
+        header: 'UKT',
+        cell: ({ getValue }) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(getValue()),
+    },
     // { accessorKey: 'description', header: 'Keterangan' },
     {
         id: 'actions',
