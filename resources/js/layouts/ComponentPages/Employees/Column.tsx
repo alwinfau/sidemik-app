@@ -84,18 +84,18 @@ export const columns = (
     },
     { accessorKey: 'nip', header: 'NIP' },
     { accessorKey: 'name', header: 'Nama' },
-    {
-        accessorKey: 'foto',
-        header: () => <div className="w-28">Foto</div>,
-        cell: ({ row }) => {
-            const path = row.original.foto;
-            return path ? (
-                <img src={`http://127.0.0.1:8080${path}`} alt="Foto Pegawai" className="h-16 w-16 rounded object-cover" />
-            ) : (
-                <div className="text-center text-sm text-gray-400">Tidak ada foto</div>
-            );
-        },
-    },
+    // {
+    //     accessorKey: 'foto',
+    //     header: () => <div className="w-28">Foto</div>,
+    //     cell: ({ row }) => {
+    //         const path = row.original.foto;
+    //         return path ? (
+    //             <img src={`http://127.0.0.1:8080${path}`} alt="Foto Pegawai" className="h-16 w-16 rounded object-cover" />
+    //         ) : (
+    //             <div className="text-center text-sm text-gray-400">Tidak ada foto</div>
+    //         );
+    //     },
+    // },
     { accessorKey: 'front_title', header: 'Gelar Depan', cell: ({ getValue }) => getValue() ?? '-' },
     { accessorKey: 'back_title', header: 'Gelar Belakang' },
     {
