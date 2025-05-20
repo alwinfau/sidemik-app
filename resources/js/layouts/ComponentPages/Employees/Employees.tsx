@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/Components_1/DataTable';
 import ConfirmDeleteDialog from '@/components/ui/Components_1/DeleteModal';
 import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@/components/ui/toast';
-import { CirclePlus } from 'lucide-react';
+import { CirclePlus,Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { columns, EmployeesType } from './Column';
 import ModalForm from './Modal';
@@ -13,6 +13,45 @@ const EmployeesPage = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [editing, setEditing] = useState<EmployeesType | undefined>();
     const [deleteId, setDeleteId] = useState<number | null>(null);
+        // State untuk multiple selection
+    const [selectedIds, setSelectedIds] = useState<number[]>([]);
+    // State untuk hapus banyak
+    const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
+
+    // Toggle select row
+    const toggleSelect = (id: number) => {
+        setSelectedIds((prev) =>
+            prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+        );
+    };
+
+    // Toggle select all rows
+    const toggleSelectAll = (checked: boolean) => {
+        if (checked) {
+            const allIds = data?.map((d) => d.id!).filter(Boolean) || [];
+            setSelectedIds(allIds);
+        } else {
+            setSelectedIds([]);
+        }
+    };
+
+    const allSelected = data && data.length > 0 && selectedIds.length === data.length;
+
+    // Hapus banyak data
+    const handleBulkDelete = async () => {
+        for (const id of selectedIds) {
+            await handleDelete(id);
+        }
+        setSelectedIds([]);
+        setBulkDeleteOpen(false);
+    };
+
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    console.log('data', data);
 
     useEffect(() => {
         if (toast) {
@@ -21,23 +60,30 @@ const EmployeesPage = () => {
         }
     }, [toast]);
 
-    useEffect(() => {
-        fetchData();
-    }, []);
-
     return (
         <div className="m-6">
             <div className="mb-4 flex justify-between">
                 <h2 className="text-2xl font-bold">Pegawai</h2>
-                <Button
-                    onClick={() => {
-                        setEditing(undefined);
-                        setModalOpen(true);
-                    }}
-                    className="flex items-center rounded bg-green-500 p-3 font-bold text-white hover:bg-green-600"
-                >
-                    <CirclePlus className="h-6 w-6" /> Tambah Pegawai
-                </Button>
+                <div className="flex gap-3">
+                   {selectedIds.length > 0 && (
+                        <Button
+                            variant="destructive"
+                            className="flex items-center gap-1"
+                            onClick={() => setBulkDeleteOpen(true)}
+                        >
+                            <Trash2 /> Delete Selected ({selectedIds.length})
+                        </Button>
+                    )}
+                    <Button
+                        onClick={() => {
+                            setEditing(undefined);
+                            setModalOpen(true);
+                        }}
+                        className="flex items-center rounded bg-green-500 p-3 font-bold text-white hover:bg-green-600"
+                    >
+                        <CirclePlus className="h-6 w-6" /> Tambah Pegawai
+                    </Button>
+                </div>
             </div>
 
             <DataTable
@@ -47,6 +93,10 @@ const EmployeesPage = () => {
                         setModalOpen(true);
                     },
                     (id) => setDeleteId(parseInt(id)),
+                    selectedIds,
+                    toggleSelect,
+                    toggleSelectAll,
+                    allSelected
                 )}
                 data={data || []}
                 isLoading={isLoading}
@@ -68,7 +118,7 @@ const EmployeesPage = () => {
                 }
                 defaultValues={editing}
             />
-            <ConfirmDeleteDialog
+             <ConfirmDeleteDialog
                 open={deleteId !== null}
                 onCancel={() => setDeleteId(null)}
                 onConfirm={() => {
@@ -78,6 +128,19 @@ const EmployeesPage = () => {
                     });
                 }}
                 isLoading={isLoading}
+            />
+
+
+            <ConfirmDeleteDialog
+                open={bulkDeleteOpen}
+                onCancel={() => setBulkDeleteOpen(false)}
+                onConfirm={() => {
+                    handleBulkDelete();
+                }}
+                isLoading={isLoading}
+                title= {`Hapus ${selectedIds.length} Pilih Pegawai?`}
+                description="Apakah Anda yakin ingin menghapus karyawan ini? Tindakan ini tidak dapat dibatalkan."
+
             />
             <ToastProvider>
                 {toast && (
