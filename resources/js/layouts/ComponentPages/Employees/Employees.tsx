@@ -7,15 +7,15 @@ import { useEffect, useState } from 'react';
 import { columns, EmployeesType } from './Column';
 import ModalForm from './Modal';
 import { useEmployees } from './useEmploye';
+import ModalDetails from './ModalDetails';
 
 const EmployeesPage = () => {
     const { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useEmployees();
     const [modalOpen, setModalOpen] = useState(false);
+    const [modalDetailOpen, setModalDetailOpen] = useState(false);
     const [editing, setEditing] = useState<EmployeesType | undefined>();
     const [deleteId, setDeleteId] = useState<number | null>(null);
-        // State untuk multiple selection
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
-    // State untuk hapus banyak
     const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
 
     // Toggle select row
@@ -86,11 +86,18 @@ const EmployeesPage = () => {
                 </div>
             </div>
 
+
             <DataTable
                 columns={columns(
+                  (row) => {
+                        setEditing(row);
+                        setModalOpen(true); // Untuk Edit
+                        setModalDetailOpen(false);
+                    },
                     (row) => {
                         setEditing(row);
-                        setModalOpen(true);
+                        setModalDetailOpen(true); // Untuk Detail
+                        setModalOpen(false);
                     },
                     (id) => setDeleteId(parseInt(id)),
                     selectedIds,
@@ -118,6 +125,13 @@ const EmployeesPage = () => {
                 }
                 defaultValues={editing}
             />
+
+             <ModalDetails
+                open={modalDetailOpen}
+                onOpenChange={setModalDetailOpen}
+                defaultValues={editing}
+            />
+
              <ConfirmDeleteDialog
                 open={deleteId !== null}
                 onCancel={() => setDeleteId(null)}
