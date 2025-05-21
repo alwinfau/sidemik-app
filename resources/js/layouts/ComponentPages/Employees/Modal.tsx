@@ -348,7 +348,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 error={errors.phone?.message}
                             />
                             <FormTextInput
-                                id="emergency_phone_1"
+                                id="emergency_phone"
                                 type="text"
                                 label="Nomor Telepon Darurat"
                                 placeholder="Masukan Nomor Telepon Darurat"

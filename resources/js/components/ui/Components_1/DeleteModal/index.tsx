@@ -7,18 +7,18 @@ type ConfirmDeleteDialogProps = {
     onConfirm: () => void ;
     onCancel: () => void;
     isLoading? : boolean
+    title?: string;
+    description?: string;
 };
 
-const ConfirmDeleteDialog = ({ open, onConfirm, onCancel, isLoading }: ConfirmDeleteDialogProps) => {
+const ConfirmDeleteDialog = ({ open, onConfirm, onCancel, isLoading, title , description}: ConfirmDeleteDialogProps) => {
     return (
         <Dialog open={open} onOpenChange={(open) => !open && onCancel()}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Are you sure?</DialogTitle>
+                    <DialogTitle>{title ? title :"Are you sure?"}</DialogTitle>
                 </DialogHeader>
-                <DialogDescription>
-                This action cannot be undone. Are you sure you want to delete this data?
-                </DialogDescription>
+                <DialogDescription> {description ? description : 'This action cannot be undone. Are you sure you want to delete this data?'}</DialogDescription>
                 <DialogFooter>
                     <Button variant="outline" onClick={onCancel}>
                         Cancel
