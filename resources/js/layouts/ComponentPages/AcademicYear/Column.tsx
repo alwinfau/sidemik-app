@@ -10,15 +10,16 @@ export type AcademicYearType = {
     start_date: string;
     end_date: string;
     description: string;
+    is_active: boolean
 };
 
 export const columns = (
-  onEdit: (row: AcademicYearType) => void,
-  onDelete: (id: string) => void,
-  selectedIds: number[],
-  toggleSelect: (id: number) => void,
-  toggleSelectAll: (checked: boolean) => void,
-  allSelected: boolean,
+    onEdit: (row: AcademicYearType) => void,
+    onDelete: (id: string) => void,
+    selectedIds: number[],
+    toggleSelect: (id: number) => void,
+    toggleSelectAll: (checked: boolean) => void,
+    allSelected: boolean,
 ): ColumnDef<AcademicYearType>[] => [
     {
         id: 'select',
@@ -47,11 +48,19 @@ export const columns = (
         header: () => <div className="text-center">No</div>,
         cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
     },
-    { accessorKey: 'academic_year', header: 'Tahun Akademik' },
-    { accessorKey: 'name', header: 'Nama' },
-    { accessorKey: 'start_date', header: 'Sejak' },
-    { accessorKey: 'end_date', header: 'Hingga' },
-    { accessorKey: 'description', header: 'Keterangan' },
+    
+    { accessorKey: 'name', header: 'Tahun Ajaran' },
+    { accessorKey: 'start_date', header: 'Tahun Mulai' },
+    { accessorKey: 'end_date', header: 'Tahun Berakhir' },
+    
+    {
+        accessorKey: 'is_active',
+        header: 'Status',
+        cell: ({ getValue }) =>  
+        <div className={`font-semibold ${ getValue<boolean>() ? 'text-green-600' : 'text-red-600' }`}>
+            {getValue<boolean>() ? 'Aktif' : 'Tidak Aktif'}
+        </div>  
+    },
     {
         id: 'actions',
         header: 'Actions',

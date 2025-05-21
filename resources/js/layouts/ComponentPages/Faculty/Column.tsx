@@ -57,9 +57,12 @@ export const columns = (
     },
     { accessorKey: 'code', header: 'Code' },
     
-    { accessorKey: 'name', header: 'Nama Fakultas' },
+    { 
+        accessorKey: 'combined_name',
+        header: 'Nama Prodi & Singkatan',
+        cell: ({ row }) => `${row.original.name} (${row.original.short_name})`, },
+    
     { accessorKey: 'eng_name', header: 'Nama Fakultas(ENG)' },
-    { accessorKey: 'short_name', header: 'Singkatan' },
     // { accessorKey: 'address', header: 'Alamat' },
     // { accessorKey: 'telephone', header: 'Telephone', cell: ({ getValue }) => getValue<number>() ?? '-' },
     // { accessorKey: 'vision', header: 'Visi', cell: ({ getValue }) => getValue<string>() ?? '-' },

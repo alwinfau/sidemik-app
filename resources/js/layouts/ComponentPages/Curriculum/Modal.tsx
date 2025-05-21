@@ -10,6 +10,8 @@ import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useCurriculum } from './useCurriculum';
+import { Label } from '@/components/ui/label';
+import YearPicker from '@/components/ui/Components_1/YearPicker';
 
 type ModalProps = {
     open: boolean;
@@ -35,6 +37,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         handleSubmit,
         reset,
         setError,
+        setValue,
         control,
         formState: { errors, isSubmitting },
     } = useForm<FormInputs>({
@@ -93,7 +96,9 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             });
         }
     };
-
+    const handleYearChange = (year: number) => {
+        setValue('curriculum_year', String(year));
+    };
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
@@ -103,6 +108,15 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4">
+                            <div className="pt-2">
+                                <Label>Tahun Kurikulum</Label>
+                                <YearPicker 
+                                    startYear={new Date().getFullYear() - 5}
+                                    endYear={new Date().getFullYear() + 2}
+                                    value={parseInt(defaultValues?.curriculum_year || new Date().getFullYear().toString())}
+                                    onSelect={handleYearChange}
+                                />
+                            </div>
                             <Controller
                                 name="study_programs_id"
                                 control={control}
@@ -125,17 +139,9 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="code"
                                 placeholder="Masukan Kode Kurikulum"
-                                label="code"
+                                label="code *"
                                 {...register('code')}
                                 error={errors.code?.message}
-                            />
-                            <FormTextInput
-                                id="curriculum_year"
-                                label="Tahun kurikulum"
-                                placeholder="Masukan tahun akademik"
-                                type="text"
-                                {...register('curriculum_year')}
-                                error={errors.curriculum_year?.message}
                             />
                             <FormTextInput
                                 id="sks_required"

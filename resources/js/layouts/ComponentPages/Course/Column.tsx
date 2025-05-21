@@ -11,7 +11,6 @@ export type CourseType = {
     theory_sks: number;
     practical_sks: number;
     fieldwork_sks: number;
-    is_scheduled: boolean;
     course_desc: string;
     prereq_courses_1: string;
     prereq_courses_2: string;
@@ -22,7 +21,7 @@ export type CourseType = {
         name: string;
     };
     curriculumns: {
-        code: string;
+        curriculum_year: string;
     };
     elective_course_group: {
         name: string;
@@ -32,21 +31,17 @@ export const columns = (onEdit: (row: CourseType) => void, onDelete: (id: string
     { id: 'rowNumber', header: 'No', cell: ({ row }) => <div className="text-center">{row.index + 1}</div> },
     {
         header: 'Kurikulum',
-        accessorFn: (row) => row.curriculumns.code,
+        accessorFn: (row) => row.curriculumns.curriculum_year,
         id: 'curriculum',
     },
-    { accessorKey: 'code', header: 'Kode' },
+    { accessorKey: 'code', header: () => <div className="w-10">Kode</div>, 
+        cell: ({ row }) => <div className="w-20 truncate">{row.getValue('code')}</div>  },
     { accessorKey: 'semester', header: 'Semester' },
     { accessorKey: 'name_idn', header: 'Nama Matakuliah' },
     { accessorKey: 'name_eng', header: 'Course' },
     { accessorKey: 'theory_sks', header: 'Teori SKS' },
     { accessorKey: 'practical_sks', header: 'SKS Praktek' },
     { accessorKey: 'fieldwork_sks', header: 'SKS Lapangan' },
-    {
-        accessorKey: 'is_scheduled',
-        header: 'Terjadwal',
-        cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Terjadwal' : 'Tidak Terjadwal'}</div>,
-    },
     // { accessorKey: 'course_desc', header: 'Course Desc' },
     // { accessorKey: 'prereq_courses_1', header: 'SKS Total' },
     // { accessorKey: 'prereq_courses_2', header: 'SKS Total' },

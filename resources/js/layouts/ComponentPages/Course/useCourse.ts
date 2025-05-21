@@ -9,16 +9,18 @@ export const useCourse = () => {
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
-
+    const [prodis, setProdis] = useState<{ id: number; name: string }[]>([]);
+    const [selectedProdiId, setSelectedProdiId] = useState<number | null>(null);    
     const [courseTypes, setCourseTypes] = useState<any>([]);
     const [courseGroups, setCourseGroups] = useState<any>([]);
     const [curriculum, setCurriculum] = useState<any>([]);
     const [MatkulPil, setMatkulPil] = useState<any>([]);
 
-    const fetchData = async (currentPage = 1) => {
+    const fetchData = async (currentPage = 1, prodiId?: number | null) => {
         try {
             setIsLoading(true);
-            const res: any = await get(`/course?page=${currentPage}&limit=10`);
+            const url = `/course?page=${currentPage}&limit=10${prodiId ? `&prodi_id=${prodiId}` : ''}`;
+            const res: any = await get(url);
             setData(res.data.data);
             setPage(res.data.current_page);
             setTotalPages(res.data.last_page);
@@ -28,6 +30,7 @@ export const useCourse = () => {
             setIsLoading(false);
         }
     };
+    
 
     const fectRelasi = async () => {
         try {
@@ -42,6 +45,8 @@ export const useCourse = () => {
 
             const resMatkulPil: any = await get('/elective-course-groups');
             setMatkulPil(resMatkulPil.data);
+
+            
         } catch (err) {
             console.error('Error fetching:', err);
         }

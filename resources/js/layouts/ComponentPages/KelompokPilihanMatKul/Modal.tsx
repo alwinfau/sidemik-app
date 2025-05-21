@@ -127,14 +127,14 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
                             <FormTextInput
                                 id="code"
-                                label="Kode"
+                                label="Kode *"
                                 placeholder="Masukan Kode Matkul pilihan"
                                 {...register('code')}
                                 error={errors.code?.message}
                             />
                             <FormTextInput
                                 id="name"
-                                label="Nama Mata Kuliah Pilihan"
+                                label="Nama Mata Kuliah Pilihan *"
                                 placeholder="Masukan Nama kelompok Mata Kuliah Pilihan"
                                 {...register('name')}
                                 error={errors.name?.message}

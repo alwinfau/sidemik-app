@@ -26,7 +26,7 @@ const schema = z.object({
     practical_sks: z.coerce.number({ message: 'Praktek Wajib diisi' }),
     fieldwork_sks: z.coerce.number(),
     course_desc: z.string().nullable(),
-    is_scheduled: z.boolean(),
+    
     prereq_courses_1: z.number().nullable(),
     prereq_courses_2: z.number().nullable(),
     course_types_id: z.string({ message: 'Jenis Mata Kuliah Wajib diisi' }),
@@ -67,7 +67,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 theory_sks: defaultValues.theory_sks || null,
                 practical_sks: defaultValues.practical_sks || null,
                 fieldwork_sks: defaultValues.fieldwork_sks || '',
-                is_scheduled: Boolean(defaultValues.is_scheduled) || true,
+                
                 prereq_courses_1: defaultValues.prereq_courses_1 || null,
                 prereq_courses_2: defaultValues.prereq_courses_2 || null,
                 course_types_id: String(defaultValues.course_types_id) || '',
@@ -85,7 +85,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 theory_sks: null,
                 practical_sks: null,
                 fieldwork_sks: null,
-                is_scheduled: true,
                 prereq_courses_1: null,
                 prereq_courses_2: null,
                 course_types_id: '',
@@ -96,15 +95,13 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         }
     }, [defaultValues, reset]);
 
+    
     const [showElectiveCourse, setShowElectiveCourse] = useState(false);
-
     const [filteredGroups, setFilteredGroups] = useState(courseGroups);
 
     const handleCourseTypeChange = (value: string) => {
         const peminatanType = courseTypes.find((type: any) => type.name === 'Pilihan');
-
         const isElective = value === String(peminatanType?.id);
-
         if (!isElective && !defaultValues) {
             setValue('elective_course_groups_id', null);
         }
@@ -115,36 +112,66 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         try {
             const result = await submit(data, defaultValues?.id);
             if (result != null && !isSubmitting && !defaultValues) {
-                reset();
+                reset({
+                    code: '',
+                    semester: null,
+                    name_idn: '',
+                    name_eng: '',
+                    course_desc: '',
+                    theory_sks: null,
+                    practical_sks: null,
+                    fieldwork_sks: null,
+                    prereq_courses_1: null,
+                    prereq_courses_2: null,
+                    course_types_id: '',
+                    course_groups_id: '',
+                    curriculums_id: '',
+                    elective_course_groups_id: '',
+                });
             }
         } catch (error: any) {
+            const errorsData = error?.data;
+            let lastErrorMessage = '';
+            let firstErrorMessage = error.meta.message;
+            
+            Object.entries(errorsData).forEach(([field, messages], index) => {
+                const messageText = (messages as string[])[0];
+                lastErrorMessage = messageText;
+            });
+            
+            let finalErrorMessage = firstErrorMessage.includes('Duplicate record') ? firstErrorMessage : lastErrorMessage;
+            
             setError('root', {
                 type: 'manual',
-                message: error?.response?.meta?.message || 'Something went wrong',
+                message: finalErrorMessage,
             });
         }
     };
-
+    
     const [filterMatkulPil, setFilterMatkulPil] = useState<any[]>([]);
-
+    
     const getProdiFromCurri = (curriculums_id: string) => {
         const selectedCurriculum = curriculum.find((item: any) => item.id === Number(curriculums_id));
         return selectedCurriculum.study_program.id;
     };
-
+    const [selectedStudyProgramId, setSelectedStudyProgramId] = useState<string | null>(null);
+    
     const handleCurriculumChange = (curriculums_id: string) => {
         setValue('curriculums_id', curriculums_id);
-
-        // get prodi
-        const study_programs_id = getProdiFromCurri(curriculums_id);
-
-        if (study_programs_id) {
-            const filtered = MatkulPil.filter((matkul: any) => String(matkul.study_program.id) === String(study_programs_id));
+        const selectedCurriculum = curriculum.find((item: any) => item.id === Number(curriculums_id));
+        if (selectedCurriculum) {
+            const studyProgramId = selectedCurriculum.study_programs_id?.id;
+            setSelectedStudyProgramId(studyProgramId ? String(studyProgramId) : null);
+            const filtered = MatkulPil.filter((matkul: any) => 
+                String(matkul.study_programs_id.id) === String(studyProgramId)
+            );
             setFilterMatkulPil(filtered);
         } else {
+            setSelectedStudyProgramId(null);
             setFilterMatkulPil([]);
         }
     };
+    
 
     // Fungsi untuk mendapatkan prefix dari kode
     const getCoddeprefix = (code: string) => {
@@ -199,7 +226,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     >
                                         {curriculum.map((Curr: any) => (
                                             <SelectItem key={Curr.id} value={String(Curr.id)}>
-                                                {Curr.code}
+                                                {Curr.curriculum_year}
                                             </SelectItem>
                                         ))}
                                     </FormSelectInput>
@@ -217,7 +244,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
                             <FormTextInput
                                 id="semester"
-                                label="Semester"
+                                label="Semester *"
                                 type="number"
                                 {...register('semester')}
                                 placeholder="Masukan Jumlah Semester"
@@ -225,7 +252,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
                             <FormTextInput
                                 id="name_idn"
-                                label="Mata Kuliah"
+                                label="Mata Kuliah *"
                                 placeholder="Masukan Nama Mata Kuliah"
                                 type="text"
                                 {...register('name_idn')}
@@ -233,7 +260,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
                             <FormTextInput
                                 id="name_eng"
-                                label="Mata Kuliah (ENG)"
+                                label="Mata Kuliah (ENG) *"
                                 placeholder="Masukan Nama Matkul Dalam B.Ing"
                                 type="text"
                                 {...register('name_eng')}
@@ -241,7 +268,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
                             <FormTextInput
                                 id="theory_sks"
-                                label="SKS Teori"
+                                label="SKS Teori *"
                                 type="number"
                                 placeholder="Masukan Jumlah SKS teori"
                                 {...register('theory_sks')}
@@ -250,7 +277,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="practical_sks"
                                 placeholder="Masukan Jumlah SKS Praktek"
-                                label="SKS Praktek"
+                                label="SKS Praktek *"
                                 type="number"
                                 {...register('practical_sks')}
                                 error={errors.practical_sks?.message}
@@ -264,28 +291,12 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 error={errors.fieldwork_sks?.message}
                             />
                             <Controller
-                                name="is_scheduled"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="is_scheduled"
-                                        label="Terjadwal"
-                                        value={field.value ? 'true' : 'false'}
-                                        onValueChange={(val) => field.onChange(val === 'true')}
-                                        error={errors.is_scheduled?.message}
-                                    >
-                                        <SelectItem value="true">Terjadwal</SelectItem>
-                                        <SelectItem value="false">Tidak Terjadwal</SelectItem>
-                                    </FormSelectInput>
-                                )}
-                            />
-                            <Controller
                                 name="course_types_id"
                                 control={control}
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="course_types_id"
-                                        label="Jenis Mata Kuliah"
+                                        label="Jenis Mata Kuliah *"
                                         value={field.value}
                                         onValueChange={(val) => {
                                             field.onChange(val);
@@ -308,7 +319,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="course_groups_id"
-                                        label="Kelompok Mata Kuliah"
+                                        label="Kelompok Mata Kuliah *"
                                         value={field.value}
                                         onValueChange={field.onChange}
                                         error={errors.course_groups_id?.message}
@@ -328,7 +339,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     render={({ field }) => (
                                         <FormSelectInput
                                             id="elective_course_groups_id"
-                                            label="Mata Kuliah Pilihan"
+                                            label="Mata Kuliah Pilihan *"
                                             value={field.value ?? ''}
                                             onValueChange={field.onChange}
                                             error={errors.elective_course_groups_id?.message}

@@ -4,13 +4,16 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import DateInput from '@/components/ui/Components_1/DateInput';
 import dayjs from 'dayjs';
 import { LoaderCircle } from 'lucide-react';
 import { AcademicYearType } from './Column';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/swicth';
 
 type ModalProps = {
     open: boolean;
@@ -20,12 +23,11 @@ type ModalProps = {
 };
 
 const schema = z.object({
-    academic_year: z.string().regex(/^\d{4}$/, { message: 'Tahun Ajaran harus berupa 4 digit tahun (misal: 2025)' }),
-    // academic_year: z.string(),
     name: z.string().min(2, 'Nama harus lebih dari 2 karakter'),
     start_date: z.string(),
     end_date: z.string(),
     description: z.string().nullable(),
+    is_active : z.boolean()
 });
 
 type FormInputs = z.infer<typeof schema>;
@@ -37,46 +39,42 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         watch,
         setValue,
         reset,
-        setError,
         control,
-
+        setError,
         formState: { errors, isSubmitting },
     } = useForm<FormInputs>({
         resolver: zodResolver(schema),
     });
 
-    const academicYear = watch('academic_year');
-
+    const name = watch('name');
     useEffect(() => {
-        if (academicYear && /^\d{4}$/.test(academicYear)) {
-            const calculatedYear = parseInt(academicYear);
-            // Format tahun menjadi 'YYYY-MM-DD'
-            const calculatedDate = `${calculatedYear}-01-01`;
-            setValue('start_date', calculatedDate);
-            // Hitung untuk end date + 1 tahun setelah tahun ajaran
-            const calculatedYearenddate = parseInt(academicYear) + 1;
-            // Format tahunnya
-            const calculatedenddate = `${calculatedYearenddate}-01-01`;
-            setValue('end_date', calculatedenddate);
+        if (name && /^\d{4}\/\d{4}$/.test(name)) {
+            const [startYearStr] = name.split('/');
+            const startYear = parseInt(startYearStr);
+            const startDate = `${startYear}-01-01`;
+            const endDate = `${startYear + 1}-01-01`;
+            setValue('start_date', startDate);
+            setValue('end_date', endDate);
         }
-    }, [academicYear, setValue]);
+    }, [name, setValue]);
+    
 
     useEffect(() => {
         if (defaultValues) {
             reset({
-                academic_year: defaultValues.academic_year || '',
                 name: defaultValues.name || '',
                 start_date: defaultValues.start_date,
                 end_date: defaultValues.end_date,
                 description: defaultValues.description || '',
+                is_active: Boolean(defaultValues.is_active) || false
             });
         } else {
             reset({
-                academic_year: '',
-                name: '',
+                name: `${dayjs().year()}/${dayjs().year() + 1}`,
                 start_date: '',
                 end_date: '',
                 description: '',
+                is_active: false,
             });
         }
     }, [defaultValues, reset]);
@@ -86,11 +84,11 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             if (result != null) {
                 if (!isSubmitting && !defaultValues) {
                     reset({
-                        academic_year: '',
                         name: '',
                         start_date: '',
                         end_date: '',
                         description: '',
+                        is_active: false,
                     });
                 }
             }
@@ -113,8 +111,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         }
     };
 
-    const currentYear = dayjs();
-
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
@@ -124,22 +120,25 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4">
-                            <FormTextInput
-                                id="academic_year"
-                                label="Tahun Akademik *"
-                                placeholder="Masukan tahun akademik"
-                                type="text"
-                                {...register('academic_year')}
-                                error={errors.academic_year?.message}
-                            />
-                            <FormTextInput
-                                placeholder="Masukan nama akademik"
-                                id="name"
-                                label="Nama *"
-                                type="text"
-                                {...register('name')}
-                                error={errors.name?.message}
-                            />
+                        <div>
+                            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                Tahun ajaran *
+                            </label>
+                            <Select
+                                defaultValue={watch('name') || `${dayjs().year()}/${dayjs().year() + 1}`}
+                                onValueChange={(value) => setValue('name', value)}
+                            >
+                                <SelectTrigger>
+                                <SelectValue placeholder="Pilih Tahun Ajaran" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                <SelectItem value={`${dayjs().year()}/${dayjs().year() + 1}`}>
+                                    {dayjs().year()}/{dayjs().year() + 1}
+                                </SelectItem>
+                                </SelectContent>
+                            </Select>
+                            {errors.name && <p className="text-sm text-red-600 mt-1">{errors.name.message}</p>}
+                        </div>
 
                             <DateInput
                                 label="Tanggal Mulai *"
@@ -163,6 +162,19 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 {...register('description')}
                                 error={errors.description?.message}
                             />
+                            <div className="pt-2">
+                                <Label>Status</Label>
+                                <Controller
+                                    name="is_active"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <div className="flex items-center gap-4">
+                                            <Switch checked={field.value} onCheckedChange={field.onChange} id="is_active" />
+                                            <Label htmlFor="is_active">{field.value ? 'Active' : 'Non Aktif'}</Label>
+                                        </div>
+                                    )}
+                                />
+                            </div>
 
                             {errors.root && <p className="text-red-600">{errors.root.message}</p>}
 

@@ -22,7 +22,11 @@ const CoursePages = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [editing, setEditing] = useState<CourseType | undefined>();
     const [deleteId, setDeleteId] = useState<number | null>(null);
+    const [prodis, setProdis] = useState<{ id: number; name: string }[]>([]);
+    const [selectedProdiId, setSelectedProdiId] = useState<number | null>(null);
+
     useEffect(() => {
+        fetchData();
         fetchData();
     }, []);
     useEffect(() => {

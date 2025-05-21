@@ -8,6 +8,8 @@ import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useStambuk } from './useStambuk';
+import YearPicker from '@/components/ui/Components_1/YearPicker';
+import { Label } from '@/components/ui/label';
 
 type ModalProps = {
     open: boolean;
@@ -32,6 +34,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         handleSubmit,
         reset,
         setError,
+        setValue,
         control,
         formState: { errors, isSubmitting },
     } = useForm<FormInputs>({
@@ -64,7 +67,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
     useEffect(() => {
         fectRelasi();
     }, []);
-
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
         try {
             const result = await submit(data, defaultValues?.id);
@@ -89,6 +91,9 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             });
         }
     };
+    const handleYearChange = (year: number) => {
+        setValue('year', String(year));
+    };
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
@@ -99,21 +104,34 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mx-3 space-y-4">
-                            <FormTextInput
-                                id="year"
-                                label="Tahun Stambuk"
-                                placeholder="Masukan tahun Stambuk"
-                                type="text"
-                                {...register('year')}
-                                error={errors.year?.message}
-                            />
-
-                            <FormTextInput
-                                id="name"
-                                label="Nama Stambuk"
-                                placeholder="Masukan nama stambuk"
-                                {...register('name')}
-                                error={errors.name?.message}
+                            <div className="pt-2">
+                                <Label>Tahun Stambuk *  </Label>
+                                <YearPicker 
+                                
+                                    startYear={new Date().getFullYear() - 5}
+                                    endYear={new Date().getFullYear() + 2}
+                                    value={parseInt(defaultValues?.curriculum_year || new Date().getFullYear().toString())}
+                                    onSelect={handleYearChange}
+                                />
+                            </div>
+                            <Controller
+                                name="curriculums_id"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormSelectInput
+                                        id="curriculums_id"
+                                        label="Kurikulum *"
+                                        value={field.value}
+                                        onValueChange={field.onChange}
+                                        error={errors.curriculums_id?.message}
+                                    >
+                                        {Curriculum.map((Curi: any) => (
+                                            <SelectItem key={Curi.id} value={String(Curi.id)}>
+                                                {Curi.code}
+                                            </SelectItem>
+                                        ))}
+                                    </FormSelectInput>
+                                )}
                             />
                             <Controller
                                 name="study_programs_id"
@@ -121,7 +139,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="study_programs_id"
-                                        label="Prodi"
+                                        label="Prodi *"
                                         value={field.value}
                                         onValueChange={field.onChange}
                                         error={errors.study_programs_id?.message}
@@ -135,31 +153,19 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 )}
                             />
                             <FormTextInput
+                                id="name"
+                                label="Angkatan *"
+                                placeholder="Masukan Angkatan ke"
+                                {...register('name')}
+                                error={errors.name?.message}
+                            />
+                            <FormTextInput
                                 id="ukt"
                                 label="UKT"
                                 placeholder="Masukan Jumlah Ukt"
                                 type="number"
                                 {...register('ukt', { valueAsNumber: true })}
                                 error={errors.ukt?.message}
-                            />
-                            <Controller
-                                name="curriculums_id"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="curriculums_id"
-                                        label="Tahun Kurikulum"
-                                        value={field.value}
-                                        onValueChange={field.onChange}
-                                        error={errors.curriculums_id?.message}
-                                    >
-                                        {Curriculum.map((Curi: any) => (
-                                            <SelectItem key={Curi.id} value={String(Curi.id)}>
-                                                {Curi.code}
-                                            </SelectItem>
-                                        ))}
-                                    </FormSelectInput>
-                                )}
                             />
                             {/* <FormTextInput
                                     id="description"

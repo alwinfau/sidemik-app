@@ -55,11 +55,11 @@ export const columns = (
     },
     {
         accessorKey: 'year',
-        header: 'Tahun',
+        header: 'Tahun Stambuk',
         cell: ({ row }) => row.original.year.slice(0, 4),
     },
     {
-        header: 'Tahun Kurikulum',
+        header: ' Kurikulum',
         accessorFn: (row) => row.curriculums?.code ?? null,
         id: 'curriculum',
     },
@@ -68,7 +68,7 @@ export const columns = (
         accessorFn: (row) => row.study_programs?.idn_sp_name ?? null,
         id: 'study_program',
     },
-    { accessorKey: 'name', header: 'Nama Stambuk' },
+    { accessorKey: 'name', header: 'Angkatan' },
     { 
         accessorKey: 'ukt', 
         header: 'UKT',
