@@ -148,7 +148,7 @@ useEffect(() => {
                     render={({ field }) => (
                     <FormSelectInput
                         id="semester"
-                        label="Semester *"
+                        label={<> Semester <span className="text-red-500">*</span></>}
                         value={field.value}
                         onValueChange={field.onChange}
                         error={errors.semester?.message}
@@ -169,7 +169,7 @@ useEffect(() => {
                     render={({ field }) => (
                     <FormSelectInput
                         id="academic_year_id"
-                        label="Tahun Akademik *"
+                        label={<> tahun akademik <span className="text-red-500">*</span></>}
                         value={String(field.value)}
                         onValueChange={field.onChange}
                         error={errors.academic_year_id?.message}
@@ -186,7 +186,7 @@ useEffect(() => {
 
                 <FormTextInput
                     id="name"
-                    label="Nama *"
+                    label={<> Nama <span className="text-red-500">*</span></>}
                     placeholder="Masukan nama periode akademik"
                     type="text"
                     {...register('name')}

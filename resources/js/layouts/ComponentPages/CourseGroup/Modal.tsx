@@ -84,14 +84,14 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="code"
                                 placeholder="Masukan Kode Kelompok Mata Kuliah"
-                                label="Code *"
+                                label={<> Kode <span className="text-red-500">*</span></>}
                                 type="text"
                                 {...register('code')}
                                 error={errors.code?.message}
                             />
                             <FormTextInput
                                 id="name"
-                                label=" Kelompok Mata kuliah *"
+                                label={<>Kelompok Mata Kuliah <span className="text-red-500">*</span></>}
                                 placeholder="Masukan Nama Kelompok Mata Kuliah"
                                 type="text"
                                 {...register('name')}

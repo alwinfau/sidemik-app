@@ -141,14 +141,14 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                         </div>
 
                             <DateInput
-                                label="Tanggal Mulai *"
+                                label={<> Tanggal Mulai <span className="text-red-500">*</span></>}
                                 id="start_date"
                                 placeholder="Enter Certificate Date"
                                 register={register('start_date')}
                                 error={errors.start_date}
                             />
                             <DateInput
-                                label="Tanggal Selesai *"
+                                label={<> Tanggal Selesai <span className="text-red-500">*</span></>}
                                 id="end_date"
                                 placeholder="Enter Valid From"
                                 register={register('end_date')}
@@ -156,7 +156,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
                             <FormTextInput
                                 id="description"
-                                label="Keterangan"
+                                label={<> Keterangan <span className="text-red-500">*</span></>}
                                 placeholder="Masukan keterangan dari tahun akademik"
                                 type="textarea"
                                 {...register('description')}
