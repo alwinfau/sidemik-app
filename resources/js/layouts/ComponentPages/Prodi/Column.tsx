@@ -22,9 +22,6 @@ export type Proditype = {
     faculty: {
         name: string;
     };
-    academic_period: {
-        name: string;
-    };
     final_project_type: {
         name: string;
     };

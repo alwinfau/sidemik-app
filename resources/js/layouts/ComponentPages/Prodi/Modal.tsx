@@ -34,7 +34,6 @@ const schema = z.object({
     program_learning_outcomes: z.string().nullable(),
     max_semester: z.number().positive(),
     faculty_id: z.string(),
-    academic_periods_id: z.string(),
     final_project_types_id: z.string(),
     status: z.boolean(),
 });
@@ -71,7 +70,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 program_learning_outcomes: defaultValues.program_learning_outcomes || '',
                 max_semester: defaultValues.max_semester || null,
                 faculty_id: String(defaultValues.faculty_id) || '',
-                academic_periods_id: String(defaultValues.academic_periods_id) || '',
                 final_project_types_id: String(defaultValues.final_project_types_id) || '',
                 status: Boolean(defaultValues.status),
             });
@@ -92,7 +90,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 program_learning_outcomes: '',
                 max_semester: null,
                 faculty_id: '',
-                academic_periods_id: '',
                 final_project_types_id: '',
                 status: true,
             });
@@ -109,12 +106,41 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         try {
             const result = await submit(data, defaultValues?.id);
             if (result != null && !isSubmitting && !defaultValues) {
-                reset();
+                reset({
+                    sp_code: '',
+                    idn_sp_name: '',
+                    eng_sp_name: '',
+                    sp_short_name: '',
+                    sp_address: '',
+                    sp_phone: '',
+                    sp_email_address: '',
+                    sp_web_address: '',
+                    sp_description: '',
+                    sp_vision: '',
+                    sp_mission: '',
+                    sp_competencies: '',
+                    program_learning_outcomes: '',
+                    max_semester: null,
+                    faculty_id: '',
+                    final_project_types_id: '',
+                    status: true,
+                });
             }
         } catch (error: any) {
+            const errorsData = error?.data;
+            let lastErrorMessage = '';
+            let firstErrorMessage = error.meta.message;
+            
+            Object.entries(errorsData).forEach(([field, messages], index) => {
+                const messageText = (messages as string[])[0];
+                lastErrorMessage = messageText;
+            });
+            
+            let finalErrorMessage = firstErrorMessage.includes('Duplicate record') ? firstErrorMessage : lastErrorMessage;
+            
             setError('root', {
                 type: 'manual',
-                message: error?.response?.meta?.message || 'Something went wrong',
+                message: finalErrorMessage,
             });
         }
     };
@@ -142,25 +168,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         {Facultas.map((Fakultas: any) => (
                                             <SelectItem key={Fakultas.id} value={String(Fakultas.id)}>
                                                 {Fakultas.name}
-                                            </SelectItem>
-                                        ))}
-                                    </FormSelectInput>
-                                )}
-                            />
-                            <Controller
-                                name="academic_periods_id"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="academic_periods_id"
-                                        label="Periode Akademik *"
-                                        value={field.value}
-                                        onValueChange={field.onChange}
-                                        error={errors.academic_periods_id?.message}
-                                    >
-                                        {AcademicPeriod.map((Academic: any) => (
-                                            <SelectItem key={Academic.id} value={String(Academic.id)}>
-                                                {Academic.name}
                                             </SelectItem>
                                         ))}
                                     </FormSelectInput>

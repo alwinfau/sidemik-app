@@ -149,28 +149,29 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
     };
     
     const [filterMatkulPil, setFilterMatkulPil] = useState<any[]>([]);
-    
+    console.log(filterMatkulPil)
+
     const getProdiFromCurri = (curriculums_id: string) => {
         const selectedCurriculum = curriculum.find((item: any) => item.id === Number(curriculums_id));
         return selectedCurriculum.study_program.id;
+
     };
     const [selectedStudyProgramId, setSelectedStudyProgramId] = useState<string | null>(null);
     
     const handleCurriculumChange = (curriculums_id: string) => {
         setValue('curriculums_id', curriculums_id);
-        const selectedCurriculum = curriculum.find((item: any) => item.id === Number(curriculums_id));
-        if (selectedCurriculum) {
-            const studyProgramId = selectedCurriculum.study_programs_id?.id;
-            setSelectedStudyProgramId(studyProgramId ? String(studyProgramId) : null);
+        const study_programs_id = getProdiFromCurri(curriculums_id);
+
+        if (study_programs_id) {
             const filtered = MatkulPil.filter((matkul: any) => 
-                String(matkul.study_programs_id.id) === String(studyProgramId)
+                String(matkul.study_program.id) === String(study_programs_id)
             );
             setFilterMatkulPil(filtered);
         } else {
-            setSelectedStudyProgramId(null);
             setFilterMatkulPil([]);
         }
-    };
+        
+    }
     
 
     // Fungsi untuk mendapatkan prefix dari kode
@@ -189,8 +190,9 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
 
         // Filter kelompok mata kuliah berdasarkan kode yang mengandung prefix
         const newFilteredGroups = courseGroups.filter(
-            (group: any) => group.code?.toUpperCase().includes(prefix) || group.name.toUpperCase().includes(prefix),
+            (group: any) => group.code?.toUpperCase().includes(prefix),
         );
+
 
         setFilteredGroups(newFilteredGroups);
 
@@ -229,7 +231,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     >
                                         {curriculum.map((Curr: any) => (
                                             <SelectItem key={Curr.id} value={String(Curr.id)}>
-                                                {`Kurikulum ${Curr.curriculum_year} - ${Curr.study_program.idn_sp_name}`}
+                                                {Curr.code}
                                             </SelectItem>
                                         ))}
                                     </FormSelectInput>

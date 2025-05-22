@@ -109,7 +109,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4">
                             <div className="pt-2">
-                                <Label>Tahun Kurikulum</Label>
+                                <Label>Tahun Kurikulum * </Label>
                                 <YearPicker 
                                     startYear={new Date().getFullYear() - 5}
                                     endYear={new Date().getFullYear() + 2}
@@ -123,7 +123,11 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="study_programs_id"
-                                        label="Prodi"
+                                        label={
+                                            <>
+                                            Prodi <span style={{color: 'red'}}>*</span>
+                                            </>
+                                        }
                                         value={field.value}
                                         onValueChange={field.onChange}
                                         error={errors.study_programs_id?.message}
@@ -139,7 +143,11 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="code"
                                 placeholder="Masukan Kode Kurikulum"
-                                label="code *"
+                                label={
+                                    <>
+                                    Kode <span style={{color: 'red'}}>*</span>
+                                    </>
+                                }
                                 {...register('code')}
                                 error={errors.code?.message}
                             />
