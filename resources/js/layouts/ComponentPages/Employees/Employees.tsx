@@ -91,12 +91,12 @@ const EmployeesPage = () => {
                 columns={columns(
                   (row) => {
                         setEditing(row);
-                        setModalOpen(true); // Untuk Edit
+                        setModalOpen(true); 
                         setModalDetailOpen(false);
                     },
                     (row) => {
                         setEditing(row);
-                        setModalDetailOpen(true); // Untuk Detail
+                        setModalDetailOpen(true);
                         setModalOpen(false);
                     },
                     (id) => setDeleteId(parseInt(id)),

@@ -23,6 +23,7 @@ import {
     TrophyIcon,
     UserPlus2Icon,
     Users,
+    Library ,
     Users2,
 } from 'lucide-react';
 import * as React from 'react';
@@ -105,7 +106,7 @@ const data: AppData = {
         {
             title: 'Akademik',
             url: '#',
-            isActive:true,
+            icon: Library ,
             items: [
                 {
                     title: 'Academic Year',
@@ -181,7 +182,6 @@ const data: AppData = {
             title: 'Supplementary Data',
             url: '#',
             icon: LucideLandmark,
-            isActive: false,
             items: [
                 {
                     title: 'Profile University',

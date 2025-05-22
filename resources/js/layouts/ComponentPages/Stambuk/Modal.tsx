@@ -10,6 +10,8 @@ import { z } from 'zod';
 import { useStambuk } from './useStambuk';
 import YearPicker from '@/components/ui/Components_1/YearPicker';
 import { Label } from '@/components/ui/label';
+import { useState } from 'react';
+
 
 type ModalProps = {
     open: boolean;
@@ -34,13 +36,19 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         handleSubmit,
         reset,
         setError,
+        watch,
         setValue,
         control,
         formState: { errors, isSubmitting },
     } = useForm<FormInputs>({
         resolver: zodResolver(schema),
     });
-
+    
+    const { Curriculum, Prodi, fectRelasi } = useStambuk();
+    useEffect(() => {
+        fectRelasi();
+    }, []);
+    
     useEffect(() => {
         if (defaultValues) {
             reset({
@@ -62,11 +70,9 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             });
         }
     }, [defaultValues, reset]);
-    const { Curriculum, Prodi, fectRelasi } = useStambuk();
 
-    useEffect(() => {
-        fectRelasi();
-    }, []);
+    
+
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
         try {
             const result = await submit(data, defaultValues?.id);
@@ -94,6 +100,18 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
     const handleYearChange = (year: number) => {
         setValue('year', String(year));
     };
+
+    const [filteredCurriculums, setFilteredCurriculums] = useState<any[]>([]);
+    useEffect(() => {
+        const selectedProdiId = watch('study_programs_id');
+        if (selectedProdiId) {
+            const filtered = Curriculum.filter((cur: any) => String(cur.study_programs_id) === String(selectedProdiId));
+            setFilteredCurriculums(filtered);
+        } else {
+            setFilteredCurriculums([]);
+        }
+    }, [watch('study_programs_id'), Curriculum]);
+    
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
@@ -115,25 +133,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 />
                             </div>
                             <Controller
-                                name="curriculums_id"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormSelectInput
-                                        id="curriculums_id"
-                                        label="Kurikulum *"
-                                        value={field.value}
-                                        onValueChange={field.onChange}
-                                        error={errors.curriculums_id?.message}
-                                    >
-                                        {Curriculum.map((Curi: any) => (
-                                            <SelectItem key={Curi.id} value={String(Curi.id)}>
-                                                {Curi.code}
-                                            </SelectItem>
-                                        ))}
-                                    </FormSelectInput>
-                                )}
-                            />
-                            <Controller
                                 name="study_programs_id"
                                 control={control}
                                 render={({ field }) => (
@@ -147,6 +146,25 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                         {Prodi.map((Study: any) => (
                                             <SelectItem key={Study.id} value={String(Study.id)}>
                                                 {Study.idn_sp_name}
+                                            </SelectItem>
+                                        ))}  
+                                    </FormSelectInput>
+                                )}
+                            />
+                            <Controller
+                                name="curriculums_id"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormSelectInput
+                                        id="curriculums_id"
+                                        label="Kurikulum *"
+                                        value={field.value}
+                                        onValueChange={field.onChange}
+                                        error={errors.curriculums_id?.message}
+                                    >
+                                        {filteredCurriculums.map((Curi: any) => (
+                                            <SelectItem key={Curi.id} value={String(Curi.id)}>
+                                                {Curi.code}
                                             </SelectItem>
                                         ))}
                                     </FormSelectInput>

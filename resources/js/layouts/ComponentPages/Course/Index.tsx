@@ -81,7 +81,6 @@ const CoursePages = () => {
                                         id="prodiFilter"
                                         value={prodiFilter}
                                         onValueChange={(value) => setProdiFilter(String(value))}
-
                                     >
                                         {Prodi.map((data: any) => (
                                             <SelectItem key={data.id} value={String(data.id)}>

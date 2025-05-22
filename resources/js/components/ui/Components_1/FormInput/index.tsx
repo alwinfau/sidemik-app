@@ -67,7 +67,7 @@ export const FormSelectInput: React.FC<FormSelectInputProps> = ({
   children
 }) => {
   return (
-    <div className="flex-col space-y-1">
+    <div className="flex-col space-y-1 bg-transparent">
       {label && <Label htmlFor={id}>{label}</Label>}
       <Select value={value} onValueChange={onValueChange}>
         <SelectTrigger id={id}>

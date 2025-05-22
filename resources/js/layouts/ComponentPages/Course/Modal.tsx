@@ -215,7 +215,11 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="curriculums_id"
-                                        label="Kurikulum *"
+                                        label={
+                                            <>
+                                            Kurikulum <span style={{color: 'red'}}>*</span>
+                                            </>
+                                        }
                                         value={field.value}
                                         onValueChange={(val) => {
                                             field.onChange(val);
@@ -233,7 +237,11 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
                             <FormTextInput
                                 id="code"
-                                label="Kode *"
+                                label={
+                                    <>
+                                    Kode <span style={{color: 'red'}}>*</span>
+                                    </>
+                                }
                                 placeholder="Isi Kode Mata Kuliah"
                                 type="text"
                                 {...register('code', {
@@ -243,7 +251,11 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
                             <FormTextInput
                                 id="semester"
-                                label="Semester *"
+                                label={
+                                    <>
+                                    Semester <span style={{color: 'red'}}>*</span>
+                                    </>
+                                }
                                 type="number"
                                 {...register('semester')}
                                 placeholder="Masukan Jumlah Semester"
@@ -251,7 +263,11 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
                             <FormTextInput
                                 id="name_idn"
-                                label="Mata Kuliah *"
+                                label={
+                                    <>
+                                    MataKuliah <span style={{color: 'red'}}>*</span>
+                                    </>
+                                }
                                 placeholder="Masukan Nama Mata Kuliah"
                                 type="text"
                                 {...register('name_idn')}
@@ -259,7 +275,11 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
                             <FormTextInput
                                 id="name_eng"
-                                label="Mata Kuliah (ENG) *"
+                                label={
+                                    <>
+                                    Mata Kuliah(ENG) <span style={{color: 'red'}}>*</span>
+                                    </>
+                                }
                                 placeholder="Masukan Nama Matkul Dalam B.Ing"
                                 type="text"
                                 {...register('name_eng')}
@@ -267,7 +287,11 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
                             <FormTextInput
                                 id="theory_sks"
-                                label="SKS Teori *"
+                                label={
+                                    <>
+                                    SKS Teori <span style={{color: 'red'}}>*</span>
+                                    </>
+                                }
                                 type="number"
                                 placeholder="Masukan Jumlah SKS teori"
                                 {...register('theory_sks')}
@@ -276,7 +300,11 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="practical_sks"
                                 placeholder="Masukan Jumlah SKS Praktek"
-                                label="SKS Praktek *"
+                                label={
+                                    <>
+                                    SKS Praktik <span style={{color: 'red'}}>*</span>
+                                    </>
+                                }
                                 type="number"
                                 {...register('practical_sks')}
                                 error={errors.practical_sks?.message}
@@ -295,7 +323,11 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="course_types_id"
-                                        label="Jenis Mata Kuliah *"
+                                        label={
+                                            <>
+                                            Jenis Mata Kuliah <span style={{color: 'red'}}>*</span>
+                                            </>
+                                        }
                                         value={field.value}
                                         onValueChange={(val) => {
                                             field.onChange(val);
@@ -318,7 +350,11 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="course_groups_id"
-                                        label="Kelompok Mata Kuliah *"
+                                        label={
+                                            <>
+                                            Kelompok Mata Kuliah <span style={{color: 'red'}}>*</span>
+                                            </>
+                                        }
                                         value={field.value}
                                         onValueChange={field.onChange}
                                         error={errors.course_groups_id?.message}
@@ -338,7 +374,11 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     render={({ field }) => (
                                         <FormSelectInput
                                             id="elective_course_groups_id"
-                                            label="Mata Kuliah Pilihan *"
+                                            label={
+                                                <>
+                                                Mata Kuliah Peminatan <span style={{color: 'red'}}>*</span>
+                                                </>
+                                            }
                                             value={field.value ?? ''}
                                             onValueChange={field.onChange}
                                             error={errors.elective_course_groups_id?.message}
