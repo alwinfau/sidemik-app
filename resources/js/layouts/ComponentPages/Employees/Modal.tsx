@@ -188,6 +188,8 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             if (data.file) {
                 if (data.file instanceof File) {
                     formData.append('file', data.file);
+                     formData.append('old_file_path', defaultValues?.foto);
+                   
 
                     const foto: any = await post('/upload-file', formData);
                     if (foto.meta.code === 200) {
@@ -241,7 +243,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="nip"
                                 type="text"
-                                label="NIP *"
+                                label={<> NIP <span className="text-red-500">*</span></>}
                                 placeholder="Masukan NIP"
                                 {...register('nip')}
                                 error={errors.nip?.message}
@@ -249,7 +251,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="name"
                                 type="text"
-                                label="Nama *"
+                                label={<> Nama <span className="text-red-500">*</span></>}
                                 placeholder="Masukan Name"
                                 {...register('name')}
                                 error={errors.name?.message}
@@ -275,7 +277,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="back_title"
                                 type="text"
-                                label="Gelar Belakang * "
+                                label={<> Gelar Belakang <span className="text-red-500">*</span></>}
                                 placeholder="Masukan Nama Belakang"
                                 {...register('back_title')}
                                 error={errors.back_title?.message}
@@ -286,7 +288,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="gender"
-                                        label="Jenis Kelamin *"
+                                        label={<> Jenis Kelamin <span className="text-red-500"> * </span></>}
                                         value={field.value}
                                         onValueChange={field.onChange}
                                         error={errors.gender?.message}
@@ -302,7 +304,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="religion"
-                                        label="Agama *"
+                                        label={<> Agama <span className="text-red-500">*</span></>}
                                         value={field.value}
                                         onValueChange={field.onChange}
                                         error={errors.religion?.message}
@@ -319,14 +321,14 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="birth_place"
                                 type="text"
-                                label="Tempat Lahir *"
+                                label={<> Tempat Lahir <span className="text-red-500">*</span></>}
                                 placeholder="Masukan Tempat Lahir"
                                 {...register('birth_place')}
                                 error={errors.birth_place?.message}
                             />
                             <DateInput
                                 id="birth_date"
-                                label="Tanggal Lahir *"
+                                label={<> Tanggal Lahir <span className="text-red-500">*</span></>}
                                 placeholder="Masukan Tanggal Lahir"
                                 register={register('birth_date')}
                                 error={errors.birth_date}
@@ -334,7 +336,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="email_pt"
                                 type="text"
-                                label="Email PT *"
+                                label={<> Email PT <span className="text-red-500">*</span></>}
                                 placeholder="Masukan Email PT"
                                 {...register('email_pt')}
                                 error={errors.email_pt?.message}
@@ -342,7 +344,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="phone"
                                 type="text"
-                                label="Nomor Telepon *"
+                                label={<> No. Telephone <span className="text-red-500">*</span></>}
                                 placeholder="Masukan Nomor Telepon"
                                 {...register('phone')}
                                 error={errors.phone?.message}
@@ -350,7 +352,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="emergency_phone_1"
                                 type="text"
-                                label="Nomor Telepon Darurat 1 *"
+                                label={<> Nomor Telepon Darurat 1 <span className="text-red-500">*</span></>}
                                 placeholder="Masukan Nomor Telepon Darurat 1"
                                 {...register('emergency_phone_1')}
                                 error={errors.emergency_phone_1?.message}
@@ -409,7 +411,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="type"
-                                        label="Tipe *"
+                                        label={<> Tipe <span className="text-red-500">*</span></>}
                                         value={String(field.value)}
                                         onValueChange={(value) => field.onChange(value)}
                                         error={errors.type?.message}
