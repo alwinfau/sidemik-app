@@ -3,24 +3,24 @@ import { Button } from '@/components/ui/button';
 import { ColumnDef } from '@tanstack/react-table';
 import { Pencil, Trash2 } from 'lucide-react';
 
-export type AcademicYearType = {
+export type BobotNilaiType = {
     id?: number;
-    academic_year: string;
-    name: string;
-    start_date: string;
-    end_date: string;
-    description: string;
-    is_active: boolean
-};
+    uts: number;
+    uas: number;
+    tugas: number;
+    quiz: number;
+    partisipatif: number;
+    proyek: number;
+}
 
-export const columns = (
-    onEdit: (row: AcademicYearType) => void,
-    onDelete: (id: string) => void,
+export const Columns = (
+    onEdit: (row: BobotNilaiType) => void,
+    onDelete : (id: string) => void,
     selectedIds: number[],
     toggleSelect: (id: number) => void,
     toggleSelectAll: (checked: boolean) => void,
     allSelected: boolean,
-): ColumnDef<AcademicYearType>[] => [
+): ColumnDef<BobotNilaiType>[] =>[
     {
         id: 'select',
         header: ({ table }) => (
@@ -48,19 +48,12 @@ export const columns = (
         header: () => <div className="text-center">No</div>,
         cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
     },
-    
-    { accessorKey: 'name', header: 'Tahun Ajaran' },
-    { accessorKey: 'start_date', header: 'Tahun Mulai' },
-    { accessorKey: 'end_date', header: 'Tahun Berakhir' },
-    
-    {
-        accessorKey: 'is_active',
-        header: 'Status',
-        cell: ({ getValue }) =>  
-        <div className={`font-semibold ${ getValue<boolean>() ? 'text-green-600' : 'text-red-600' }`}>
-            {getValue<boolean>() ? 'Aktif' : 'Tidak Aktif'}
-        </div>  
-    },
+    { accessorKey: 'uts', header: 'UTS'},
+    { accessorKey: 'uas', header: 'UAS'},
+    { accessorKey: 'tugas', header: 'Tugas'},
+    { accessorKey: 'quiz', header: 'Quiz'},
+    { accessorKey: 'partisipatif', header: 'Partisipatif'},
+    { accessorKey: 'proyek', header: 'proyek'},
     {
         id: 'actions',
         header: 'Actions',
@@ -75,4 +68,4 @@ export const columns = (
             </div>
         ),
     },
-];
+]

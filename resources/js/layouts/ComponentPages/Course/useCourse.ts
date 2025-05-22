@@ -9,17 +9,17 @@ export const useCourse = () => {
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
-    const [prodis, setProdis] = useState<{ id: number; name: string }[]>([]);
     const [selectedProdiId, setSelectedProdiId] = useState<number | null>(null);    
     const [courseTypes, setCourseTypes] = useState<any>([]);
     const [courseGroups, setCourseGroups] = useState<any>([]);
     const [curriculum, setCurriculum] = useState<any>([]);
     const [MatkulPil, setMatkulPil] = useState<any>([]);
+    const [ Prodi, setProdi ] = useState<any>([])
 
-    const fetchData = async (currentPage = 1, prodiId?: number | null) => {
+    const fetchData = async (currentPage = 1, prodiId?: string) => {
         try {
             setIsLoading(true);
-            const url = `/course?page=${currentPage}&limit=10${prodiId ? `&prodi_id=${prodiId}` : ''}`;
+            const url = `/course?page=${currentPage}&limit=10${prodiId ? `&prodi=${prodiId}` : ''}`;
             const res: any = await get(url);
             setData(res.data.data);
             setPage(res.data.current_page);
@@ -46,11 +46,20 @@ export const useCourse = () => {
             const resMatkulPil: any = await get('/elective-course-groups');
             setMatkulPil(resMatkulPil.data);
 
-            
         } catch (err) {
             console.error('Error fetching:', err);
         }
     };
+
+    const filterProdi = async () => {
+        try {
+            const resProdi : any = await get('/study-program');
+            setProdi(resProdi.data);
+        } catch (error) {
+            console.error("Error fetching: ", error);
+        }
+    };
+    
 
     const handleSubmit = async (data: Omit<CourseType, 'id'>, id?: number, onSuccess?: () => void) => {
         try {
@@ -112,5 +121,9 @@ export const useCourse = () => {
         curriculum,
         MatkulPil,
         fectRelasi,
+        Prodi, 
+        selectedProdiId,
+        setSelectedProdiId, 
+        filterProdi,
     };
 };

@@ -199,7 +199,6 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
             setValue('course_groups_id', String(newFilteredGroups[0].id));
         }
     };
-
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-hidden p-6">
@@ -226,7 +225,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     >
                                         {curriculum.map((Curr: any) => (
                                             <SelectItem key={Curr.id} value={String(Curr.id)}>
-                                                {Curr.curriculum_year}
+                                                {`Kurikulum ${Curr.curriculum_year} - ${Curr.study_program.idn_sp_name}`}
                                             </SelectItem>
                                         ))}
                                     </FormSelectInput>
