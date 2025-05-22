@@ -39,7 +39,7 @@ const CourseTypes = () => {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Jenis Mata Kuliah" />
             <div className="m-6">
-                <div className="flex items-center justify-between">
+                <div className="mb-4 flex justify-between items-center">
                     <h2 className="text-3xl font-bold">Jenis Mata Kuliah</h2>
                     <Button
                         onClick={() => {

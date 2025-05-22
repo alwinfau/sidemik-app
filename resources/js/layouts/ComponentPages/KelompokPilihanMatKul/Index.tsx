@@ -12,7 +12,7 @@ import ModalForm from './Modal';
 
 import { useMatkulPilihan } from './usePilihanMatKul';
 
-const breadcrumbs: BreadcrumbItem[] = [{ title: 'Matkul Pilihan', href: '/elective-course-groups' }];
+const breadcrumbs: BreadcrumbItem[] = [{ title: 'Kelompok Peminatan', href: '/elective-course-groups' }];
 
 const pilihan = () => {
     const { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useMatkulPilihan();
@@ -33,16 +33,16 @@ const pilihan = () => {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Mata Kuliah Pilihan" />
+            <Head title="Kelompok Peminatan" />
             <div className="m-6">
                 <div className="mb-4 flex justify-between">
-                    <h2 className="text-2xl font-bold">Mata Kuliah Pilihan</h2>
+                    <h2 className="text-2xl font-bold">Kelompok Peminatan</h2>
                     <Button
                         onClick={() => {
                             setEditing(undefined);
                             setModalOpen(true);
                         }}
-                        className="flex items-center rounded bg-green-500 p-3 font-bold text-white hover:bg-green-600"
+                        className="flex items-center rounded bg-green-600 p-3 font-bold text-white hover:bg-green-500"
                     >
                         <CirclePlus className="h-6 w-6" /> Add Mata Kuliah Pilihan
                     </Button>

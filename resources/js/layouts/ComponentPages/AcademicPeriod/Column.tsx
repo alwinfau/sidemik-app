@@ -5,23 +5,22 @@ import { Pencil, Trash2 } from 'lucide-react';
 
 export type PeriodeAcademicType = {
     id?: number;
-
     academic_year: {
-        academic_year: string;
+        name: string;
     };
     semester: string;
     name: string;
     short_name: string;
-    start_date: Date;
-    end_date: Date;
-    start_midterm_exam: Date;
-    end_midterm_exam: Date;
-    start_final_exam: Date;
-    end_final_exam: Date;
+    start_date: string;
+    end_date: string;
+    start_midterm_exam: string;
+    end_midterm_exam: string;
+    start_final_exam: string;
+    end_final_exam: string;
     number_of_meetings: number;
     min_presence: number;
     is_active: boolean;
-    descritpion: Text;
+    descritpion: string;
 };
 
 export const columns = (
@@ -61,17 +60,41 @@ export const columns = (
     },
     {
         header: 'Tahun Ajaran',
-        accessorFn: (row) => row.academic_year?.academic_year ?? null,
+        accessorFn: (row) => row.academic_year?.name ?? null,
         id: 'academic_year',
     },
     { accessorKey: 'semester', header: 'Semester' },
-    { accessorKey: 'name', header: 'Nama' },
-    { accessorKey: 'start_date', header: 'Mulai' },
-    { accessorKey: 'end_date', header: 'Hingga' },
-    { accessorKey: 'start_midterm_exam', header: 'Tanggal Mulai UTS' },
-    { accessorKey: 'end_midterm_exam', header: 'Tanggal Selesai UTS' },
-    { accessorKey: 'start_final_exam', header: 'Tanggal Mulai UAS' },
-    { accessorKey: 'end_final_exam', header: 'Tanggal Selesai UAS' },
+    { accessorKey: 'name', header: () => <div className="w-30">Nama</div>, cell: ({ row }) => <div className="w-22">{row.getValue('name')}</div> },
+    {
+        accessorKey: 'start_date',
+            header: () => <div className="w-10">Mulai</div>, 
+            cell: ({ row }) => <div className="w-20 truncate">{row.getValue('start_date')}</div> 
+    },
+    {
+        accessorKey: 'start_midterm_exam',
+        header: () => <div className="w-20">Tanggal Mulai UTS</div>, 
+        cell: ({ row }) => <div className="w-20 truncate">{row.getValue('start_midterm_exam')}</div> 
+    },
+    {
+        accessorKey: 'end_midterm_exam',
+        header: () => <div className="w-10">Tanggal Selesai UTS</div>, 
+        cell: ({ row }) => <div className="w-20 truncate">{row.getValue('end_midterm_exam')}</div> 
+    },
+    {
+        accessorKey: 'start_final_exam',
+        header: () => <div className="w-10">Tanggal Mulai UAS</div>, 
+        cell: ({ row }) => <div className="w-2- truncate">{row.getValue('start_final_exam')}</div> 
+    },
+    {
+        accessorKey: 'end_final_exam',
+        header: () => <div className="w-10">Tanggal Selsei UAS</div>, 
+        cell: ({ row }) => <div className="w-20 truncate">{row.getValue('end_final_exam')}</div> 
+    },
+    {
+        accessorKey: 'end_date',
+        header: () => <div className="w-10">Berakhir</div>, 
+        cell: ({ row }) => <div className="w-20 truncate">{row.getValue('end_date')}</div> 
+    },
     {
         accessorKey: 'number_of_meetings',
         header: 'Jumlah Pertemuan',
@@ -85,7 +108,9 @@ export const columns = (
     {
         accessorKey: 'is_active',
         header: 'Status',
-        cell: ({ getValue }) => <div className="text-center">{getValue<boolean>() ? 'Aktif' : 'Tidak Aktif'}</div>,
+        cell: ({ getValue }) => <div className={`font-semibold ${ getValue<boolean>() ? 'text-green-600' : 'text-red-600' }`}>
+        {getValue<boolean>() ? 'Aktif' : 'Tidak Aktif'}
+    </div>  ,
     },
     {
         accessorKey: 'description',

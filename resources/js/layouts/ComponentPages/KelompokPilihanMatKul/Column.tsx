@@ -19,17 +19,20 @@ export const columns = (onEdit: (row: MatkulPilihan) => void, onDelete: (id: str
         header: () => <div className="text-center">No</div>,
         cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
     },
+    {
+        header: 'Prodi',
+        accessorFn: (row) => row.study_program?.idn_sp_name ?? null,
+        id: 'study_program',
+    },
     { accessorKey: 'code', header: 'Kode' },
     { accessorKey: 'name', header: 'Mata Kuliah Pilihan' },
     {
         accessorKey: 'is_active',
         header: 'Status',
-        cell: ({ getValue }) => <div>{getValue<boolean>() ? 'Aktif' : 'Tidak Aktif'}</div>,
-    },
-    {
-        header: 'Prodi',
-        accessorFn: (row) => row.study_program?.idn_sp_name ?? null,
-        id: 'study_program',
+        cell: ({ getValue }) =>  
+        <div className={`font-semibold ${ getValue<boolean>() ? 'text-green-600' : 'text-red-600' }`}>
+            {getValue<boolean>() ? 'Aktif' : 'Tidak Aktif'}
+        </div>  
     },
     {
         id: 'actions',

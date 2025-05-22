@@ -15,11 +15,9 @@ const breadcrumbs: BreadcrumbItem[] = [{ title: 'Academic Year', href: '/academi
 
 const AcademicYearPage = () => {
     const { data, isLoading, toast, fetchData, handleSubmit, handleDelete, setToast, page, setPage, totalPages } = useAcademicYear();
-
     const [modalOpen, setModalOpen] = useState(false);
     const [editing, setEditing] = useState<AcademicYearType | undefined>();
     const [deleteId, setDeleteId] = useState<number | null>(null);
-
     // State untuk multiple selection
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
     // State untuk hapus banyak
