@@ -16,7 +16,7 @@ export type EmployeesType = {
     birth_date: string;
     email_pt: string;
     phone: string;
-    emergency_phone: string;
+    emergency_phone_1: string;
     relationship_1: string;
     emergency_phone_2: string;
     relationship_2: string;
@@ -115,7 +115,7 @@ export const columns = (
     // { accessorKey: 'birth_date', header: 'Tanggal Lahir' },
     // { accessorKey: 'email_pt', header: 'Email PT' },
     { accessorKey: 'phone', header: 'Handphone' },
-    // { accessorKey: 'emergency_phone', header: 'Handphone Darurat', cell: ({ getValue }) => getValue() ?? '-' },
+    // { accessorKey: 'emergency_phone_1', header: 'Handphone Darurat', cell: ({ getValue }) => getValue() ?? '-' },
     // { accessorKey: 'relationship_1', header: 'Hubungan 1', cell: ({ getValue }) => getValue() ?? '-' },
     // { accessorKey: 'emergency_phone_2', header: 'Handphone Darurat 2', cell: ({ getValue }) => getValue() ?? '-' },
     // { accessorKey: 'relationship_2', header: 'Hubungan 2', cell: ({ getValue }) => getValue() ?? '-' },
