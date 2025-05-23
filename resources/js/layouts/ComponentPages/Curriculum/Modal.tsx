@@ -76,10 +76,17 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
         try {
             const result = await submit(data, defaultValues?.id);
             if (result != null && !isSubmitting && !defaultValues) {
-                reset();
+                reset({
+                    code: '',
+                    curriculum_year: '',
+                    sks_required: null,
+                    sks_elective: null,
+                    // description: '',
+                    study_programs_id: '',
+                });
             }
         } catch (error: any) {
-            const errorsData = error?.data;
+            const errorsData = error?.response.data;
             let lastErrorMessage = '';
             let firstErrorMessage = error.meta.message;
 
@@ -108,15 +115,20 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4">
-                            <div className="pt-2">
-                                <Label>Tahun Kurikulum * </Label>
-                                <YearPicker 
+                            <div className="pt-1">
+                                <Label>
+                                    Tahun Kurikulum <span className="text-red-500">* </span>
+                                </Label>
+                                <div className="flex justify">
+                                    <YearPicker 
                                     startYear={new Date().getFullYear() - 5}
                                     endYear={new Date().getFullYear() + 2}
                                     value={parseInt(defaultValues?.curriculum_year || new Date().getFullYear().toString())}
                                     onSelect={handleYearChange}
-                                />
+                                    />
+                                </div>
                             </div>
+
                             <Controller
                                 name="study_programs_id"
                                 control={control}
@@ -153,7 +165,11 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
                             <FormTextInput
                                 id="sks_required"
-                                label="SKS Wajib"
+                                label={
+                                    <>
+                                    SKS Wajib <span style={{color: 'red'}}>*</span>
+                                    </>
+                                }
                                 placeholder="Masukan Jumlah SKS "
                                 type="number"
                                 {...register('sks_required', { valueAsNumber: true })}
@@ -161,7 +177,11 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
                             <FormTextInput
                                 id="sks_elective"
-                                label="SKS Pilihan"
+                                label={
+                                    <>
+                                    SKS Pilihan <span style={{color: 'red'}}>*</span>
+                                    </>
+                                }
                                 placeholder="Masukan Jumlah SKS pilihan"
                                 type="number"
                                 {...register('sks_elective', { valueAsNumber: true })}
@@ -174,6 +194,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     {...register('description')}
                                     error={errors.description?.message}
                                 />  */}
+                            {errors.root && <p className="text-red-600">{errors.root.message}</p>}
                             <Button
                                 type="submit"
                                 className={`mb-5 rounded px-4 py-2 font-bold text-white ${

@@ -121,9 +121,9 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4">
                         <div>
-                            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                Tahun ajaran *
-                            </label>
+                        <Label>
+                            Tahun Ajaran <span className="text-red-500">*</span>
+                        </Label>
                             <Select
                                 defaultValue={watch('name') || `${dayjs().year()}/${dayjs().year() + 1}`}
                                 onValueChange={(value) => setValue('name', value)}
@@ -156,7 +156,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
                             <FormTextInput
                                 id="description"
-                                label={<> Keterangan <span className="text-red-500">*</span></>}
+                                label='Keterangan'
                                 placeholder="Masukan keterangan dari tahun akademik"
                                 type="textarea"
                                 {...register('description')}

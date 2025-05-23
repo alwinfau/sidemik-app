@@ -10,6 +10,8 @@ import { useEffect, useState } from 'react';
 import { columns, CurriculumType } from './Column';
 import ModalForm from './Modal';
 import { useCurriculum } from './useCurriculum';
+import { FormTextInput } from '@/components/ui/Components_1/FormInput';
+import { Input } from '@/components/ui/input';
 
 const breadcrumbs: BreadcrumbItem[] = [{ title: 'Kurikulum', href: '/curriculum' }];
 
@@ -18,13 +20,15 @@ const Curiculumpage = () => {
         data,
         isLoading,
         toast,
+        totalPages,
+        page,
+        searchName,
         fetchData,
         handleSubmit,
         handleDelete,
         setToast,
-        page,
         setPage,
-        totalPages,
+        setSearchName,
     } = useCurriculum();
     const [modalOpen, setModalOpen] = useState(false);
     const [editing, setEditing] = useState<CurriculumType | undefined>();
@@ -62,27 +66,24 @@ const Curiculumpage = () => {
             return () => clearTimeout(timer);
         }
     }, [toast]);
+
     useEffect(() => {
         fetchData();
     }, []);
     
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            fetchData(1);
+        }, 200); 
+    
+        return () => clearTimeout(timeout);
+    }, [searchName]);
     
     
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Kurikulum" />
             <div className="m-6">
-                {/* <div className="flex items-center gap-2">
-                    <Input
-                        id="search"
-                        placeholder="Search. .."
-                        onChange={(e) => {
-                            setSearchTahunKurikulum(e.target.value);
-                        }}
-                        className="mt-3 max-w-sm bg-white"
-                    />
-                    <Button className="self-end">search</Button>
-                </div> */}
                 <div className="mb-4 flex justify-between">
                     <h2 className="text-2xl font-bold">Kurikulum</h2>
                     <div className="flex gap-2">
@@ -105,7 +106,53 @@ const Curiculumpage = () => {
                         <CirclePlus className="h-6 w-6" /> Add Tahun Ajaran
                     </Button>
                 </div>
-                </div>
+            </div>
+            {/* <div className='mb-4 flex justify-between'>
+            <input
+                type="text"
+                placeholder="Search curriculum..."
+                value={searchName}
+                onChange={(e) => {
+                    setSearchName(e.target.value);
+                }}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                        fetchData(1, searchName);
+                    }
+                }}
+                className="border px-2 py-1 rounded"
+            />
+            <FormTextInput
+                type='search'
+                placeholder='Search Curriculum..'
+                value={searchName}
+                onChange={(e) => {
+                    setSearchName(e.target.value);
+                }}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                        fetchData(1, searchName);
+                    }
+                }}
+                className="border px-2 py-1 rounded"
+            >
+            </FormTextInput> */}
+            <div className="mb-4 flex justify-between">
+                <FormTextInput
+                    type='search'
+                    placeholder='Search Curriculum..'
+                    value={searchName}
+                    onChange={(e) => {
+                        setSearchName(e.target.value);
+                    }}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            fetchData(1, searchName);
+                        }
+                    }}
+                    className="max-w-sm bg-white mt-3"
+                />
+            </div>
 
                 <DataTable
                     columns={columns(

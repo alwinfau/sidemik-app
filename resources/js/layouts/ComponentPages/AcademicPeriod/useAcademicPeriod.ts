@@ -56,7 +56,6 @@ export const useAcademicPriod = () => {
                 setToast({ message: 'Failed to submit Academic Period', type: 'error' });
             }
             throw error.response.data;
-            console.log(error)
         } finally {
             setIsLoading(false);
         }

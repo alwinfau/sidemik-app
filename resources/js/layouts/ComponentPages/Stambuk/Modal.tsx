@@ -122,15 +122,18 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                 <ScrollArea className="max-h-[70vh] pr-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mx-3 space-y-4">
-                            <div className="pt-2">
-                                <Label>Tahun Stambuk *  </Label>
-                                <YearPicker 
-                                
+                        <div className="pt-1">
+                                <Label>
+                                    Tahun Kurikulum <span className="text-red-500">* </span>
+                                </Label>
+                                <div className="flex justify">
+                                    <YearPicker 
                                     startYear={new Date().getFullYear() - 5}
                                     endYear={new Date().getFullYear() + 2}
                                     value={parseInt(defaultValues?.curriculum_year || new Date().getFullYear().toString())}
                                     onSelect={handleYearChange}
-                                />
+                                    />
+                                </div>
                             </div>
                             <Controller
                                 name="study_programs_id"
@@ -138,7 +141,11 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="study_programs_id"
-                                        label="Prodi *"
+                                        label={
+                                            <>
+                                            Prodi <span style={{color: 'red'}}>*</span>
+                                            </>
+                                        }
                                         value={field.value}
                                         onValueChange={field.onChange}
                                         error={errors.study_programs_id?.message}
@@ -157,7 +164,11 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="curriculums_id"
-                                        label="Kurikulum *"
+                                        label={
+                                            <>
+                                            Kurikulum <span style={{color: 'red'}}>*</span>
+                                            </>
+                                        }
                                         value={field.value}
                                         onValueChange={field.onChange}
                                         error={errors.curriculums_id?.message}
@@ -172,14 +183,22 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
                             <FormTextInput
                                 id="name"
-                                label="Angkatan *"
+                                label={
+                                    <>
+                                    Angkatan <span style={{color: 'red'}}>*</span>
+                                    </>
+                                }
                                 placeholder="Masukan Angkatan ke"
                                 {...register('name')}
                                 error={errors.name?.message}
                             />
                             <FormTextInput
                                 id="ukt"
-                                label="UKT"
+                                label={
+                                    <>
+                                    UKT <span style={{color: 'red'}}>*</span>
+                                    </>
+                                }
                                 placeholder="Masukan Jumlah Ukt"
                                 type="number"
                                 {...register('ukt', { valueAsNumber: true })}

@@ -154,7 +154,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 {...register('short_name')}
                                 error={errors.short_name?.message}
                             />
-                            <FormTextInput
+                            {/* <FormTextInput
                                 placeholder="Masukan Alamat Fakultas"
                                 id="address"
                                 label="Alamat"
@@ -192,7 +192,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 label="Keterangan"
                                 {...register('description')}
                                 error={errors.description?.message}
-                            />
+                            /> */}
                             <div className="pt-2">
                                 <Label>Status</Label>
                                 <Controller

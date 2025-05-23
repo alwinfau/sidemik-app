@@ -40,13 +40,14 @@ const schema = z.object({
 type FormInputs = z.infer<typeof schema>;
 
 const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) => {
-  const {
+const {
+    control,
     register,
     handleSubmit,
     reset,
     setValue,
-    control,
     setError,
+    watch,
     formState: { errors, isSubmitting },
     } = useForm<FormInputs>({
     resolver: zodResolver(schema),
@@ -133,6 +134,24 @@ useEffect(() => {
         });
     }
     };  
+    useEffect(() => {
+        const selectedYear = AcademicYears.find((ay: any) => String(ay.id) === String(watch('academic_year_id')));
+        if (selectedYear && selectedYear.name) {
+            const [startYearStr, endYearStr] = selectedYear.name.split('/');
+            const startYear = parseInt(startYearStr);
+            const endYear = parseInt(endYearStr);
+    
+            if (!isNaN(startYear) && !isNaN(endYear)) {
+                setValue('start_date', `${startYear}-08-01`);
+                setValue('start_midterm_exam', `${startYear}-10-15`);
+                setValue('end_midterm_exam', `${startYear}-10-20`);
+                setValue('start_final_exam', `${startYear}-12-10`);
+                setValue('end_final_exam', `${startYear}-12-20`);
+                setValue('end_date', `${endYear}-01-01`);
+            }
+        }
+    }, [watch('academic_year_id'), AcademicYears, setValue]);
+    
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-h-[90vh] overflow-hidden p-6">
@@ -200,13 +219,6 @@ useEffect(() => {
                     error={errors.start_date}
                 />
                 <DateInput
-                    label="Tanggal Selesai"
-                    id="end_date"
-                    placeholder="Enter End Date"
-                    register={register('end_date')}
-                    error={errors.end_date}
-                />
-                <DateInput
                     label="Tanggal UTS"
                     id="start_midterm_exam"
                     placeholder="Enter UTS Date"
@@ -233,6 +245,13 @@ useEffect(() => {
                     placeholder="Enter End UAS Date"
                     register={register('end_final_exam')}
                     error={errors.end_final_exam}
+                />
+                <DateInput
+                    label="Tanggal Selesai"
+                    id="end_date"
+                    placeholder="Enter End Date"
+                    register={register('end_date')}
+                    error={errors.end_date}
                 />
                 <FormTextInput
                     id="number_of_meetings"

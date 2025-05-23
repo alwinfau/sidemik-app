@@ -12,11 +12,13 @@ export const useCurriculum = () => {
     const [Prodi, setProdi] = useState<any>([]);
     const [TahunKurikulum, setTahunKurikulum] = useState<CurriculumType[]>([]);
     const [searchTahunKurikulum, setSearchTahunKurikulum] = useState<string>('');
+    const [ searchName, setSearchName ] = useState('');
 
-    const fetchData = async (currentPage = 1) => {
+
+    const fetchData = async (currentPage = 1, search = '') => {
         try {
             setIsLoading(true);
-            const res: any = await get(`/curriculum?page=${currentPage}&limit=10`);
+            const res: any = await get(`/curriculum?page=${currentPage}&limit=10&search=${search}`);
             setData(res.data.data);
             setPage(res.data.current_page);
             setTotalPages(res.data.last_page);
@@ -26,6 +28,7 @@ export const useCurriculum = () => {
             setIsLoading(false);
         }
     };
+    
 
     // const fecthsearch = async () => {
     //     try {
@@ -66,7 +69,7 @@ export const useCurriculum = () => {
                 setToast({ message: 'Failed to submit curriculum', type: 'error' });
             }
             console.log(error);
-            throw error.response.data;
+            throw error.response.data.data;
         } finally {
             setIsLoading(false);
         }
@@ -94,6 +97,7 @@ export const useCurriculum = () => {
         Prodi,
         TahunKurikulum,
         searchTahunKurikulum,
+        searchName,
         setSearchTahunKurikulum,
         setTahunKurikulum,
         setPage,
@@ -101,7 +105,7 @@ export const useCurriculum = () => {
         handleSubmit,
         handleDelete,
         setToast,
-
+        setSearchName,
         fecthRelasi,
     };
 };

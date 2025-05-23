@@ -112,7 +112,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="study_program_id"
-                                        label="Prodi"
+                                        label={<> Prodi <span className="text-red-500">*</span></>}
                                         value={field.value}
                                         onValueChange={field.onChange}
                                         error={errors.study_program_id?.message}
@@ -127,14 +127,14 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             />
                             <FormTextInput
                                 id="code"
-                                label="Kode *"
+                                label={<> Kode <span className="text-red-500">*</span></>}
                                 placeholder="Masukan Kode Matkul pilihan"
                                 {...register('code')}
                                 error={errors.code?.message}
                             />
                             <FormTextInput
                                 id="name"
-                                label="Nama Mata Kuliah Pilihan *"
+                                label={<> Nama Mata Kuliah Pilihan <span className="text-red-500">*</span></>}
                                 placeholder="Masukan Nama kelompok Mata Kuliah Pilihan"
                                 {...register('name')}
                                 error={errors.name?.message}

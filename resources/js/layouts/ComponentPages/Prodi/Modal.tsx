@@ -160,7 +160,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                 render={({ field }) => (
                                     <FormSelectInput
                                         id="faculty_id"
-                                        label="Fakultas *"
+                                        label={<> Fakultas <span className="text-red-500">*</span></>}
                                         value={field.value}
                                         onValueChange={field.onChange}
                                         error={errors.faculty_id?.message}
@@ -176,27 +176,27 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             <FormTextInput
                                 id="sp_code"
                                 placeholder="Masukan Kode prodi"
-                                label="Kode *"
+                                label={<> kode <span className="text-red-500">*</span></>}
                                 {...register('sp_code')}
                                 error={errors.sp_code?.message}
                             />
                             <FormTextInput
                                 id="idn_sp_name"
                                 placeholder="Masukan Nama Prodi"
-                                label="Nama Prodi (ID) *"
+                                label={<> Nama Prodi (ID) <span className="text-red-500">*</span></>}
                                 {...register('idn_sp_name')}
                                 error={errors.idn_sp_name?.message}
                             />
                             <FormTextInput
                                 id="eng_sp_name"
-                                label="Nama Prodi (ENG) *"
+                                label={<> Nama Prodi (ENG) <span className="text-red-500">*</span></>}
                                 placeholder="Masukan Nama Prodi dalam b.ing"
                                 {...register('eng_sp_name')}
                                 error={errors.eng_sp_name?.message}
                             />
                             <FormTextInput
                                 id="sp_short_name"
-                                label="Singkatan *"
+                                label={<> Singkatan <span className="text-red-500">*</span></>}
                                 placeholder="Masukan singkatan prodi"
                                 type="text"
                                 {...register('sp_short_name')}
@@ -238,7 +238,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                             /> */}
                             <FormTextInput
                                 id="max_semester"
-                                label="Maximal Semeter *"
+                                label={<> MAX Semester <span className="text-red-500">*</span></>}
                                 type="number"
                                 placeholder="Masukan Jumlah max semester"
                                 {...register('max_semester', { valueAsNumber: true })}
@@ -278,7 +278,7 @@ const ModalForm = ({ open, onOpenChange, submit, defaultValues }: ModalProps) =>
                                     )}
                                 />
                             </div>
-
+                            {errors.root && <p className="text-red-600">{errors.root.message}</p>}
                             <Button
                                 type="submit"
                                 className={`mb-5 rounded px-4 py-2 font-bold text-white ${
